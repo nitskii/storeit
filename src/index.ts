@@ -1,7 +1,11 @@
 import { Elysia } from "elysia";
+import { itemPlugin } from "./plugins/item.plugin";
 
-const app = new Elysia().get("/", () => "Hello Elysia").listen(3000);
-
-console.log(
-  `🦊 Elysia is running at ${app.server?.hostname}:${app.server?.port}`
-);
+new Elysia()
+  .use(itemPlugin)
+  .listen(
+    process.env.PORT ?? 3000,
+    ({ hostname, port }) => {
+      console.log(`Server started at ${hostname}:${port}`);
+    }
+  );
