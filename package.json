@@ -1,10 +1,9 @@
 {
   "name": "wardrobe",
   "scripts": {
-    "dev": "bun --hot src/index.ts"
+    "dev": "bun --hot src/app.ts"
   },
   "dependencies": {
-    "@elysiajs/html": "^0.5.2",
     "elysia": "latest"
   },
   "devDependencies": {

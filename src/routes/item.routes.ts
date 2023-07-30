@@ -1,24 +1,20 @@
-import html from "@elysiajs/html";
 import { randomUUID } from "crypto";
 import { Elysia, t } from "elysia";
-import db from "../db/db";
+import itemController from "../controllers/item.controller";
 
-export const itemPlugin = (app: Elysia) => app
+export default (app: Elysia) => app
     .model({
         item: t.Object({
             name: t.String(),
             location: t.Optional(t.String())
         })
     })
-    .use(html())
     .post(
         "/item",
-        ({ body }) => {
-            db.push({id: randomUUID(), ...body});
-        },
+        ({ body }) => itemController.create({ id: randomUUID(), ...body }),
         { body: "item" }
     )
     .get(
         "/item",
-        () => db
+        () => itemController.getAll()
     );
