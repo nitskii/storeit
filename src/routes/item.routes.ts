@@ -1,18 +1,24 @@
 import { Elysia, t } from "elysia";
 import itemController from "../controllers/item.controller";
 
-export default (app: Elysia) => app
+const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
+
+const itemRoutes = (app: Elysia) => app
     .model({
         item: t.Object({
             name: t.String(),
+            image: t.File({
+                type: "image",
+                maxSize: MAX_IMAGE_SIZE
+            }),
             location: t.Optional(t.String()),
             tags: t.Optional(t.Array(t.String()))
         })
     })
     .post(
         "/item",
-        async ({ body }) => {
-            console.log(body);
+        async ({ body: item }) => {
+            await itemController.create(item);
         },
         { body: "item" }
     )
@@ -22,3 +28,5 @@ export default (app: Elysia) => app
             return await itemController.getAll();
         }
     );
+
+export default itemRoutes;

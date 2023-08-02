@@ -1,6 +1,8 @@
-import itemModel from "../models/item.model";
+import { ItemData, default as itemModel } from "../models/item.model";
 
-const create = async () => {};
+const create = async (item: ItemData) => {
+    await itemModel.create(item);
+};
 
 const getAll = async () => {
     return await itemModel.getAll();

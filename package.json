@@ -7,6 +7,7 @@
   },
   "dependencies": {
     "@libsql/client": "^0.3.1",
+    "cloudinary": "^1.40.0",
     "drizzle-orm": "^0.27.2",
     "elysia": "latest"
   },
