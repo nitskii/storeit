@@ -1,9 +1,10 @@
-import db from "../db/db";
-import { Item } from "../types";
+import itemModel from "../models/item.model";
 
-const create = (item: Item) => db.push(item);
+const create = async () => {};
 
-const getAll = () => db;
+const getAll = async () => {
+    return await itemModel.getAll();
+};
 
 export default {
     create,
