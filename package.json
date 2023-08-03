@@ -6,6 +6,7 @@
     "db:studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
+    "@elysiajs/jwt": "^0.5.3",
     "@libsql/client": "^0.3.1",
     "cloudinary": "^1.40.0",
     "drizzle-orm": "^0.27.2",
