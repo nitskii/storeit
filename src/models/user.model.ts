@@ -1,4 +1,3 @@
-import { JWTPayloadSpec } from "@elysiajs/jwt";
 import { randomBytes, randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
 import db from "./db";
@@ -9,44 +8,40 @@ export type UserData = {
     password: string
 };
 
-export type JwtSign = (payload: Record<string, string> & JWTPayloadSpec) => Promise<string>;
-
-const create = async (user: UserData, sign: JwtSign) => {
+const create = async (userData: UserData) => {
     const [ existingUser ] = await db
         .select()
         .from(users)
-        .where(eq(users.nickname, user.nickname))
+        .where(eq(users.nickname, userData.nickname))
         .limit(1)
         .all();
 
     if (existingUser) {
         const correctPassword = await Bun.password.verify(
-            `${user.password}${existingUser.salt}`,
+            `${userData.password}${existingUser.salt}`,
             existingUser.password
         );
 
         if (correctPassword) {
-            const token = await sign({
-                sub: existingUser.id
-            });
-
-            return token;
+            return existingUser.id;
         }
+
+        throw new Error("Incorrect password");
     }
 
     const salt = randomBytes(8).toString("hex");
     const password = await Bun.password.hash(
-        `${user.password}${salt}`,
+        `${userData.password}${salt}`,
         "bcrypt"
     );
 
-    const id = randomUUID();
+    const newUserId = randomUUID();
 
     const userToInsert: User = {
-        id,
-        nickname: user.nickname,
+        id: newUserId,
+        nickname: userData.nickname,
         password,
-        salt: salt
+        salt
     }
 
     await db
@@ -54,11 +49,7 @@ const create = async (user: UserData, sign: JwtSign) => {
         .values(userToInsert)
         .run();
 
-    const token = await sign({
-        sub: id
-    });
-
-    return token;
+    return newUserId;
 };
 
 export default {

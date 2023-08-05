@@ -23,8 +23,14 @@ const userRoutes = (app: Elysia) => app
     })
     .put(
         "/user",
-        async ({ body: user, jwt: { sign } }) => {
-            return await userController.create(user, sign);
+        async ({ body: user, jwt }) => {
+            const newUserId = await userController.create(user);
+
+            const token = await jwt.sign({
+                sub: newUserId
+            });
+
+            return token;
         },
         { body: "user" }
     );
