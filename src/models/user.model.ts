@@ -26,7 +26,7 @@ const create = async (userData: UserData) => {
             return existingUser.id;
         }
 
-        throw new Error("Incorrect password");
+        return null;
     }
 
     const salt = randomBytes(8).toString("hex");

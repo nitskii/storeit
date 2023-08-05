@@ -10,6 +10,9 @@ cloudinary.config({
 });
 
 new Elysia()
+    .get("/", () => Bun.file("./src/views/index.html"))
+    .get("/public/:file", ({ params: { file } }) => Bun.file(`./public/${file}`))
+    .get("/favicon.ico", () => Bun.file("./public/favicon.ico"))
     .use(userRoutes)
     .use(itemRoutes)
     .listen(
