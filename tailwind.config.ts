@@ -1,8 +1,12 @@
-/** @type {import("tailwindcss").Config} */
-module.exports = {
-  darkMode: "class",
-  content: ["./src/views/*.html"],
-  plugins: [import("@tailwindcss/forms")],
+import { Config } from "tailwindcss";
+
+const tailwindConfig =  {
+  content: [
+    "./src/views/*.{html,tsx}"
+  ],
+  plugins: [
+    import("@tailwindcss/forms")
+  ],
   theme: {
     extend: {
       colors: {
@@ -52,3 +56,5 @@ module.exports = {
     },
   },
 };
+
+export default tailwindConfig;

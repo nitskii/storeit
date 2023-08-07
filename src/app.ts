@@ -1,5 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
 import { Elysia } from "elysia";
+import baseRoutes from "./routes/base.routes";
 import itemRoutes from "./routes/item.routes";
 import userRoutes from "./routes/user.routes";
 
@@ -10,14 +11,12 @@ cloudinary.config({
 });
 
 new Elysia()
-    .get("/", () => Bun.file("./src/views/index.html"))
-    .get("/public/:file", ({ params: { file } }) => Bun.file(`./public/${file}`))
-    .get("/favicon.ico", () => Bun.file("./public/favicon.ico"))
+    .use(baseRoutes)
     .use(userRoutes)
     .use(itemRoutes)
     .listen(
         process.env.PORT ?? 8080,
         ({ hostname, port }) => {
-            console.log(`Server started at ${hostname}:${port}`);
+            console.log(`Server started at http://${hostname}:${port}`);
         }
     );
