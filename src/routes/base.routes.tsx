@@ -10,3 +10,4 @@ const baseRoutes = (app: Elysia) => app
     .get("/favicon.ico", () => Bun.file("./public/favicon.ico"));
 
 export default baseRoutes;
+
