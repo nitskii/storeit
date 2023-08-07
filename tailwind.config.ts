@@ -1,10 +1,10 @@
-import type { Config } from 'tailwindcss'
+import type { Config } from 'tailwindcss';
 
 export default {
   content: [
-    "./src/**/*.{html,ts,tsx}"
+    "./src/**/*.{html,tsx}"
   ],
   plugins: [
     require("@tailwindcss/forms")
   ],
-} satisfies Config
+} satisfies Config;

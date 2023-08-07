@@ -1,5 +1,4 @@
 {
-  "name": "wardrobe",
   "scripts": {
     "dev": "bun --hot src/app.ts",
     "db:push": "bunx drizzle-kit push:sqlite",
@@ -7,13 +6,12 @@
   },
   "dependencies": {
     "@elysiajs/html": "^0.6.0",
-    "@elysiajs/jwt": "^0.5.3",
+    "@elysiajs/jwt": "^0.6.0",
     "@libsql/client": "^0.3.1",
     "@tailwindcss/forms": "^0.5.4",
     "cloudinary": "^1.40.0",
     "drizzle-orm": "^0.27.2",
-    "elysia": "0.6.0",
-    "htmx.org": "^1.9.4"
+    "elysia": "0.6.0"
   },
   "devDependencies": {
     "bun-types": "latest",

@@ -1,4 +1,5 @@
-import { jwt } from "@elysiajs/jwt";
+import html from "@elysiajs/html";
+import jwt from "@elysiajs/jwt";
 import { Elysia, t } from "elysia";
 import userController from "../controllers/user.controller";
 
@@ -9,6 +10,7 @@ const userRoutes = (app: Elysia) => app
             exp: "7d"
         })
     )
+    .use(html())
     .model({
         user: t.Object({
             nickname: t.String({
@@ -23,7 +25,7 @@ const userRoutes = (app: Elysia) => app
     })
     .put(
         "/user",
-        async ({ body: userData, jwt, set }) => {
+        async ({ body: userData, jwt, set, html }) => {
             const newUserId = await userController.create(userData);
 
             if (newUserId) {
@@ -31,12 +33,14 @@ const userRoutes = (app: Elysia) => app
                     sub: newUserId
                 });
                 
-                return token;
+                set.status = 200;
+
+                return html(token);
             }
 
             set.status = 401;
 
-            return "Incorrect password";
+            return html("Incorrect password");
         },
         { body: "user" }
     );

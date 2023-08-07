@@ -9,14 +9,10 @@
     "strict": true,
     "downlevelIteration": true,
     "skipLibCheck": true,
-    "jsx": "react",
-    "jsxFactory": "elements.createElement",
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "allowJs": true,
     "noEmit": true,
-    "types": [
-      "bun-types"
-    ]
+    "types": ["bun-types"]
   }
 }
