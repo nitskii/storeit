@@ -1,3 +1,4 @@
+import cookie from "@elysiajs/cookie";
 import { v2 as cloudinary } from "cloudinary";
 import { Elysia } from "elysia";
 import itemRoutes from "./routes/item.routes";
@@ -9,8 +10,21 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
+const PATH_TO_VIEWS = "./src/views/";
+
 new Elysia()
-    .get("/", () => Bun.file("./src/views/index.html"))
+    .use(cookie())
+    .get("/", ({ cookie, set }) => {
+        if (cookie.auth) {
+            set.status = 302;
+            set.redirect = "/items";
+
+            return;
+        }
+
+        return Bun.file(`${PATH_TO_VIEWS}index.html`);
+    })
+    .get("/items", () => Bun.file(`${PATH_TO_VIEWS}items.html`))
     .get("/public/:file", ({ params: { file } }) => Bun.file(`./public/${file}`))
     .get("/favicon.ico", () => Bun.file("./public/favicon.ico"))
     .group("/api", app => app

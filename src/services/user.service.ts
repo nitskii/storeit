@@ -8,7 +8,7 @@ export type UserData = {
     password: string
 };
 
-const create = async (userData: UserData) => {
+const createOrLogin = async (userData: UserData) => {
     const [ existingUser ] = await db
         .select()
         .from(users)
@@ -53,5 +53,5 @@ const create = async (userData: UserData) => {
 };
 
 export default {
-    create
+    createOrLogin
 };

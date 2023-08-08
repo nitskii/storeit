@@ -1,4 +1,4 @@
-import html from "@elysiajs/html";
+import cookie from "@elysiajs/cookie";
 import jwt from "@elysiajs/jwt";
 import { Elysia, t } from "elysia";
 import userService from "../services/user.service";
@@ -10,7 +10,10 @@ const userRoutes = (app: Elysia) => app
             exp: "7d"
         })
     )
-    .use(html())
+    .use(cookie({
+        maxAge: 120,
+        sameSite: true
+    }))
     .model({
         user: t.Object({
             nickname: t.String({
@@ -25,22 +28,27 @@ const userRoutes = (app: Elysia) => app
     })
     .put(
         "/user",
-        async ({ body: userData, jwt, set, html }) => {
-            const newUserId = await userService.create(userData);
+        async ({ body: userData, jwt, setCookie, set }) => {
+            const newUserId = await userService.createOrLogin(userData);
 
             if (newUserId) {
                 const token = await jwt.sign({
                     sub: newUserId
                 });
                 
-                set.status = 200;
-
-                return html(token);
+                setCookie("auth", token);
+                
+                set.status = 204;
+                set.headers["HX-Redirect"] = "/items";
+                
+                return;
             }
 
             set.status = 401;
 
-            return html("Incorrect password");
+            return {
+                error: "Incorrect password"
+            };
         },
         { body: "user" }
     );

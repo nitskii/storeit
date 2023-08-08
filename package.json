@@ -5,6 +5,7 @@
     "db:studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
+    "@elysiajs/cookie": "^0.6.0",
     "@elysiajs/html": "^0.6.0",
     "@elysiajs/jwt": "^0.6.0",
     "@libsql/client": "^0.3.1",
