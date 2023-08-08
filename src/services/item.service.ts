@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from "cloudinary";
-import db from "./db";
-import { items } from "./schema";
+import db from "../db";
+import { items } from "../db/schema";
 
 export type ItemData = {
     name: string,

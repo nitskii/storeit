@@ -1,7 +1,7 @@
 import html from "@elysiajs/html";
 import jwt from "@elysiajs/jwt";
 import { Elysia, t } from "elysia";
-import userController from "../controllers/user.controller";
+import userService from "../services/user.service";
 
 const userRoutes = (app: Elysia) => app
     .use(
@@ -26,7 +26,7 @@ const userRoutes = (app: Elysia) => app
     .put(
         "/user",
         async ({ body: userData, jwt, set, html }) => {
-            const newUserId = await userController.create(userData);
+            const newUserId = await userService.create(userData);
 
             if (newUserId) {
                 const token = await jwt.sign({

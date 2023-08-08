@@ -1,7 +1,7 @@
 import { randomBytes, randomUUID } from "crypto";
 import { eq } from "drizzle-orm";
-import db from "./db";
-import { User, users } from "./schema";
+import db from "../db";
+import { User, users } from "../db/schema";
 
 export type UserData = {
     nickname: string,

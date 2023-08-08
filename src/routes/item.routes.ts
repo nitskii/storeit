@@ -1,5 +1,5 @@
 import { Elysia, t } from "elysia";
-import itemController from "../controllers/item.controller";
+import itemService from "../services/item.service";
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
@@ -18,14 +18,14 @@ const itemRoutes = (app: Elysia) => app
     .post(
         "/item",
         async ({ body: item }) => {
-            await itemController.create(item);
+            await itemService.create(item);
         },
         { body: "item" }
     )
     .get(
         "/item",
         async () => {
-            return await itemController.getAll();
+            return await itemService.getAll();
         }
     );
 
