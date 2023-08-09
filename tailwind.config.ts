@@ -5,6 +5,7 @@ export default {
     "./src/**/*.{html,tsx}"
   ],
   plugins: [
-    require("@tailwindcss/forms")
+    require("@tailwindcss/forms"),
+    require("@tailwindcss/aspect-ratio")
   ],
 } satisfies Config;
