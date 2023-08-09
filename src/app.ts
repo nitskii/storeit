@@ -24,7 +24,16 @@ new Elysia()
 
         return Bun.file(`${PATH_TO_VIEWS}index.html`);
     })
-    .get("/items", () => Bun.file(`${PATH_TO_VIEWS}items.html`))
+    .get("/items", ({ cookie, set }) => {
+        if (!cookie.auth) {
+            set.status = 302;
+            set.redirect = "/";
+
+            return;
+        }
+
+        return Bun.file(`${PATH_TO_VIEWS}items.html`);
+    })
     .get("/public/:file", ({ params: { file } }) => Bun.file(`./public/${file}`))
     .get("/favicon.ico", () => Bun.file("./public/favicon.ico"))
     .group("/api", app => app

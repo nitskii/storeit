@@ -29,6 +29,11 @@ const itemRoutes = (app: Elysia) => app
         async ({ html }) => {
             const items = await itemService.getAll();
 
+            // temporary
+            for (let i = 0; i < 5; ++i) {
+              items.push(items[0]);
+            }
+
             return html(items.map(item => (`
               <div class="group relative">
                 <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
