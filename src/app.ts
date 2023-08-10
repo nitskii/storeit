@@ -10,7 +10,7 @@ cloudinary.config({
     api_secret: process.env.CLOUDINARY_API_SECRET,
 });
 
-const PATH_TO_VIEWS = "./src/views/";
+const VIEWS_DIR = "./src/views/";
 
 new Elysia()
     .use(cookie())
@@ -22,7 +22,7 @@ new Elysia()
             return;
         }
 
-        return Bun.file(`${PATH_TO_VIEWS}index.html`);
+        return Bun.file(`${VIEWS_DIR}index.html`);
     })
     .get("/items", ({ cookie, set }) => {
         if (!cookie.auth) {
@@ -32,7 +32,7 @@ new Elysia()
             return;
         }
 
-        return Bun.file(`${PATH_TO_VIEWS}items.html`);
+        return Bun.file(`${VIEWS_DIR}items.html`);
     })
     .get("/public/:file", ({ params: { file } }) => Bun.file(`./public/${file}`))
     .get("/favicon.ico", () => Bun.file("./public/favicon.ico"))

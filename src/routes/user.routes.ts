@@ -6,12 +6,12 @@ import userService from "../services/user.service";
 const userRoutes = (app: Elysia) => app
     .use(
         jwt({
-            secret: process.env.JWT_SECRET,
+            secret: process.env.SECRET,
             exp: "7d"
         })
     )
     .use(cookie({
-        maxAge: 120,
+        maxAge: process.env.COOKIE_MAX_AGE,
         sameSite: true
     }))
     .model({
