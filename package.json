@@ -1,5 +1,6 @@
 {
   "scripts": {
+    "dev": "bun --watch src/app.ts",
     "db:push": "bunx drizzle-kit push:sqlite",
     "db:studio": "bunx drizzle-kit studio"
   },

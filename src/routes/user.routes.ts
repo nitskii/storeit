@@ -6,8 +6,7 @@ import userService from "../services/user.service";
 const userRoutes = (app: Elysia) => app
     .use(
         jwt({
-            secret: process.env.SECRET,
-            exp: "7d"
+            secret: process.env.SECRET
         })
     )
     .use(cookie({
@@ -26,31 +25,29 @@ const userRoutes = (app: Elysia) => app
             })
         })
     })
-    .put(
-        "/user",
+    .post(
+        "/signup",
         async ({ body: userData, jwt, setCookie, set }) => {
-            const newUserId = await userService.createOrLogin(userData);
+            const newUserId = await userService.signup(userData);
+            const token = await jwt.sign({ sub: newUserId });
 
-            if (newUserId) {
-                const token = await jwt.sign({
-                    sub: newUserId
-                });
-                
-                setCookie("auth", token);
-                
-                set.status = 204;
-                set.headers["HX-Redirect"] = "/items";
-                
-                return;
-            }
+            setCookie("auth", token);
 
-            set.status = 401;
-
-            return {
-                error: "Incorrect password"
-            };
+            set.status = 204;
+            set.headers["HX-Redirect"] = "/user/items";
+            
+            return;
         },
         { body: "user" }
-    );
+    )
+    .onError(({ error, set }) => {
+        if (error.message === "User exists") {
+            set.status = 409;
+        }
+
+        return {
+            error: error.message
+        };
+    })
 
 export default userRoutes;

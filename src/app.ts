@@ -24,7 +24,7 @@ new Elysia()
 
         return Bun.file(`${VIEWS_DIR}index.html`);
     })
-    .get("/items", ({ cookie, set }) => {
+    .get("/items", async ({ cookie, set }) => {
         if (!cookie.auth) {
             set.status = 302;
             set.redirect = "/";

@@ -34,10 +34,11 @@ const create = async (item: ItemData) => {
     // );
 };
 
-const getAll = async () => {
+const getAllForUser = async (userId: string) => {
     const rows = await db
         .select()
         .from(items)
+        .where(eq(items.userId, userId))
         .leftJoin(tags, eq(items.id, tags.itemId))
         .all();
 
@@ -73,5 +74,5 @@ const getAll = async () => {
 
 export default {
     create,
-    getAll
+    getAllForUser
 }

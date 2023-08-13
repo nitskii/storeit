@@ -8,25 +8,18 @@ export type UserData = {
     password: string
 };
 
-const createOrLogin = async (userData: UserData) => {
-    const [ existingUser ] = await db
-        .select()
-        .from(users)
-        .where(eq(users.nickname, userData.nickname))
-        .limit(1)
-        .all();
+const signup = async (userData: UserData) => {
+    const userExists = (
+        await db
+            .select({ id: users.id })
+            .from(users)
+            .where(eq(users.nickname, userData.nickname))
+            .limit(1)
+            .all()
+    ).length > 0;
 
-    if (existingUser) {
-        const correctPassword = await Bun.password.verify(
-            `${userData.password}${existingUser.salt}`,
-            existingUser.password
-        );
-
-        if (correctPassword) {
-            return existingUser.id;
-        }
-
-        return null;
+    if (userExists) {
+        throw new Error("User exists");
     }
 
     const salt = randomBytes(8).toString("hex");
@@ -39,7 +32,7 @@ const createOrLogin = async (userData: UserData) => {
 
     const userToInsert: User = {
         id: newUserId,
-        nickname: userData.nickname,
+        ...userData,
         password,
         salt
     }
@@ -50,8 +43,8 @@ const createOrLogin = async (userData: UserData) => {
         .run();
 
     return newUserId;
-};
+}
 
 export default {
-    createOrLogin
+    signup
 };
