@@ -5,21 +5,25 @@
     "db:studio": "bunx drizzle-kit studio"
   },
   "dependencies": {
-    "@elysiajs/cookie": "^0.6.0",
+    "@elysiajs/cookie": "^0.6.1",
     "@elysiajs/html": "^0.6.0",
-    "@elysiajs/jwt": "^0.6.0",
+    "@elysiajs/jwt": "^0.6.3",
     "@libsql/client": "^0.3.1",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.4",
     "cloudinary": "^1.40.0",
-    "drizzle-orm": "^0.27.2",
-    "elysia": "0.6.0"
+    "drizzle-orm": "^0.28.2",
+    "elysia": "^0.6.10"
   },
   "devDependencies": {
-    "bun-types": "latest",
+    "@typescript-eslint/eslint-plugin": "^6.3.0",
+    "@typescript-eslint/parser": "^6.3.0",
+    "bun-types": "^0.7.3",
     "drizzle-kit": "^0.19.12",
+    "eslint": "^8.47.0",
     "prettier": "^3.0.1",
-    "prettier-plugin-tailwindcss": "^0.4.1",
-    "tailwindcss": "^3.3.3"
+    "prettier-plugin-tailwindcss": "^0.5.2",
+    "tailwindcss": "^3.3.3",
+    "typescript": "^5.1.6"
   }
 }
