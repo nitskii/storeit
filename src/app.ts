@@ -15,28 +15,27 @@ const VIEWS_DIR = './src/views/';
 new Elysia()
   .use(cookie())
   .get('/', ({ cookie, set }) => {
-    if (cookie.auth) {
-      set.status = 302;
-      set.redirect = '/items';
-
-      return;
+    if (!cookie.auth) {
+      return Bun.file(`${VIEWS_DIR}index.html`);
     }
 
-    return Bun.file(`${VIEWS_DIR}index.html`);
+    set.status = 302;
+    set.redirect = '/items';
   })
   .get('/items', async ({ cookie, set }) => {
-    if (!cookie.auth) {
-      set.status = 302;
-      set.redirect = '/';
-
-      return;
+    if (cookie.auth) {
+      return Bun.file(`${VIEWS_DIR}items.html`);
     }
 
-    return Bun.file(`${VIEWS_DIR}items.html`);
+    set.status = 302;
+    set.redirect = '/';
   })
   .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
   .get('/favicon.ico', () => Bun.file('./public/favicon.ico'))
-  .group('/api', (app) => app.use(userRoutes).use(itemRoutes))
+  .group('/api', app => app
+    .use(userRoutes)
+    .use(itemRoutes)
+  )
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);
   });

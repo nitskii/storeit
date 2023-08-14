@@ -15,11 +15,7 @@
           class="w-full rounded-lg bg-white shadow sm:max-w-md md:mt-0 xl:p-0"
         >
           <div class="space-y-4 p-6 sm:p-8 md:space-y-6">
-            <form
-              class="space-y-4 md:space-y-6"
-              hx-put="/api/user"
-              hx-swap="none"
-            >
+            <form class="space-y-4 md:space-y-6">
               <div>
                 <label
                   for="nickname"
@@ -50,12 +46,24 @@
                   required
                 />
               </div>
-              <button
-                type="submit"
-                class="w-full rounded-lg bg-orange-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-300"
-              >
-                Увійти
-              </button>
+              <div class="flex">
+                <button
+                  type="submit"
+                  class="mr-3 w-full rounded-lg bg-orange-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-300"
+                  hx-post="/api/login"
+                  hx-swap="none"
+                >
+                  Увійти
+                </button>
+                <button
+                  type="submit"
+                  class="ml-3 w-full rounded-lg bg-orange-400 px-5 py-2.5 text-center text-sm font-medium text-white hover:bg-orange-500 focus:outline-none focus:ring-4 focus:ring-orange-300"
+                  hx-post="/api/signup"
+                  hx-swap="none"
+                >
+                  Зареєструватись
+                </button>
+              </div>
             </form>
           </div>
         </div>

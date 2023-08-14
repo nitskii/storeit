@@ -16,7 +16,8 @@
     "linebreak-style": ["warn", "unix"],
     "quotes": ["warn", "single"],
     "semi": ["warn", "always"],
-    "no-unused-vars": "warn"
+    "no-unused-vars": "warn",
+    "no-empty": "warn"
   },
   "globals": {
     "Bun": true

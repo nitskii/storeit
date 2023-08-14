@@ -34,15 +34,46 @@ const userRoutes = (app: Elysia) => app
       setCookie('auth', token);
 
       set.status = 204;
-      set.headers['HX-Redirect'] = '/user/items';
+      set.headers['HX-Redirect'] = '/items';
             
       return;
     },
     { body: 'user' }
   )
+  .post(
+    '/login',
+    async ({ body: userData, jwt, setCookie, set }) => {
+      const userId = await userService.login(userData);
+      const token = await jwt.sign({ sub: userId });
+
+      setCookie('auth', token);
+
+      set.status = 204;
+      set.headers['HX-Redirect'] = '/items';
+            
+      return;
+    },
+    { body: 'user' }
+  )
+  .post(
+    '/logout',
+    async ({ set }) => {
+      set.status = 204;
+      set.headers['Set-Cookie'] = 'auth=;Path=/;Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+      set.headers['HX-Redirect'] = '/';
+    }
+  )
   .onError(({ error, set }) => {
-    if (error.message === 'User exists') {
+    switch (error.message) {
+    case 'Incorrect password':
+      set.status = 401;
+      break;
+    case 'User not found':
+      set.status = 404;
+      break;
+    case 'User exists':
       set.status = 409;
+      break;
     }
 
     return {

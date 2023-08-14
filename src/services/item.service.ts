@@ -1,3 +1,6 @@
+import { eq } from 'drizzle-orm';
+import db from '../db';
+import { items, tags } from '../db/schema';
 
 export type ItemData = {
   name: string;
@@ -29,43 +32,44 @@ export type ItemResponse = {
 //   );
 // };
 
-// const getAllForUser = async (userId: string) => {
-//   const rows = await db
-//     .select()
-//     .from(items)
-//     .where(eq(items.userId, userId))
-//     .leftJoin(tags, eq(items.id, tags.itemId))
-//     .all();
+const getAllForUser = async (userId: string) => {
+  const rows = await db
+    .select()
+    .from(items)
+    .where(eq(items.userId, userId))
+    .leftJoin(tags, eq(items.id, tags.itemId))
+    .all();
 
-//   const result: ItemResponse[] = [];
+  const result: ItemResponse[] = [];
 
-//   rows.forEach((row) => {
-//     const foundIndex = result.findIndex((i) => i.id === row.items.id);
+  rows.forEach((row) => {
+    const foundIndex = result.findIndex((i) => i.id === row.items.id);
 
-//     if (foundIndex > -1 && row.tags) {
-//       result[foundIndex].tags.push(row.tags.name);
-//     } else {
-//       const valueToAdd: ItemResponse = {
-//         id: row.items.id,
-//         name: row.items.name,
-//         image: row.items.image,
-//         tags: [],
-//       };
+    if (foundIndex > -1 && row.tags) {
+      result[foundIndex].tags.push(row.tags.name);
+    } else {
+      const valueToAdd: ItemResponse = {
+        id: row.items.id,
+        name: row.items.name,
+        image: row.items.image,
+        tags: [],
+      };
 
-//       if (row.items.location) {
-//         valueToAdd.location = row.items.location;
-//       }
+      if (row.items.location) {
+        valueToAdd.location = row.items.location;
+      }
       
-//       if (row.tags) {
-//         valueToAdd.tags.push(row.tags.name);
-//       }
+      if (row.tags) {
+        valueToAdd.tags.push(row.tags.name);
+      }
 
-//       result.push(valueToAdd);
-//     }
-//   });
+      result.push(valueToAdd);
+    }
+  });
 
-//   return result;
-// };
+  return result;
+};
 
 export default {
+  getAllForUser
 };
