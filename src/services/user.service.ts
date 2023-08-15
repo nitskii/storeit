@@ -9,15 +9,14 @@ export type UserData = {
 };
 
 const signup = async (userData: UserData) => {
-  const userExists =
-    (
-      await db
-        .select({ id: users.id })
-        .from(users)
-        .where(eq(users.nickname, userData.nickname))
-        .limit(1)
-        .all()
-    ).length > 0;
+  const userExists = (
+    await db
+      .select({ id: users.id })
+      .from(users)
+      .where(eq(users.nickname, userData.nickname))
+      .limit(1)
+      .all()
+  ).length > 0;
 
   if (userExists) {
     throw new Error('User exists');
@@ -38,7 +37,10 @@ const signup = async (userData: UserData) => {
     salt,
   };
 
-  await db.insert(users).values(userToInsert).run();
+  await db
+    .insert(users)
+    .values(userToInsert)
+    .run();
 
   return newUserId;
 };

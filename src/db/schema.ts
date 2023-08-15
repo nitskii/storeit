@@ -12,8 +12,14 @@ export const items = sqliteTable('items', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
   image: text('image').notNull(),
-  location: text('location'),
   userId: text('user_id').references(() => users.id)
+});
+
+export const locations = sqliteTable('locations', {
+  id: text('id').primaryKey(),
+  name: text('name').notNull(),
+  itemId: text('item_id').references(() => items.id),
+  locationId: text('location_id').references(() => locations.id)
 });
 
 export const tags = sqliteTable('tags', {
@@ -24,4 +30,5 @@ export const tags = sqliteTable('tags', {
 
 export type User = InferModel<typeof users>;
 export type Item = InferModel<typeof items>;
+export type Location = InferModel<typeof locations>;
 export type Tag = InferModel<typeof tags>;

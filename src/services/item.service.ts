@@ -1,11 +1,11 @@
-import { eq } from 'drizzle-orm';
-import db from '../db';
-import { items, tags } from '../db/schema';
+// import { eq } from 'drizzle-orm';
+// import db from '../db';
+// import { items, tags } from '../db/schema';
 
 export type ItemData = {
   name: string;
   image: Blob;
-  location?: string;
+  location: string;
   tags?: string[];
 };
 
@@ -13,7 +13,7 @@ export type ItemResponse = {
   id: string;
   name: string;
   image: string;
-  location?: string;
+  location: string;
   tags: string[];
 };
 
@@ -32,44 +32,37 @@ export type ItemResponse = {
 //   );
 // };
 
-const getAllForUser = async (userId: string) => {
-  const rows = await db
-    .select()
-    .from(items)
-    .where(eq(items.userId, userId))
-    .leftJoin(tags, eq(items.id, tags.itemId))
-    .all();
+// const getAllForUser = async (userId: string) => {
+//   const rows = await db
+//     .select({
+//       id: items.id,
+//       name: items.name,
+//       image: items.image,
+//       location: items.location,
+//       tag: tags.name
+//     })
+//     .from(items)
+//     .where(eq(items.userId, userId))
+//     .leftJoin(tags, eq(items.id, tags.itemId))
+//     .all();
 
-  const result: ItemResponse[] = [];
+//   const result = rows.reduce((acc, row) => {
+//     acc.has(row.id)
+//       ? acc.get(row.id)!.tags.push(row.tag!)
+//       : acc.set(row.id, {
+//         id: row.id,
+//         name: row.name,
+//         image: row.image,
+//         location: row.location!,
+//         tags: row.tag ? [row.tag] : []
+//       });
+    
+//     return acc;
+//   }, new Map<string, ItemResponse>());
 
-  rows.forEach((row) => {
-    const foundIndex = result.findIndex((i) => i.id === row.items.id);
-
-    if (foundIndex > -1 && row.tags) {
-      result[foundIndex].tags.push(row.tags.name);
-    } else {
-      const valueToAdd: ItemResponse = {
-        id: row.items.id,
-        name: row.items.name,
-        image: row.items.image,
-        tags: [],
-      };
-
-      if (row.items.location) {
-        valueToAdd.location = row.items.location;
-      }
-      
-      if (row.tags) {
-        valueToAdd.tags.push(row.tags.name);
-      }
-
-      result.push(valueToAdd);
-    }
-  });
-
-  return result;
-};
+//   return [ ...result.values() ];
+// };
 
 export default {
-  getAllForUser
+  // getAllForUser
 };

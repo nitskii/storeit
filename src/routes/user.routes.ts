@@ -4,15 +4,15 @@ import { Elysia, t } from 'elysia';
 import userService from '../services/user.service';
 
 const userRoutes = (app: Elysia) => app
+  .use(cookie({
+    maxAge: process.env.COOKIE_MAX_AGE,
+    sameSite: true
+  }))
   .use(
     jwt({
       secret: process.env.SECRET
     })
   )
-  .use(cookie({
-    maxAge: process.env.COOKIE_MAX_AGE,
-    sameSite: true
-  }))
   .model({
     user: t.Object({
       nickname: t.String({
@@ -62,23 +62,7 @@ const userRoutes = (app: Elysia) => app
       set.headers['Set-Cookie'] = 'auth=;Path=/;Expires=Thu, 01 Jan 1970 00:00:00 GMT';
       set.headers['HX-Redirect'] = '/';
     }
-  )
-  .onError(({ error, set }) => {
-    switch (error.message) {
-    case 'Incorrect password':
-      set.status = 401;
-      break;
-    case 'User not found':
-      set.status = 404;
-      break;
-    case 'User exists':
-      set.status = 409;
-      break;
-    }
-
-    return {
-      error: error.message
-    };
-  });
+  );
+  
 
 export default userRoutes;

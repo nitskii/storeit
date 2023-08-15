@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uk" class="h-full bg-white">
+<html lang="uk" class="h-full">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -7,13 +7,24 @@
     <link href="/public/tailwind.css" rel="stylesheet" />
   </head>
   <body class="h-full">
-    <main class="bg-white">
+    <header>
+      <nav class="flex justify-end py-2">
+        <button
+          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-center text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
+          Додати
+        </button>
+        <button
+          hx-post="/api/logout"
+          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-center text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
+          Вийти
+        </button>
+      </nav>
+    </header>
+    <main class="h-full">
       <div
-        class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8"
-      >
+        class="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
         <div
-          class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8"
-        >
+          class="mt-6 grid grid-cols-1 gap-x-6 gap-y-10 sm:grid-cols-2 lg:grid-cols-4 xl:gap-x-8">
           <div hx-trigger="load" hx-get="/api/items" hx-swap="outerHTML"></div>
         </div>
       </div>
