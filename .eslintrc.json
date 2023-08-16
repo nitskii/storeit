@@ -17,7 +17,8 @@
     "quotes": ["warn", "single"],
     "semi": ["warn", "always"],
     "no-unused-vars": "warn",
-    "no-empty": "warn"
+    "no-empty": "warn",
+    "comma-dangle": ["warn", "never"]
   },
   "globals": {
     "Bun": true
