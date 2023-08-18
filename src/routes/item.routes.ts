@@ -1,7 +1,6 @@
 import { Elysia, t } from 'elysia';
 import authPlugin from '../plugins/auth.plugin';
 import itemService from '../services/item.service';
-import locationService from '../services/location.service';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
@@ -16,14 +15,24 @@ const itemRoutes = (app: Elysia) =>
           maxSize: MAX_IMAGE_SIZE
         }),
         location: t.String(),
-        tags: t.Optional(t.Array(t.String()))
+        tags: t.Optional(t.Union([
+          t.Array(t.String()),
+          t.String()
+        ]))
       })
     })
     .get('/item/locations', async () => {
     })
     .post(
       '/item',
-      async () => {
+      async ({ body: newItem, userId }) => {
+        await itemService.create({
+          ...newItem,
+          tags: typeof newItem.tags == 'string'
+            ? [newItem.tags]
+            : newItem.tags,
+          userId
+        });
       },
       { body: 'item' }
     )

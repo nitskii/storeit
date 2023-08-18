@@ -1,11 +1,15 @@
-import { InferModel } from 'drizzle-orm';
-import { items } from '../db/schema';
-
-export type Item = Omit<InferModel<typeof items> & { location: string, tags: string[] }, 'userId' | 'locationId'>;
+export type Item = {
+  id: string,
+  name: string,
+  image: string
+  location: string,
+  tags: string[]
+};
 
 export type NewItem = {
   name: string,
   image: Blob,
   location: string,
-  tags: string[]
+  tags?: string[],
+  userId: string
 }

@@ -1,20 +1,14 @@
 import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
-import Elysia from 'elysia';
+import { Elysia } from 'elysia';
 
-const authPlugin = new Elysia()
-  .use(
-    cookie({
-      maxAge: process.env.COOKIE_MAX_AGE,
-      sameSite: true
-    })
-  )
+const authPlugin = (app: Elysia) => app
+  .use(cookie())
   .use(
     jwt({
       secret: process.env.SECRET
     })
-  )
-  .derive(async ({ cookie, jwt }) => {
+  ).derive(async ({ cookie, jwt }) => {
     if (!cookie.auth) {
       throw new Error('Unauthorized');
     }
