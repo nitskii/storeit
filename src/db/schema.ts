@@ -13,6 +13,11 @@ export const locations = sqliteTable('locations', {
   parentId: text('parent_id').references(() => locations.id)
 });
 
+export const tags = sqliteTable('tags', {
+  id: text('id').primaryKey(),
+  name: text('name').unique().notNull()
+});
+
 export const items = sqliteTable('items', {
   id: text('id').primaryKey(),
   name: text('name').notNull(),
@@ -21,8 +26,7 @@ export const items = sqliteTable('items', {
   userId: text('user_id').references(() => users.id)
 });
 
-export const tags = sqliteTable('tags', {
-  id: text('id').primaryKey(),
-  name: text('name').unique().notNull(),
-  itemId: text('item_id').references(() => items.id)
+export const tagsToItems = sqliteTable('tagsToItems', {
+  tagId: text('tag_id').notNull().references(() => tags.id),
+  itemId: text('item_id').notNull().references(() => items.id)
 });

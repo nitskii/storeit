@@ -47,6 +47,20 @@ const create = async (newLocation: NewLocation) => {
     .run();
 };
 
+const getIdByName = async (name: string): Promise<string | undefined> => {
+  const [ location ] = await db
+    .select({
+      id: locations.id
+    })
+    .from(locations)
+    .where(eq(locations.name, name))
+    .limit(1)
+    .all();
+    
+  return location && location.id;
+};
+
 export default {
-  create
+  create,
+  getIdByName
 };

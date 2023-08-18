@@ -21,7 +21,8 @@ const itemRoutes = (app: Elysia) =>
         ]))
       })
     })
-    .get('/item/locations', async () => {
+    .get('/item/locations', async ({ userId }) => {
+      return await itemService.getItemLocations(userId);
     })
     .post(
       '/item',
@@ -38,7 +39,7 @@ const itemRoutes = (app: Elysia) =>
     )
     .get(
       '/items',
-      async ({ set, userId }) => {
+      async ({ userId, set }) => {
         const items = await itemService.getAllForUser(userId);
 
         set.headers['Content-Type'] = 'text/html; charset=utf8';
