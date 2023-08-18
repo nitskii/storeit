@@ -1,0 +1,74 @@
+<!doctype html>
+<html lang="uk" class="h-full">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Шафа - Додавання предмету</title>
+    <link href="/public/tailwind.css" rel="stylesheet" />
+  </head>
+  <body class="h-full">
+    <header class="bg-orange-100">
+      <nav class="flex justify-end py-2">
+        <a
+          href="/items"
+          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-center text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
+          Повернутись
+        </a>
+        <a
+          hx-post="/api/logout"
+          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-center text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
+          Вийти
+        </a>
+      </nav>
+    </header>
+    <main class="h-full">
+      <div
+        class="mx-auto flex flex-col items-center justify-center px-6 py-8 md:h-screen lg:py-0">
+        <div
+          class="w-full rounded-lg bg-white shadow sm:max-w-md md:mt-0 xl:p-0">
+          <div class="space-y-4 p-6 sm:p-8 md:space-y-6">
+            <form class="space-y-4 md:space-y-6">
+              <div>
+                <label for="name" class="mb-2 block text-sm text-gray-900">
+                  Назва
+                </label>
+                <input
+                  type="text"
+                  name="name"
+                  id="name"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-3 text-gray-900 focus:border-orange-300 focus:outline-none focus:ring-orange-300 sm:text-sm"
+                  required />
+              </div>
+              <div>
+                <label for="image" class="mb-2 block text-sm text-gray-900">
+                  Картинка
+                </label>
+                <input
+                  type="file"
+                  name="image"
+                  id="image"
+                  class="block w-full rounded-lg border border-gray-300 bg-gray-50 p-2.5 text-gray-900 file:mr-4 file:rounded-full file:border-0 file:bg-orange-100 file:px-4 file:py-1 file:font-semibold file:text-orange-400 hover:file:bg-orange-200 focus:border-orange-300 focus:outline-none focus:ring-orange-300 sm:text-sm"
+                  required />
+              </div>
+              <div>
+                <label for="location" class="mb-2 block text-sm text-gray-900">
+                  Розположення
+                </label>
+                <div hx-get="/item/locations" hx-trigger="load" />
+              </div>
+              <div class="flex">
+                <button
+                  type="submit"
+                  class="w-full rounded-lg bg-orange-400 px-5 py-2.5 text-center text-sm text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300"
+                  hx-post="/api/item">
+                  Додати
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </main>
+    <script src="/public/htmx.min.js"></script>
+  </body>
+</html>

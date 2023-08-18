@@ -45,12 +45,12 @@ const itemRoutes = (app: Elysia) =>
         set.headers['Content-Type'] = 'text/html; charset=utf8';
 
         return items.map((item) => `
-          <div class="group relative">
-            <div class="aspect-h-1 aspect-w-1 w-full overflow-hidden rounded-md bg-gray-200 lg:aspect-none group-hover:opacity-75 lg:h-80">
+          <div class="group h-full relative">
+            <div class="flex items-end w-full h-full overflow-hidden rounded-md lg:aspect-none group-hover:opacity-75">
               <img
                 src="${item.image}"
                 alt="${item.id}"
-                class="h-full w-full object-cover object-center" />
+                class="object-cover object-center" />
             </div>
             <div class="mt-4 flex justify-between">
               <div>
