@@ -43,7 +43,6 @@ new Elysia()
     set.redirect = '/';
   })
   .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
-  .get('/favicon.ico', () => Bun.file('./public/favicon.ico'))
   .group('/api', app => app
     .use(userRoutes)
     .use(locationRoutes)

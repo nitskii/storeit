@@ -3,20 +3,21 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Шафа - Предмети</title>
+    <link href="/public/favicon.ico" rel="icon" />
     <link href="/public/tailwind.css" rel="stylesheet" />
+    <title>Шафа - Предмети</title>
   </head>
   <body class="h-full">
     <header class="bg-orange-100">
       <nav class="flex justify-end py-2">
         <a
           href="/add-item"
-          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-center text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
+          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
           Додати
         </a>
         <a
           hx-post="/api/logout"
-          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-center text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
+          class="mr-2 rounded-lg bg-orange-400 px-4 py-2 text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300">
           Вийти
         </a>
       </nav>

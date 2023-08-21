@@ -12,7 +12,8 @@
     "@tailwindcss/forms": "^0.5.4",
     "cloudinary": "^1.40.0",
     "drizzle-orm": "^0.28.2",
-    "elysia": "^0.6.10"
+    "elysia": "^0.6.11",
+    "typed-html": "^3.0.1"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^6.3.0",
