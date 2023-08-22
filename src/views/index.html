@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="uk" class="h-full">
+<html lang="uk" class="h-full bg-orange-50">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -8,42 +8,40 @@
     <title>Шафа - Вхід</title>
   </head>
   <body class="h-full">
-    <main>
-      <div class="p-4">
-        <form class="rounded-lg px-6 py-3 shadow sm:mx-auto sm:max-w-sm">
-          <div class="mb-3">
-            <label for="nickname" class="mb-2 block sm:text-sm">Нікнейм</label>
+    <main class="h-full">
+      <div class="flex h-full items-center px-4">
+        <form
+          class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 px-4 py-4 shadow sm:mx-auto sm:max-w-md">
+          <div class="w-full">
             <input
-              id="nickname"
+              type="text"
               name="nickname"
-              class="w-full rounded-lg border border-orange-200 focus:border-orange-300 focus:outline-none focus:ring-orange-300 sm:text-sm"
+              class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+              placeholder="Нікнейм"
               required />
           </div>
-          <div class="mb-3">
-            <label for="password" class="mb-2 block sm:text-sm">Пароль</label>
+          <div class="w-full">
             <input
               type="password"
-              id="password"
               name="password"
-              class="w-full rounded-lg border border-orange-200 focus:border-orange-300 focus:outline-none focus:ring-orange-300 sm:text-sm"
+              class="w-full rounded-lg border-0 bg-orange-200 focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+              placeholder="Пароль"
               required />
           </div>
-          <div class="flex justify-between">
-            <button
-              type="submit"
-              class="w-40 rounded-lg bg-orange-400 px-5 py-2 text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300 sm:text-sm"
-              hx-post="/api/login"
-              hx-swap="none">
-              Увійти
-            </button>
-            <button
-              type="submit"
-              class="w-40 rounded-lg bg-orange-400 px-5 py-2 text-white hover:bg-orange-500 focus:outline-none focus:ring-2 focus:ring-orange-300 sm:text-sm"
-              hx-post="/api/signup"
-              hx-swap="none">
-              Зареєструватись
-            </button>
-          </div>
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+            hx-post="/api/login"
+            hx-swap="none">
+            Увійти
+          </button>
+          <button
+            type="submit"
+            class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+            hx-post="/api/signup"
+            hx-swap="none">
+            Зареєструватись
+          </button>
         </form>
       </div>
     </main>
