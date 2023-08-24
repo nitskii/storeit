@@ -41,25 +41,21 @@ const itemRoutes = (app: Elysia) =>
 
       return items
         .map((item) => (
-          <div class="group">
-            <div class="overflow-hidden rounded-md group-hover:opacity-75">
+          <div class="group h-fit">
+            <div class="overflow-hidden rounded-lg group-hover:opacity-75">
               <img src={item.image} alt={item.id} />
             </div>
-            <div class="mt-4">
-              <div>
-                <h3 class="text-gray-700">{item.name}</h3>
-                {item.location && (
-                  <span class="mt-1 text-sm text-gray-500">
-                    {item.location}
+            <div class="mt-1 flex flex-col items-center space-y-1">
+              <span class="text-lg text-gray-700">{item.name}</span>
+              {item.location && (
+                <span class="block text-sm text-gray-500">{item.location}</span>
+              )}
+              <div class="space-x-1">
+                {item.tags.map((t) => (
+                  <span class="rounded-lg bg-orange-200 px-2 py-1 text-xs uppercase">
+                    {t}
                   </span>
-                )}
-                <div class="mt-1">
-                  {item.tags.map((t) => (
-                    <span class="mr-1 rounded-md bg-orange-400 px-2 py-1 text-xs uppercase text-white last:mr-0">
-                      {t}
-                    </span>
-                  ))}
-                </div>
+                ))}
               </div>
             </div>
           </div>
