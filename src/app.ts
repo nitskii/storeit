@@ -1,6 +1,7 @@
 import cookie from '@elysiajs/cookie';
 import { v2 as cloudinary } from 'cloudinary';
 import { Elysia } from 'elysia';
+import logger from './plugins/logger.plugin';
 import itemRoutes from './routes/item.routes';
 import locationRoutes from './routes/location.routes';
 import userRoutes from './routes/user.routes';
@@ -14,10 +15,8 @@ cloudinary.config({
 const VIEWS_DIR = './src/views/';
 
 new Elysia()
+  .use(logger)
   .use(cookie())
-  .onRequest(({ request }) => {
-    console.log(`${request.method} ${request.url.slice(21)}`);
-  })
   .get('/', ({ cookie, set }) => {
     if (!cookie.auth) {
       return Bun.file(`${VIEWS_DIR}index.html`);
@@ -29,14 +28,6 @@ new Elysia()
   .get('/items', async ({ cookie, set }) => {
     if (cookie.auth) {
       return Bun.file(`${VIEWS_DIR}items.html`);
-    }
-
-    set.status = 302;
-    set.redirect = '/';
-  })
-  .get('/add-item', ({ cookie, set }) => {
-    if (cookie.auth) {
-      return Bun.file(`${VIEWS_DIR}add-item.html`);
     }
 
     set.status = 302;
@@ -70,15 +61,6 @@ new Elysia()
       };
     })
   )
-  .onError(({ code, set }) => {
-    if (code == 'NOT_FOUND') {
-      set.status = 404;
-
-      return {
-        error: 'Endpoint not found'
-      };
-    }
-  })
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);
   });
