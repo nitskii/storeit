@@ -20,17 +20,25 @@ const itemRoutes = (app: Elysia) =>
         tags: t.Optional(t.Union([t.Array(t.String()), t.String()]))
       })
     })
-    .get('/item/locations', async ({ userId }) => {
-      return await itemService.getItemLocations(userId);
+    .get('/item/locations', async ({ userId, set }) => {
+      const locations = await itemService.getItemLocations(userId);
+
+      set.headers['Content-Type'] = 'text/html; charset=utf-8';
+
+      return locations.map((location) => <option>{location}</option>).join('');
     })
     .post(
       '/item',
-      async ({ body: newItem, userId }) => {
+      async ({ body: newItem, userId, set }) => {
+        console.log(newItem);
+
         await itemService.create({
           ...newItem,
           tags: typeof newItem.tags == 'string' ? [newItem.tags] : newItem.tags,
           userId
         });
+
+        set.status = 204;
       },
       { body: 'item' }
     )

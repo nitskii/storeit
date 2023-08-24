@@ -11,13 +11,12 @@
     <header class="bg-orange-100">
       <nav class="flex justify-end space-x-2 py-2 pr-2">
         <a
-          href="/add-item"
-          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+          class="show-modal cursor-pointer rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
           Додати
         </a>
         <a
           hx-post="/api/logout"
-          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+          class="cursor-pointer rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
           Вийти
         </a>
       </nav>
@@ -28,6 +27,55 @@
         <div hx-trigger="load" hx-get="/api/items" hx-swap="outerHTML" />
       </div>
     </main>
+    <div
+      class="modal fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      <form
+        class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 px-4 py-4 shadow sm:max-w-md">
+        <input
+          type="text"
+          name="name"
+          class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+          placeholder="Назва предмету"
+          required />
+        <input
+          type="file"
+          name="image"
+          accept="image/*"
+          class="w-full rounded-lg bg-orange-200 px-2 py-1.5 file:rounded-lg file:border-0 file:bg-transparent file:px-2 file:py-1 file:outline file:outline-2 file:outline-offset-0 file:outline-orange-300 hover:cursor-pointer file:hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300" />
+        <select
+          name="location"
+          class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+          required
+          hx-get="/api/item/locations"
+          hx-trigger="load"
+          hx-swap="innerHTML"></select>
+        <button
+          type="submit"
+          class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          hx-post="/api/item"
+          hx-encoding="multipart/form-data"
+          hx-swap="none">
+          Додати
+        </button>
+        <button
+          class="close-modal w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+          Назад
+        </button>
+      </form>
+    </div>
     <script src="/public/htmx.min.js"></script>
+    <script>
+      const modal = document.querySelector('.modal');
+      const showModalButton = document.querySelector('.show-modal');
+      const closeModalButton = document.querySelector('.close-modal');
+
+      showModalButton.addEventListener('click', () => {
+        modal.classList.replace('hidden', 'flex');
+      });
+
+      closeModalButton.addEventListener('click', () => {
+        modal.classList.replace('flex', 'hidden');
+      });
+    </script>
   </body>
 </html>
