@@ -1,6 +1,5 @@
 import { Elysia, t } from 'elysia';
 import authPlugin from '../plugins/auth.plugin';
-import errorHandler from '../plugins/error-handler.plugin';
 import locationService from '../services/location.service';
 
 const locationRoutes = (app: Elysia) => app
@@ -21,6 +20,17 @@ const locationRoutes = (app: Elysia) => app
       },
       { body: 'location' }
     )
-    .use(errorHandler));
+    .onError(({ error, set }) => {
+      switch (error.message) {
+      case 'Location exists':
+        set.status = 409;
+        break;
+      }
+  
+      return {
+        error: error.message
+      };
+    })
+  );
 
 export default locationRoutes;

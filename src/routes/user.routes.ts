@@ -1,7 +1,6 @@
 import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import { Elysia, t } from 'elysia';
-import errorHandler from '../plugins/error-handler.plugin';
 import userService from '../services/user.service';
 
 const userRoutes = (app: Elysia) => app
@@ -59,6 +58,23 @@ const userRoutes = (app: Elysia) => app
         set.headers['HX-Redirect'] = '/';
       }
     )
-    .use(errorHandler));
+    .onError(({ error, set }) => {
+      switch (error.message) {
+      case 'Incorrect password':
+        set.status = 401;
+        break;
+      case 'User not found':
+        set.status = 404;
+        break;
+      case 'User exists':
+        set.status = 409;
+        break;
+      }
+  
+      return {
+        error: error.message
+      };
+    })
+  );
 
 export default userRoutes;

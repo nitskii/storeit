@@ -2,7 +2,6 @@ import { Elysia, t } from 'elysia';
 // eslint-disable-next-line no-unused-vars
 import * as elements from 'typed-html';
 import authPlugin from '../plugins/auth.plugin';
-import errorHandler from '../plugins/error-handler.plugin';
 import itemService from '../services/item.service';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
@@ -30,21 +29,17 @@ const itemRoutes = (app: Elysia) => app
         .map((location) => <option>{location}</option>)
         .join('');
     })
-    .post(
-      '/item',
-      async ({ body: newItem, userId, set }) => {
-        console.log(newItem);
-
-        await itemService.create({
-          ...newItem,
-          tags:
+    .post('/item', async ({ body: newItem, userId, set }) => {
+      await itemService.create({
+        ...newItem,
+        tags:
               typeof newItem.tags == 'string' ? [newItem.tags] : newItem.tags,
-          userId
-        });
+        userId
+      });
 
-        set.status = 204;
-      },
-      { body: 'item' }
+      set.status = 204;
+    },
+    { body: 'item' }
     )
     .get('/items', async ({ userId, set }) => {
       const items = await itemService.getAllForUser(userId);
@@ -76,7 +71,6 @@ const itemRoutes = (app: Elysia) => app
         ))
         .join('');
     })
-    .use(errorHandler)
   );
 
 export default itemRoutes;

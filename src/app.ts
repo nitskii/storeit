@@ -33,7 +33,10 @@ new Elysia()
     set.status = 302;
     set.redirect = '/';
   })
-  .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
+  .get(
+    '/public/:file',
+    ({ params: { file } }) => Bun.file(`./public/${file}`)
+  )
   .use(userRoutes)
   .use(locationRoutes)
   .use(itemRoutes)
