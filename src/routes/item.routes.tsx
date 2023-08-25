@@ -2,12 +2,13 @@ import { Elysia, t } from 'elysia';
 // eslint-disable-next-line no-unused-vars
 import * as elements from 'typed-html';
 import authPlugin from '../plugins/auth.plugin';
+import errorHandler from '../plugins/error-handler.plugin';
 import itemService from '../services/item.service';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
-const itemRoutes = (app: Elysia) =>
-  app
+const itemRoutes = (app: Elysia) => app
+  .group('/api', (app) => app
     .use(authPlugin)
     .model({
       item: t.Object({
@@ -25,7 +26,9 @@ const itemRoutes = (app: Elysia) =>
 
       set.headers['Content-Type'] = 'text/html; charset=utf-8';
 
-      return locations.map((location) => <option>{location}</option>).join('');
+      return locations
+        .map((location) => <option>{location}</option>)
+        .join('');
     })
     .post(
       '/item',
@@ -34,7 +37,8 @@ const itemRoutes = (app: Elysia) =>
 
         await itemService.create({
           ...newItem,
-          tags: typeof newItem.tags == 'string' ? [newItem.tags] : newItem.tags,
+          tags:
+              typeof newItem.tags == 'string' ? [newItem.tags] : newItem.tags,
           userId
         });
 
@@ -56,7 +60,9 @@ const itemRoutes = (app: Elysia) =>
             <div class="mt-1 flex flex-col items-center space-y-1">
               <span class="text-lg text-gray-700">{item.name}</span>
               {item.location && (
-                <span class="block text-sm text-gray-500">{item.location}</span>
+                <span class="block text-sm text-gray-500">
+                  {item.location}
+                </span>
               )}
               <div class="space-x-1">
                 {item.tags.map((t) => (
@@ -69,6 +75,8 @@ const itemRoutes = (app: Elysia) =>
           </div>
         ))
         .join('');
-    });
+    })
+    .use(errorHandler)
+  );
 
 export default itemRoutes;

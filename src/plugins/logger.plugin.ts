@@ -15,7 +15,7 @@ methodToColor.set('PUT', COLOR_YELLOW);
 methodToColor.set('PATCH', COLOR_ORANGE);
 methodToColor.set('DELETE', COLOR_RED);
 
-const loggerPlugin = (app: Elysia) => app
+const logger = (app: Elysia) => app
   .onRequest(({ request }) => {
     const { method, url } = request;
     const { pathname: path } = new URL(url);
@@ -24,4 +24,4 @@ const loggerPlugin = (app: Elysia) => app
     console.log(`${F_BOLD}${color}${method}${NO_FORMAT} ${path}`);
   });
 
-export default loggerPlugin;
+export default logger;

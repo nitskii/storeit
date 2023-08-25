@@ -1,6 +1,6 @@
 import cookie from '@elysiajs/cookie';
 import { v2 as cloudinary } from 'cloudinary';
-import { Elysia } from 'elysia';
+import Elysia from 'elysia';
 import logger from './plugins/logger.plugin';
 import itemRoutes from './routes/item.routes';
 import locationRoutes from './routes/location.routes';
@@ -34,33 +34,9 @@ new Elysia()
     set.redirect = '/';
   })
   .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
-  .group('/api', app => app
-    .use(userRoutes)
-    .use(locationRoutes)
-    .use(itemRoutes)
-    .onError(({ error, set }) => {
-      switch (error.message) {
-      case 'JWT is invalid or expired':
-        set.status = 400;
-        break;
-      case 'Incorrect password':
-      case 'Unauthorized':
-        set.status = 401;
-        break;
-      case 'User not found':
-        set.status = 404;
-        break;
-      case 'User exists':
-      case 'Location exists':
-        set.status = 409;
-        break;
-      }
-  
-      return {
-        error: error.message
-      };
-    })
-  )
+  .use(userRoutes)
+  .use(locationRoutes)
+  .use(itemRoutes)
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);
   });
