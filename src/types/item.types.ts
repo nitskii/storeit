@@ -1,4 +1,4 @@
-export type Item = {
+export type ItemResponse = {
   id: string,
   name: string,
   image: string

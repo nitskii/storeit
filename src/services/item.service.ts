@@ -3,7 +3,7 @@ import { randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
 import db from '../db';
 import { items, locations, tags, tagsToItems } from '../db/schema';
-import { Item, NewItem } from '../types/item.types';
+import { ItemResponse, NewItem } from '../types/item.types';
 import locationService from './location.service';
 import tagService from './tag.service';
 
@@ -49,7 +49,7 @@ const create = async (newItem: NewItem) => {
     .run();
 };
 
-const getAllForUser = async (userId: string): Promise<Item[]> => {
+const getAllForUser = async (userId: string): Promise<ItemResponse[]> => {
   const itemsSubquery = db
     .select({
       id: items.id,
@@ -87,7 +87,7 @@ const getAllForUser = async (userId: string): Promise<Item[]> => {
       });
     
     return acc;
-  }, new Map<string, Item>());
+  }, new Map<string, ItemResponse>());
 
   return [ ...result.values() ];
 };

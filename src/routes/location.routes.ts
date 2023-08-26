@@ -1,12 +1,12 @@
 import { Elysia, t } from 'elysia';
-import authPlugin from '../plugins/auth.plugin';
+import authentication from '../middleware/authentication';
 import locationService from '../services/location.service';
 
 const locationRoutes = (app: Elysia) => app
   .group('/api', app => app
-    .use(authPlugin)
+    .use(authentication)
     .model({
-      'location': t.Object({
+      location: t.Object({
         name: t.String(),
         parentId: t.Optional(t.String())
       })
@@ -22,13 +22,17 @@ const locationRoutes = (app: Elysia) => app
     )
     .onError(({ error, set }) => {
       switch (error.message) {
+      case 'Location not found':
+      case 'Parent location not found':
+        set.status = 404;
+        break;
       case 'Location exists':
         set.status = 409;
         break;
       }
   
       return {
-        error: error.message
+        message: error.message
       };
     })
   );

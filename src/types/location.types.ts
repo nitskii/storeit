@@ -1,4 +1,4 @@
-export type Location = {
+export type LocationResponse = {
     id: string,
     name: string
 }

@@ -1,4 +1,4 @@
-export type Tag = {
+export type TagResponse = {
   id: string
   name: string
 }

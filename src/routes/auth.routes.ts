@@ -1,9 +1,9 @@
 import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import { Elysia, t } from 'elysia';
-import userService from '../services/user.service';
+import userService from '../services/auth.service';
 
-const userRoutes = (app: Elysia) => app
+const authRoutes = (app: Elysia) => app
   .group('/api', app => app
     .use(cookie({
       maxAge: process.env.COOKIE_MAX_AGE,
@@ -72,9 +72,10 @@ const userRoutes = (app: Elysia) => app
       }
   
       return {
-        error: error.message
+        message: error.message
       };
     })
   );
 
-export default userRoutes;
+
+export default authRoutes;

@@ -2,7 +2,7 @@ import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import { Elysia } from 'elysia';
 
-const authPlugin = (app: Elysia) => app
+export default (app: Elysia) => app
   .use(cookie())
   .use(
     jwt({
@@ -38,5 +38,3 @@ const authPlugin = (app: Elysia) => app
       message: error.message
     };
   });
-
-export default authPlugin;

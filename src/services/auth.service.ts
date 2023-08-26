@@ -2,9 +2,9 @@ import { randomBytes, randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
 import db from '../db';
 import { users } from '../db/schema';
-import { NewUser } from '../types/user.types';
+import { UserCredentials } from '../types/user.types';
 
-const signup = async (newUser: NewUser) => {
+const signup = async (newUser: UserCredentials) => {
   const [ existingUser ] = await db
     .select({
       id: users.id
@@ -19,7 +19,8 @@ const signup = async (newUser: NewUser) => {
   }
 
   const salt = randomBytes(8).toString('hex');
-  const password = await Bun.password.hash(
+  
+  newUser.password = await Bun.password.hash(
     `${newUser.password}${salt}`,
     'bcrypt'
   );
@@ -31,7 +32,6 @@ const signup = async (newUser: NewUser) => {
     .values({
       id: newUserId,
       ...newUser,
-      password,
       salt
     })
     .run();
@@ -39,7 +39,7 @@ const signup = async (newUser: NewUser) => {
   return newUserId;
 };
 
-const login = async (user: NewUser) => {
+const login = async (user: UserCredentials) => {
   const [ existingUser ] = await db
     .select({
       id: users.id,

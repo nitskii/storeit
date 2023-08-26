@@ -21,20 +21,20 @@ const create = async (newLocation: NewLocation) => {
   let parentId = null;
 
   if (newLocation.parent) {
-    const [ existingLocation ] = await db
+    const [ existingParent ] = await db
       .select({
         id: locations.id
       })
       .from(locations)
-      .where(eq(locations.name, newLocation.name))
+      .where(eq(locations.name, newLocation.parent))
       .limit(1)
       .all();
 
-    if (!existingLocation) {
-      throw new Error('Location not found');
+    if (!existingParent) {
+      throw new Error('Parent location not found');
     }
     
-    parentId = existingLocation.id;
+    parentId = existingParent.id;
   }
 
   await db
@@ -47,7 +47,7 @@ const create = async (newLocation: NewLocation) => {
     .run();
 };
 
-const getIdByName = async (name: string): Promise<string | undefined> => {
+const getIdByName = async (name: string): Promise<string | null> => {
   const [ location ] = await db
     .select({
       id: locations.id
@@ -57,7 +57,7 @@ const getIdByName = async (name: string): Promise<string | undefined> => {
     .limit(1)
     .all();
     
-  return location && location.id;
+  return location ? location.id : null;
 };
 
 export default {
