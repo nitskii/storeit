@@ -1,6 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
 import Elysia from 'elysia';
-import { authentication, logger } from './middleware';
+import { logger } from './middleware';
+import redirector from './middleware/redirector';
 import { authRoutes, itemRoutes, locationRoutes } from './routes';
 
 cloudinary.config({
@@ -13,11 +14,11 @@ const VIEWS_DIR = './src/views/';
 
 new Elysia()
   .use(logger)
-  .get('/', () => Bun.file(`${VIEWS_DIR}index.html`))
-  .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
   .use(authRoutes)
-  .use(authentication)
+  .use(redirector)
+  .get('/', () => Bun.file(`${VIEWS_DIR}index.html`))
   .get('/items', () => Bun.file(`${VIEWS_DIR}items.html`))
+  .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
   .use(locationRoutes)
   .use(itemRoutes)
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
