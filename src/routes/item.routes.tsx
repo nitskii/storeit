@@ -28,7 +28,7 @@ const itemRoutes = (app: Elysia) => app
         set.headers['Content-Type'] = 'text/html; charset=utf-8';
 
         return locations
-          .map((location) => <option>{location}</option>)
+          .map(([id, name]) => <option value={id}>{name}</option>)
           .join('');
       })
     .post(

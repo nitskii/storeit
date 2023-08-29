@@ -5,5 +5,5 @@ export type LocationResponse = {
 
 export type NewLocation = {
     name: string,
-    parent?: string
+    parentId?: string
 };

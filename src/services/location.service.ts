@@ -18,31 +18,26 @@ const create = async (newLocation: NewLocation) => {
     throw new Error('Location exists');
   }
 
-  let parentId = null;
-
-  if (newLocation.parent) {
+  if (newLocation.parentId) {
     const [ existingParent ] = await db
       .select({
         id: locations.id
       })
       .from(locations)
-      .where(eq(locations.name, newLocation.parent))
+      .where(eq(locations.id, newLocation.parentId))
       .limit(1)
       .all();
 
     if (!existingParent) {
       throw new Error('Parent location not found');
     }
-    
-    parentId = existingParent.id;
   }
 
   await db
     .insert(locations)
     .values({
       id: randomUUID(),
-      name: newLocation.name,
-      parentId
+      ...newLocation
     })
     .run();
 };

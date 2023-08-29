@@ -95,19 +95,22 @@ const getAllForUser = async (userId: string): Promise<ItemResponse[]> => {
 const getItemLocations = async (userId: string) => {
   const rows = await db
     .select({
-      location: locations.name
+      id: locations.id,
+      name: locations.name
     })
     .from(items)
     .where(eq(items.userId, userId))
     .leftJoin(locations, eq(items.locationId, locations.id))
     .all();
 
-  return Array.from(
-    rows.reduce(
-      (acc, row) => acc.add(row.location),
-      new Set<string>()
-    )
-  );
+  return [
+    ...rows.reduce(
+      (acc, row) => 
+        acc.has(row.id)
+          ? acc
+          : acc.set(row.id, row.name),
+      new Map<string, string>()).entries()
+  ];
 };
 
 export default {

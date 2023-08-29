@@ -109,18 +109,19 @@
           <input
             type="checkbox"
             class="mx-2 h-5 w-5 appearance-none rounded-md border-0 bg-orange-200 checked:bg-orange-300 hover:bg-orange-300 hover:checked:bg-orange-300 focus:ring-1 focus:ring-orange-300 focus:ring-offset-0 focus:checked:bg-orange-300 focus:checked:ring-orange-200"
-            hx-on:change="document.querySelector('#location-select').classList.toggle('hidden')" />
-          Локація-власник
+            hx-on:change="const ps=document.querySelector('#parent-select');ps.classList.toggle('hidden');ps.disabled=!ps.disabled" />
+          Має локацію-власника
         </label>
         <select
-          id="location-select"
-          name="location"
+          id="parent-select"
+          name="parentId"
           class="hidden w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
           hx-get="api/item/locations"
           hx-params="none"
           hx-swap="beforeend"
+          disabled
           hx-trigger="load">
-          <option disabled value="" selected>Оберіть локацію</option>
+          <option disabled selected>Оберіть локацію</option>
         </select>
         <button
           type="submit"
