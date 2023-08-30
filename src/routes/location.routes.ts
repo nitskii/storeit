@@ -13,12 +13,23 @@ const locationRoutes = (app: Elysia) => app
     })
     .post(
       '/location',
-      async ({ body: newLocation, set }) => {
-        await locationService.create(newLocation);
+      async ({ body: newLocation, userId, set }) => {
+        await locationService.create({
+          ...newLocation,
+          userId
+        });
 
         set.status = 204;
       },
       { body: 'location' }
+    )
+    .get(
+      '/locations',
+      async ({ userId }) => {
+        const locations = await locationService.getAllForUser(userId);
+
+        return locations;
+      }
     )
     .onError(({ error, set }) => {
       switch (error.message) {

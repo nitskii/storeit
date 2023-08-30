@@ -14,7 +14,6 @@
     "allowJs": true,
     "noEmit": true,
     "types": ["bun-types"],
-    "noImplicitAny": false,
     "jsx": "react",
     "jsxFactory": "elements.createElement"
   }
