@@ -26,9 +26,7 @@ const locationRoutes = (app: Elysia) => app
     .get(
       '/locations',
       async ({ userId }) => {
-        const locations = await locationService.getAllForUser(userId);
-
-        return locations;
+        return await locationService.getAllForUser(userId);
       }
     )
     .onError(({ error, set }) => {

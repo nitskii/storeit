@@ -1,18 +1,18 @@
 import { randomUUID } from 'crypto';
 import { and, eq } from 'drizzle-orm';
 import db from '../db';
-import { NewLocation, locations as locationsTable, locationsToLocations } from '../db/schema';
+import { NewLocation, locations, locationsToLocations } from '../db/schema';
 
 const create = async (newLocation: NewLocation) => {
   const [ locationExists ] = await db
     .select({
-      id: locationsTable.id
+      id: locations.id
     })
-    .from(locationsTable)
+    .from(locations)
     .where(
       and(
-        eq(locationsTable.userId, newLocation.userId),
-        eq(locationsTable.name, newLocation.name)
+        eq(locations.userId, newLocation.userId),
+        eq(locations.name, newLocation.name)
       ))
     .limit(1);
 
@@ -23,13 +23,13 @@ const create = async (newLocation: NewLocation) => {
   if (newLocation.parentId) {
     const [ existingParent ] = await db
       .select({
-        id: locationsTable.id
+        id: locations.id
       })
-      .from(locationsTable)
+      .from(locations)
       .where(
         and(
-          eq(locationsTable.userId, newLocation.userId),
-          eq(locationsTable.id, newLocation.parentId)
+          eq(locations.userId, newLocation.userId),
+          eq(locations.id, newLocation.parentId)
         ))
       .limit(1);
           
@@ -41,7 +41,7 @@ const create = async (newLocation: NewLocation) => {
   const newLocationId = randomUUID();
 
   await db
-    .insert(locationsTable)
+    .insert(locations)
     .values({
       id: newLocationId,
       ...newLocation
@@ -60,29 +60,27 @@ const create = async (newLocation: NewLocation) => {
 const getAllForUser = async (userId: string) => {
   return await db
     .select({
-      id: locationsTable.id,
-      name: locationsTable.name
+      id: locations.id,
+      name: locations.name
     })
-    .from(locationsTable)
-    .where(eq(locationsTable.userId, userId))
-    .all();  
+    .from(locations)
+    .where(eq(locations.userId, userId));
 };
 
-const getIdByName = async (name: string): Promise<string | null> => {
-  const [ location ] = await db
-    .select({
-      id: locationsTable.id
-    })
-    .from(locationsTable)
-    .where(eq(locationsTable.name, name))
-    .limit(1)
-    .all();
-    
-  return location ? location.id : null;
+const existsById = async (id: string) => {
+  return (
+    await db
+      .select({
+        id: locations.id
+      })
+      .from(locations)
+      .where(eq(locations.id, id))
+      .limit(1)
+  ).length == 1;
 };
 
 export default {
   create,
-  getIdByName,
-  getAllForUser
+  getAllForUser,
+  existsById
 };

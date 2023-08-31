@@ -26,8 +26,8 @@ const authRoutes = (app: Elysia) => app
     })
     .post(
       '/signup',
-      async ({ body: newUser, jwt, setCookie, set }) => {
-        const newUserId = await userService.signup(newUser);
+      async ({ body: credentials, jwt, setCookie, set }) => {
+        const newUserId = await userService.signup(credentials);
         const token = await jwt.sign({ sub: newUserId });
 
         setCookie('auth', token);
@@ -39,8 +39,8 @@ const authRoutes = (app: Elysia) => app
     )
     .post(
       '/login',
-      async ({ body: user, jwt, setCookie, set }) => {
-        const userId = await userService.login(user);
+      async ({ body: credentials, jwt, setCookie, set }) => {
+        const userId = await userService.login(credentials);
         const token = await jwt.sign({ sub: userId });
 
         setCookie('auth', token);

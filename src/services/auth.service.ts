@@ -1,18 +1,16 @@
-import { randomBytes, randomUUID } from 'crypto';
+import { randomBytes } from 'crypto';
 import { eq } from 'drizzle-orm';
 import db from '../db';
-import { users } from '../db/schema';
-import { UserCredentials } from '../types/user.types';
+import { UserCredentials, users } from '../db/schema';
 
-const signup = async (newUser: UserCredentials) => {
+const signup = async (credentials: UserCredentials) => {
   const [ existingUser ] = await db
     .select({
       id: users.id
     })
     .from(users)
-    .where(eq(users.nickname, newUser.nickname))
-    .limit(1)
-    .all();
+    .where(eq(users.nickname, credentials.nickname))
+    .limit(1);
 
   if (existingUser) {
     throw new Error('User exists');
@@ -20,26 +18,23 @@ const signup = async (newUser: UserCredentials) => {
 
   const salt = randomBytes(8).toString('hex');
   
-  newUser.password = await Bun.password.hash(
-    `${newUser.password}${salt}`,
+  credentials.password = await Bun.password.hash(
+    `${credentials.password}${salt}`,
     'bcrypt'
   );
 
-  const newUserId = randomUUID();
-
-  await db
+  const [ newUser ] = await db
     .insert(users)
     .values({
-      id: newUserId,
-      ...newUser,
+      ...credentials,
       salt
     })
-    .run();
+    .returning();
 
-  return newUserId;
+  return newUser.id;
 };
 
-const login = async (user: UserCredentials) => {
+const login = async (credentials: UserCredentials) => {
   const [ existingUser ] = await db
     .select({
       id: users.id,
@@ -47,16 +42,15 @@ const login = async (user: UserCredentials) => {
       salt: users.salt
     })
     .from(users)
-    .where(eq(users.nickname, user.nickname))
-    .limit(1)
-    .all();
+    .where(eq(users.nickname, credentials.nickname))
+    .limit(1);
 
   if (!existingUser) {
     throw new Error('User not found');
   }
 
   const correctPassword = await Bun.password.verify(
-    `${user.password}${existingUser.salt}`,
+    `${credentials.password}${existingUser.salt}`,
     existingUser.password,
     'bcrypt'
   );

@@ -1,24 +1,20 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { randomUUID } from 'crypto';
 import { eq } from 'drizzle-orm';
 import db from '../db';
-import { items, locations, tags, tagsToItems } from '../db/schema';
-import { ItemResponse, NewItem } from '../types/item.types';
+import { NewItem, ResponseItem, items, locations, tags, tagsToItems } from '../db/schema';
 import locationService from './location.service';
 import tagService from './tag.service';
 
 const create = async (newItem: NewItem) => {
-  const { location, tags, image } = newItem;
+  const { locationId, tags, image } = newItem;
 
-  const locationId = await locationService.getIdByName(location);
+  const locationExists = await locationService.existsById(locationId);
 
-  if (!locationId) {
+  if (!locationExists) {
     throw new Error('Location not found');
   }
-
-  if (tags) {
-    await tagService.createMany(tags);
-  }
+  
+  tags && await tagService.createMany(tags);
 
   const buffer = Buffer.from(await image.arrayBuffer());
   const imageUrl: string = await new Promise((resolve, reject) => {
@@ -41,15 +37,12 @@ const create = async (newItem: NewItem) => {
   await db
     .insert(items)
     .values({
-      id: randomUUID(),
       ...newItem,
-      image: imageUrl,
-      locationId
-    })
-    .run();
+      image: imageUrl
+    });
 };
 
-const getAllForUser = async (userId: string): Promise<ItemResponse[]> => {
+const getAllForUser = async (userId: string): Promise<ResponseItem[]> => {
   const itemsSubquery = db
     .select({
       id: items.id,
@@ -71,50 +64,31 @@ const getAllForUser = async (userId: string): Promise<ItemResponse[]> => {
     })
     .from(tagsToItems)
     .rightJoin(itemsSubquery, eq(tagsToItems.itemId, itemsSubquery.id))
-    .leftJoin(locations, eq(itemsSubquery.locationId, locations.id))
     .leftJoin(tags, eq(tagsToItems.tagId, tags.id))
-    .all();
-
-  const result = rows.reduce((acc, row) => {
-    acc.has(row.id)
-      ? acc.get(row.id)!.tags.push(row.tag!)
-      : acc.set(row.id, {
-        id: row.id,
-        name: row.name,
-        image: row.image,
-        location: row.location,
-        tags: row.tag ? [ row.tag ] : []
-      });
-    
-    return acc;
-  }, new Map<string, ItemResponse>());
-
-  return [ ...result.values() ];
-};
-
-const getItemLocations = async (userId: string) => {
-  const rows = await db
-    .select({
-      id: locations.id,
-      name: locations.name
-    })
-    .from(items)
-    .where(eq(items.userId, userId))
-    .leftJoin(locations, eq(items.locationId, locations.id))
-    .all();
+    .innerJoin(locations, eq(itemsSubquery.locationId, locations.id));
 
   return [
-    ...rows.reduce(
-      (acc, row) => 
-        acc.has(row.id)
-          ? acc
-          : acc.set(row.id, row.name),
-      new Map<string, string>()).entries()
+    ...rows
+      .reduce(
+        (result, row) => {
+          result.has(row.id)
+            ? result.get(row.id)!.tags.push(row.tag!)
+            : result.set(row.id, {
+              id: row.id,
+              name: row.name,
+              image: row.image,
+              location: row.location,
+              tags: row.tag ? [ row.tag ] : []
+            });
+      
+          return result;
+        },
+        new Map<string, ResponseItem>())
+      .values()
   ];
 };
 
 export default {
   create,
-  getAllForUser,
-  getItemLocations
+  getAllForUser
 };

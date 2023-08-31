@@ -16,28 +16,17 @@ const itemRoutes = (app: Elysia) => app
           type: 'image',
           maxSize: MAX_IMAGE_SIZE
         }),
-        location: t.String(),
+        locationId: t.String(),
         tags: t.Optional(t.Union([t.Array(t.String()), t.String()]))
       })
     })
-    .get(
-      '/item/locations',
-      async ({ userId, set }) => {
-        const locations = await itemService.getItemLocations(userId);
-
-        set.headers['Content-Type'] = 'text/html; charset=utf-8';
-
-        return locations
-          .map(([id, name]) => <option value={id}>{name}</option>)
-          .join('');
-      })
     .post(
       '/item',
       async ({ body: newItem, userId, set }) => {
         await itemService.create({
           ...newItem,
           tags: typeof newItem.tags == 'string'
-            ? [newItem.tags]
+            ? [ newItem.tags ]
             : newItem.tags,
           userId
         });
