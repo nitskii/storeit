@@ -1,3 +1,6 @@
+// eslint-disable-next-line no-unused-vars
+import * as elements from 'typed-html';
+
 import { Elysia, t } from 'elysia';
 import authentication from '../middleware/authentication';
 import locationService from '../services/location.service';
@@ -26,7 +29,11 @@ const locationRoutes = (app: Elysia) => app
     .get(
       '/locations',
       async ({ userId }) => {
-        return await locationService.getAllForUser(userId);
+        const locations = await locationService.getAllForUser(userId);
+
+        return locations
+          .map(({ id, name }) => <option value={id}>{name}</option>)
+          .join();
       }
     )
     .onError(({ error, set }) => {
