@@ -1,0 +1,6 @@
+# flyctl launch added from .gitignore
+**/node_modules
+
+# flyctl launch added from node_modules/tailwindcss/stubs/.gitignore
+!node_modules/tailwindcss/stubs/**/*
+fly.toml
