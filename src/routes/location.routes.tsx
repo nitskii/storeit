@@ -33,7 +33,7 @@ const locationRoutes = (app: Elysia) => app
 
         return locations
           .map(({ id, name }) => <option value={id}>{name}</option>)
-          .join();
+          .join('');
       }
     )
     .onError(({ error, set }) => {
