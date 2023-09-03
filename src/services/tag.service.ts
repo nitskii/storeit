@@ -3,12 +3,11 @@ import db from '../db';
 import { tags as tagsTable } from '../db/schema';
 
 const createMany = async (tags: string[], userId: string) => {
-  await db
+  return await db
     .insert(tagsTable)
     .values(tags.map(tag => ({ name: tag, userId })))
-    .onConflictDoNothing({
-      target: tagsTable.name
-    });
+    .onConflictDoNothing({ target: tagsTable.name })
+    .returning({ id: tagsTable.id });
 };
 
 const getAllForUser = async (userId: string) => {

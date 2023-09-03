@@ -14,7 +14,11 @@ const create = async (newItem: NewItem) => {
     throw new Error('Location not found');
   }
   
-  tags && await tagService.createMany(tags, userId);
+  const newTags: { id: string }[] = [];
+
+  if (tags) {
+    newTags.push(...await tagService.createMany(tags, userId));
+  }
 
   const buffer = Buffer.from(await image.arrayBuffer());
   const imageUrl: string = await new Promise((resolve, reject) => {
@@ -34,12 +38,19 @@ const create = async (newItem: NewItem) => {
     );
   });
 
-  await db
+  const [{ id: newItemId }] = await db
     .insert(items)
     .values({
       ...newItem,
       image: imageUrl
-    });
+    })
+    .returning({ id: items.id });
+
+  newTags.length && await db
+    .insert(tagsToItems)
+    .values(
+      newTags.map(tag => ({ tagId: tag.id, itemId: newItemId }))
+    );
 };
 
 const getAllForUser = async (userId: string): Promise<ResponseItem[]> => {
@@ -67,6 +78,7 @@ const getAllForUser = async (userId: string): Promise<ResponseItem[]> => {
     .leftJoin(tags, eq(tagsToItems.tagId, tags.id))
     .innerJoin(locations, eq(itemsSubquery.locationId, locations.id));
 
+  
   return [
     ...rows
       .reduce(
