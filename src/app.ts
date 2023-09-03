@@ -2,6 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import Elysia from 'elysia';
 import { logger, redirector } from './middleware';
 import { authRoutes, itemRoutes, locationRoutes } from './routes';
+import tagRoutes from './routes/tag.routes';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -19,6 +20,7 @@ new Elysia()
   .get('/items', () => Bun.file(`${VIEWS_DIR}items.html`))
   .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
   .use(locationRoutes)
+  .use(tagRoutes)
   .use(itemRoutes)
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);
