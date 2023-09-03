@@ -10,23 +10,24 @@
   <body>
     <header class="bg-orange-100">
       <nav class="flex justify-end space-x-2 p-2">
-        <a
-          class="cursor-pointer rounded-lg bg-orange-200 p-2 hover:bg-orange-300"
-          hx-on:click="document.querySelector('#select-modal').classList.replace('hidden', 'flex')">
+        <button
+          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          hx-on:click="document.getElementById('select-modal').classList.replace('hidden', 'flex')">
           Додати
-        </a>
-        <a
-          class="cursor-pointer rounded-lg bg-orange-200 p-2 hover:bg-orange-300"
+        </button>
+        <button
+          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
           hx-post="/api/logout">
           Вийти
-        </a>
+        </button>
       </nav>
     </header>
     <main>
       <section
-        class="grid grid-cols-1 gap-y-4 p-4 sm:grid-cols-2 sm:gap-x-4 lg:grid-cols-4">
-        <div hx-get="/api/items" hx-swap="outerHTML" hx-trigger="load" />
-      </section>
+        class="grid grid-cols-1 gap-y-4 p-4 sm:grid-cols-2 sm:gap-x-4 lg:grid-cols-4"
+        hx-get="/api/items"
+        hx-swap="innerHTML"
+        hx-trigger="load"></section>
     </main>
     <div
       id="select-modal"
@@ -65,7 +66,7 @@
           type="file"
           name="image"
           accept="image/*"
-          class="w-full text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-400" />
+          class="w-full rounded-lg text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-400 focus:outline-2 focus:outline-orange-300" />
         <select
           name="locationId"
           class="w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
@@ -118,7 +119,7 @@
           id="parent-select"
           name="parentId"
           class="hidden w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
-          hx-get="api/locations"
+          hx-get="/api/locations"
           hx-params="none"
           hx-swap="beforeend"
           hx-trigger="load"
