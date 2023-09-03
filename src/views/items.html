@@ -65,7 +65,8 @@
           type="file"
           name="image"
           accept="image/*"
-          class="w-full text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-400" />
+          class="w-full text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-400"
+          required />
         <select
           name="locationId"
           class="w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
@@ -76,6 +77,17 @@
           required>
           <option disabled selected>Оберіть локацію</option>
         </select>
+        <input
+          type="text"
+          class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+          placeholder="Теги"
+          list="tag-list" />
+        <datalist
+          id="tag-list"
+          hx-get="/api/tags"
+          hx-swap="innerHTML"
+          hx-trigger="load">
+        </datalist>
         <button
           type="submit"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
