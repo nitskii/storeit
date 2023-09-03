@@ -6,7 +6,7 @@ import locationService from './location.service';
 import tagService from './tag.service';
 
 const create = async (newItem: NewItem) => {
-  const { locationId, tags, image } = newItem;
+  const { locationId, tags, image, userId } = newItem;
 
   const locationExists = await locationService.existsById(locationId);
 
@@ -14,7 +14,7 @@ const create = async (newItem: NewItem) => {
     throw new Error('Location not found');
   }
   
-  tags && await tagService.createMany(tags);
+  tags && await tagService.createMany(tags, userId);
 
   const buffer = Buffer.from(await image.arrayBuffer());
   const imageUrl: string = await new Promise((resolve, reject) => {
