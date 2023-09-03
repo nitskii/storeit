@@ -1,7 +1,6 @@
+import { Elysia, t } from 'elysia';
 // eslint-disable-next-line no-unused-vars
 import * as elements from 'typed-html';
-
-import { Elysia, t } from 'elysia';
 import authentication from '../middleware/authentication';
 import itemService from '../services/item.service';
 
