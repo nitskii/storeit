@@ -67,13 +67,15 @@
           accept="image/*"
           class="w-full text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-400" />
         <select
-          name="location"
+          name="locationId"
           class="w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
           hx-get="/api/locations"
           hx-params="none"
-          hx-swap="innerHTML"
+          hx-swap="beforeend"
           hx-trigger="load"
-          required></select>
+          required>
+          <option disabled selected>Оберіть локацію</option>
+        </select>
         <button
           type="submit"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
@@ -119,8 +121,8 @@
           hx-get="api/locations"
           hx-params="none"
           hx-swap="beforeend"
-          disabled
-          hx-trigger="load">
+          hx-trigger="load"
+          disabled>
           <option disabled selected>Оберіть локацію</option>
         </select>
         <button
