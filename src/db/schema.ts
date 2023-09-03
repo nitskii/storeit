@@ -22,7 +22,8 @@ export const locationsToLocations = sqliteTable('locationsToLocations', {
 
 export const tags = sqliteTable('tags', {
   id: text('id').primaryKey().$defaultFn(() => randomUUID()),
-  name: text('name').unique().notNull()
+  name: text('name').unique().notNull(),
+  userId: text('user_id').references(() => users.id).notNull()
 });
 
 export const items = sqliteTable('items', {
