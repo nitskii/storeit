@@ -1,6 +1,6 @@
 import { randomUUID } from 'crypto';
 import { InferInsertModel } from 'drizzle-orm';
-import { sqliteTable, text } from 'drizzle-orm/sqlite-core';
+import { sqliteTable, text, unique } from 'drizzle-orm/sqlite-core';
 
 export const users = sqliteTable('users', {
   id: text('id').primaryKey().$defaultFn(() => randomUUID()),
@@ -22,9 +22,11 @@ export const locationsToLocations = sqliteTable('locationsToLocations', {
 
 export const tags = sqliteTable('tags', {
   id: text('id').primaryKey().$defaultFn(() => randomUUID()),
-  name: text('name').unique().notNull(),
+  name: text('name').notNull(),
   userId: text('user_id').references(() => users.id).notNull()
-});
+}, (tags) => ({
+  unq: unique().on(tags.name, tags.userId)
+}));
 
 export const items = sqliteTable('items', {
   id: text('id').primaryKey().$defaultFn(() => randomUUID()),

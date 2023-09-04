@@ -6,7 +6,9 @@ const createMany = async (tags: string[], userId: string) => {
   return await db
     .insert(tagsTable)
     .values(tags.map(tag => ({ name: tag, userId })))
-    .onConflictDoNothing({ target: tagsTable.name })
+    .onConflictDoNothing({
+      target: [tagsTable.name, tagsTable.userId]
+    })
     .returning({ id: tagsTable.id });
 };
 
