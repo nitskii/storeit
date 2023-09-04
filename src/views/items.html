@@ -36,17 +36,17 @@
         class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.querySelector('#select-modal').classList.replace('flex', 'hidden');document.querySelector('#item-modal').classList.replace('hidden', 'flex')">
+          hx-on:click="document.getElementById('select-modal').classList.replace('flex', 'hidden');document.getElementById('item-modal').classList.replace('hidden', 'flex')">
           Додати предмет
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.querySelector('#select-modal').classList.replace('flex', 'hidden');document.querySelector('#location-modal').classList.replace('hidden', 'flex')">
+          hx-on:click="document.getElementById('select-modal').classList.replace('flex', 'hidden');document.getElementById('location-modal').classList.replace('hidden', 'flex')">
           Додати локацію
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.querySelector('#select-modal').classList.replace('flex', 'hidden')">
+          hx-on:click="document.getElementById('select-modal').classList.replace('flex', 'hidden')">
           Закрити
         </button>
       </div>
@@ -87,12 +87,12 @@
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.querySelector('#item-modal').classList.replace('flex', 'hidden');document.querySelector('#select-modal').classList.replace('hidden', 'flex')">
+          hx-on:click="document.getElementById('item-modal').classList.replace('flex', 'hidden');document.getElementById('select-modal').classList.replace('hidden', 'flex')">
           Назад
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.querySelector('#item-modal').classList.replace('flex', 'hidden')">
+          hx-on:click="document.getElementById('item-modal').classList.replace('flex', 'hidden')">
           Закрити
         </button>
       </form>
@@ -112,7 +112,7 @@
           <input
             type="checkbox"
             class="mx-2 h-5 w-5 appearance-none rounded-md border-0 bg-orange-200 checked:bg-orange-300 hover:bg-orange-300 hover:checked:bg-orange-300 focus:ring-1 focus:ring-orange-300 focus:ring-offset-0 focus:checked:bg-orange-300 focus:checked:ring-orange-200"
-            hx-on:change="const ps=document.querySelector('#parent-select');ps.classList.toggle('hidden');ps.disabled=!ps.disabled" />
+            hx-on:change="const ps=document.getElementById('parent-select');ps.classList.toggle('hidden');ps.disabled=!ps.disabled" />
           Має локацію-власника
         </label>
         <select
@@ -135,12 +135,12 @@
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.querySelector('#location-modal').classList.replace('flex', 'hidden');document.querySelector('#select-modal').classList.replace('hidden', 'flex')">
+          hx-on:click="document.getElementById('location-modal').classList.replace('flex', 'hidden');document.getElementById('select-modal').classList.replace('hidden', 'flex')">
           Назад
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.querySelector('#location-modal').classList.replace('flex', 'hidden')">
+          hx-on:click="document.getElementById('location-modal').classList.replace('flex', 'hidden')">
           Закрити
         </button>
       </form>
