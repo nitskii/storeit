@@ -53,13 +53,13 @@
     </div>
     <div
       id="item-modal"
-      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      class="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <form
         class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
         <input
           type="text"
           name="name"
-          class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+          class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
           placeholder="Назва предмету"
           required />
         <input
@@ -77,6 +77,54 @@
           required>
           <option disabled selected>Оберіть локацію</option>
         </select>
+        <div class="flex w-full flex-col justify-between">
+          <ul class="mb-4 flex flex-wrap gap-2">
+            <li class="flex items-center rounded-md bg-orange-200 pl-2">
+              одежда
+              <button class="cursor-pointer p-2">
+                <svg
+                  xmlns="http://www.w3.org/2000/svg"
+                  fill="none"
+                  viewBox="0 0 24 24"
+                  stroke-width="2"
+                  stroke="currentColor"
+                  class="h-4 w-4">
+                  <path
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                    d="M6 18L18 6M6 6l12 12" />
+                </svg>
+              </button>
+            </li>
+          </ul>
+          <div class="flex w-full overflow-hidden rounded-lg">
+            <input
+              list="tags-list"
+              type="text"
+              class="block w-full border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+              placeholder="Теги" />
+            <datalist
+              id="tags-list"
+              hx-get="/api/tags"
+              hx-swap="innerHTML"
+              hx-trigger="load"></datalist>
+            <button
+              class="border-l-2 border-orange-100 bg-orange-200 px-4 py-2">
+              <svg
+                xmlns="http://www.w3.org/2000/svg"
+                fill="none"
+                viewBox="0 0 24 24"
+                stroke-width="1.5"
+                stroke="currentColor"
+                class="h-6 w-6">
+                <path
+                  stroke-linecap="round"
+                  stroke-linejoin="round"
+                  d="M12 4.5v15m7.5-7.5h-15" />
+              </svg>
+            </button>
+          </div>
+        </div>
         <button
           type="submit"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
@@ -92,7 +140,7 @@
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('item-modal').classList.replace('flex', 'hidden')">
+          hx-on:click="document.getElementById('item-modal').classList.replace('flex', 'hidden');console.log(event)">
           Закрити
         </button>
       </form>
