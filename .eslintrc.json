@@ -18,7 +18,8 @@
     "semi": ["warn", "always"],
     "no-unused-vars": "warn",
     "no-empty": "warn",
-    "comma-dangle": ["warn", "never"]
+    "comma-dangle": ["warn", "never"],
+    "eol-last": "warn"
   },
   "globals": {
     "Bun": true

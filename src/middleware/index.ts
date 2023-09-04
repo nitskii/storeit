@@ -7,4 +7,3 @@ export {
   logger,
   redirector
 };
-
