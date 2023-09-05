@@ -191,6 +191,14 @@
 
         const tagsList = document.getElementById('selected-tags-list');
 
+        const items = tagsList.getElementsByTagName('li');
+
+        for (let item of items) {
+          if (item.innerText === tagInput.value) {
+            return;
+          }
+        }
+
         const removeButton = document.createElement('button');
         removeButton.type = 'button';
         removeButton.classList.add('cursor-pointer', 'p-2');
