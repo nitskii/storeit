@@ -1,7 +1,7 @@
 import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import { Elysia, t } from 'elysia';
-import userService from '../services/auth.service';
+import userService from '../services/auth-service';
 
 const authRoutes = (app: Elysia) => app
   .group('/api', app => app

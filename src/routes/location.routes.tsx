@@ -3,7 +3,7 @@ import * as elements from 'typed-html';
 
 import { Elysia, t } from 'elysia';
 import authentication from '../middleware/authentication';
-import locationService from '../services/location.service';
+import locationService from '../services/location-service';
 
 const locationRoutes = (app: Elysia) => app
   .group('/api', app => app

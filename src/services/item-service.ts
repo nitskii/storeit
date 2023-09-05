@@ -2,8 +2,8 @@ import { v2 as cloudinary } from 'cloudinary';
 import { eq } from 'drizzle-orm';
 import db from '../db';
 import { NewItem, ResponseItem, items, locations, tags, tagsToItems } from '../db/schema';
-import locationService from './location.service';
-import tagService from './tag.service';
+import locationService from './location-service';
+import tagService from './tag-service';
 
 const create = async (newItem: NewItem) => {
   const { locationId, tags, image, userId } = newItem;

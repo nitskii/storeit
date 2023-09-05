@@ -3,7 +3,7 @@ import * as elements from 'typed-html';
 
 import Elysia from 'elysia';
 import { authentication } from '../middleware';
-import tagService from '../services/tag.service';
+import tagService from '../services/tag-service';
 
 const tagRoutes = async (app: Elysia) => app
   .group('/api', app => app

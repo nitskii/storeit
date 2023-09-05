@@ -2,7 +2,7 @@ import { Elysia, t } from 'elysia';
 // eslint-disable-next-line no-unused-vars
 import * as elements from 'typed-html';
 import authentication from '../middleware/authentication';
-import itemService from '../services/item.service';
+import itemService from '../services/item-service';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
