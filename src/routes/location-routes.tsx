@@ -28,8 +28,10 @@ const locationRoutes = (app: Elysia) => app
     )
     .get(
       '/locations',
-      async ({ userId }) => {
+      async ({ userId, set }) => {
         const locations = await locationService.getAllForUser(userId);
+
+        set.headers['Content-Type'] = 'text/html;charset=utf-8';
 
         return locations
           .map(({ id, name }) => <option value={id}>{name}</option>)

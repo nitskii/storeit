@@ -22,6 +22,11 @@ new Elysia()
   .use(locationRoutes)
   .use(tagRoutes)
   .use(itemRoutes)
+  .onError(({ code }) => {
+    if (code === 'NOT_FOUND') {
+      return Bun.file(`${VIEWS_DIR}404.html`);
+    }
+  })
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);
   });
