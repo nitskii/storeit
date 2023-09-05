@@ -13,7 +13,8 @@ const itemRoutes = (app: Elysia) => app
       item: t.Object({
         name: t.String(),
         image: t.File({
-          type: 'image',
+          // currently has a bug which doesn't allow to upload .webp and some other formats
+          // type: 'image',
           maxSize: MAX_IMAGE_SIZE
         }),
         locationId: t.String(),
@@ -30,11 +31,12 @@ const itemRoutes = (app: Elysia) => app
             : newItem.tags,
           userId
         });
-
+        
         set.status = 204;
         set.headers['HX-Refresh'] = 'true';
-      },
-      { body: 'item' }
+      }, {
+        body: 'item'
+      }
     )
     .get(
       '/items',
