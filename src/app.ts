@@ -2,7 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import Elysia from 'elysia';
 import { logger, redirector } from './middleware';
 import { authRoutes, itemRoutes, locationRoutes } from './routes';
-import tagRoutes from './routes/tag.routes';
+import tagRoutes from './routes/tag-routes';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
