@@ -3,7 +3,7 @@
     "start": "bun src/app.ts",
     "dev": "bun --watch src/app.ts",
     "db:push": "bunx drizzle-kit push:sqlite",
-    "db:studio": "bunx drizzle-kit studio"
+    "db:studio": "bunx drizzle-kit studio --host localhost"
   },
   "dependencies": {
     "@elysiajs/cookie": "^0.6.1",
