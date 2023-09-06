@@ -1,26 +1,29 @@
-import { randomUUID } from 'crypto';
 import { and, eq } from 'drizzle-orm';
 import db from '../db';
 import { NewLocation, locations, locationsToLocations } from '../db/schema';
 
 const create = async (newLocation: NewLocation) => {
-  const [ locationExists ] = await db
+  const [ existingLocation ] = await db
     .select({
       id: locations.id
     })
     .from(locations)
     .where(
       and(
-        eq(locations.userId, newLocation.userId),
-        eq(locations.name, newLocation.name)
+        eq(locations.name, newLocation.name),
+        eq(locations.userId, newLocation.userId)
       ))
     .limit(1);
 
-  if (locationExists) {
-    throw new Error('Location exists');
-  }
-  
-  if (newLocation.parentId) {
+  const { parentId: hasParent } = newLocation;
+
+  if (!existingLocation && !hasParent) {
+    await db
+      .insert(locations)
+      .values({
+        ...newLocation
+      });
+  } else if (!existingLocation && hasParent) {
     const [ existingParent ] = await db
       .select({
         id: locations.id
@@ -29,30 +32,52 @@ const create = async (newLocation: NewLocation) => {
       .where(
         and(
           eq(locations.userId, newLocation.userId),
-          eq(locations.id, newLocation.parentId)
+          eq(locations.id, newLocation.parentId!)
         ))
       .limit(1);
           
     if (!existingParent) {
       throw new Error('Parent location not found');
     }
-  }
 
-  const newLocationId = randomUUID();
+    const [{ id: newLocationId }] = await db
+      .insert(locations)
+      .values({
+        ...newLocation
+      })
+      .returning({
+        id: locations.id
+      });
 
-  await db
-    .insert(locations)
-    .values({
-      id: newLocationId,
-      ...newLocation
-    });
+    if (newLocation.parentId) {
+      await db
+        .insert(locationsToLocations)
+        .values({
+          parentId: newLocation.parentId,
+          childId: newLocationId
+        });
+    }
+  } else if (existingLocation && !hasParent) {
+    throw new Error('Location exists');
+  } else {
+    const [ recordExists ] = await db
+      .select()
+      .from(locationsToLocations)
+      .where(and(
+        eq(locationsToLocations.parentId, newLocation.parentId!),
+        eq(locationsToLocations.childId, existingLocation.id)
+      ))
+      .limit(1);
 
-  if (newLocation.parentId) {
+    if (recordExists) {
+      throw new Error('Parent location already has such child');
+    }
+
     await db
       .insert(locationsToLocations)
       .values({
-        parentId: newLocation.parentId,
-        childId: newLocationId
+        parentId: newLocation.parentId!,
+        childId: existingLocation.id
       });
   }
 };

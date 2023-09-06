@@ -11,9 +11,11 @@ export const users = sqliteTable('users', {
 
 export const locations = sqliteTable('locations', {
   id: text('id').primaryKey().$defaultFn(() => randomUUID()),
-  name: text('name').unique().notNull(),
+  name: text('name').notNull(),
   userId: text('user_id').references(() => users.id).notNull()
-});
+}, (locations) => ({
+  unq: unique().on(locations.name, locations.userId)
+}));
 
 export const locationsToLocations = sqliteTable('locationsToLocations', {
   parentId: text('parent_id').references(() => locations.id).notNull(),
@@ -32,7 +34,7 @@ export const items = sqliteTable('items', {
   id: text('id').primaryKey().$defaultFn(() => randomUUID()),
   name: text('name').notNull(),
   image: text('image').notNull(),
-  locationId: text('location_id').references(() => locations.id).notNull(),
+  locationId: text('location_id').references(() => locations.id),
   userId: text('user_id').references(() => users.id).notNull()
 });
 
