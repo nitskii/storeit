@@ -1,19 +1,18 @@
 FROM oven/bun
 
-WORKDIR /app
+RUN curl -L https://get.tur.so/install.sh | sh
 
-RUN curl -L https://get.tur.so/install.sh | bash
+ENV NODE_ENV production
 
-ENV NODE_ENV=production
-
-COPY package.json .
-COPY bun.lockb .
+COPY package.json bun.lockb .
 
 RUN bun install -p
 
-COPY public public
-COPY src src
-COPY tsconfig.json tsconfig.json
+USER bun
+
+COPY --chown=bun:bun public public
+COPY --chown=bun:bun src src
+COPY --chown=bun:bun tsconfig.json tsconfig.json
 
 EXPOSE 8080
 
