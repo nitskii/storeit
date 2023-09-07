@@ -1,7 +1,5 @@
 FROM oven/bun
 
-RUN curl -L https://get.tur.so/install.sh | sh
-
 ENV NODE_ENV production
 
 COPY package.json bun.lockb .
