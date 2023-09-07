@@ -2,7 +2,8 @@ import type { Config } from 'tailwindcss';
 
 export default {
   content: [
-    './src/**/*.{html,ts,tsx}'
+    './src/views/*.html',
+    './src/routes/*.tsx'
   ],
   plugins: [
     require('@tailwindcss/forms'),

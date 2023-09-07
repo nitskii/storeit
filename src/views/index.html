@@ -9,25 +9,19 @@
   </head>
   <body class="h-full">
     <main class="h-full">
-      <div class="flex h-full items-center px-4">
+      <section class="flex h-full items-center px-4">
         <form
           class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 px-4 py-4 shadow sm:mx-auto sm:max-w-md">
-          <div class="w-full">
-            <input
-              type="text"
-              name="nickname"
-              class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-              placeholder="Нікнейм"
-              required />
-          </div>
-          <div class="w-full">
-            <input
-              type="password"
-              name="password"
-              class="w-full rounded-lg border-0 bg-orange-200 focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-              placeholder="Пароль"
-              required />
-          </div>
+          <input
+            type="text"
+            name="nickname"
+            class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+            placeholder="Нікнейм" />
+          <input
+            type="password"
+            name="password"
+            class="w-full rounded-lg border-0 bg-orange-200 focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+            placeholder="Пароль" />
           <button
             type="submit"
             class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
@@ -43,7 +37,7 @@
             Зареєструватись
           </button>
         </form>
-      </div>
+      </section>
     </main>
     <script src="/public/htmx.min.js"></script>
   </body>
