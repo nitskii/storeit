@@ -1,6 +1,7 @@
 import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import Elysia from 'elysia';
+import userService from '../services/user-service';
 
 const redirector = (app: Elysia) => app
   .use(cookie())
@@ -13,9 +14,9 @@ const redirector = (app: Elysia) => app
     const { pathname: path } = new URL(request.url);
 
     if (path == '/' && cookie.auth) {
-      const validJwt = await jwt.verify(cookie.auth);
+      const payload = await jwt.verify(cookie.auth);
           
-      if (validJwt) {
+      if (payload && await userService.existsById(payload.sub!)) {
         set.redirect = '/items';
       }
     } else if (path == '/items' && !cookie.auth) {
