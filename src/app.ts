@@ -24,7 +24,9 @@ new Elysia()
   .use(locationRoutes)
   .use(tagRoutes)
   .use(itemRoutes)
-  .onError(({ code }) => {
+  .onError(({ error: { message }, code }) => {
+    process.env.NODE_ENV == 'development' && console.log(message);
+
     if (code === 'NOT_FOUND') {
       return Bun.file(`${VIEWS_DIR}404.html`);
     }
