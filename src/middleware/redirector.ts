@@ -13,11 +13,17 @@ const redirector = (app: Elysia) => app
   .onBeforeHandle(async ({ path, cookie, jwt, set }) => {
     if (['/', '/signup', '/login'].includes(path) && cookie.auth) {
       const payload = await jwt.verify(cookie.auth);
-          
+      
       if (payload && await userService.existsById(payload.sub!)) {
         set.redirect = '/items';
       }
-    } else if (path == '/items' && !cookie.auth) {
+    } else if (path == '/items' && cookie.auth) {
+      const payload = await jwt.verify(cookie.auth);
+      
+      if (!payload || !await userService.existsById(payload.sub!)) {
+        set.redirect = '/login';
+      }
+    } else if (path == '/items' && !cookie.auth){
       set.redirect = '/login';
     }
   });
