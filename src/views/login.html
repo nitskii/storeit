@@ -1,0 +1,52 @@
+<!doctype html>
+<html lang="uk" class="h-full bg-orange-50">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href="/public/favicon.ico" rel="icon" />
+    <link href="/public/tailwind.css" rel="stylesheet" />
+    <title>Шафа - Вхід</title>
+  </head>
+  <body class="h-full">
+    <main class="h-full">
+      <section
+        class="flex h-full flex-col justify-center px-4 sm:mx-auto sm:max-w-md">
+        <div
+          class="flex flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow-md">
+          <form
+            class="flex w-full flex-col items-center space-y-4"
+            onsubmit="event.preventDefault()">
+            <input
+              type="text"
+              name="nickname"
+              class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+              placeholder="Нікнейм"
+              required
+              minlength="3"
+              maxlength="30" />
+            <input
+              type="password"
+              name="password"
+              class="w-full rounded-lg border-0 bg-orange-200 focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+              placeholder="Пароль"
+              required
+              minlength="8"
+              maxlength="50" />
+            <button
+              type="submit"
+              class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+              hx-post="/api/login"
+              hx-trigger="submit from:form"
+              hx-swap="none">
+              Ввійти
+            </button>
+          </form>
+          <a class="cursor-pointer underline hover:text-gray-600">
+            Я не маю аккаунту
+          </a>
+        </div>
+      </section>
+    </main>
+    <script src="/public/htmx.min.js"></script>
+  </body>
+</html>
