@@ -16,14 +16,17 @@
           <form
             class="flex w-full flex-col items-center space-y-4"
             onsubmit="event.preventDefault()">
-            <input
-              type="text"
-              name="nickname"
-              class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-              placeholder="Нікнейм"
-              required
-              minlength="3"
-              maxlength="30" />
+            <div class="w-full">
+              <input
+                type="text"
+                name="nickname"
+                class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+                placeholder="Нікнейм"
+                required
+                minlength="3"
+                maxlength="30" />
+              <div id="nickname-exists-message" hidden></div>
+            </div>
             <input
               type="password"
               name="password"
@@ -37,16 +40,18 @@
               class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
               hx-post="/api/signup"
               hx-trigger="submit from:form"
-              hx-swap="none">
+              hx-on::after-request="document.getElementById('nickname-exists-message').outerHTML = event.detail.xhr.response">
               Зареєструватись
             </button>
           </form>
-          <a class="cursor-pointer underline hover:text-gray-600">
+          <a
+            class="cursor-pointer underline underline-offset-[6px] hover:text-gray-600">
             Я вже маю аккаунт
           </a>
         </div>
       </section>
     </main>
-    <script src="/public/htmx.min.js"></script>
+    <!-- <script src="/public/htmx.min.js"></script> -->
+    <script src="https://unpkg.com/htmx.org@1.9.5"></script>
   </body>
 </html>

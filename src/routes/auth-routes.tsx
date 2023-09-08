@@ -1,3 +1,6 @@
+// eslint-disable-next-line no-unused-vars
+import * as elements from 'typed-html';
+
 import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import { Elysia, t } from 'elysia';
@@ -34,8 +37,9 @@ const authRoutes = (app: Elysia) => app
 
         set.status = 204;
         set.headers['HX-Redirect'] = '/items';
-      },
-      { body: 'user' }
+      }, {
+        body: 'user'
+      }
     )
     .post(
       '/login',
@@ -47,19 +51,20 @@ const authRoutes = (app: Elysia) => app
 
         set.status = 204;
         set.headers['HX-Redirect'] = '/items';
-      },
-      { body: 'user' }
+      }, {
+        body: 'user'
+      }
     )
     .post(
       '/logout',
       async ({ set }) => {
         set.status = 204;
         set.headers['Set-Cookie'] = 'auth=;Path=/;Expires=Thu, 01 Jan 1970 00:00:00 GMT';
-        set.headers['HX-Redirect'] = '/';
+        set.headers['HX-Redirect'] = '/login';
       }
     )
-    .onError(({ error, set }) => {
-      switch (error.message) {
+    .onError(({ error: { message }, set }) => {
+      switch (message) {
       case 'Incorrect password':
         set.status = 401;
         break;
@@ -68,14 +73,16 @@ const authRoutes = (app: Elysia) => app
         break;
       case 'User exists':
         set.status = 409;
-        break;
+        set.headers['Content-Type']='text/html;charset=utf-8';
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            Нікнейм вже існує
+          </div>
+        );
       }
-  
-      return {
-        message: error.message
-      };
+
+      return { message };
     })
   );
-
 
 export default authRoutes;
