@@ -25,21 +25,25 @@
                 required
                 minlength="3"
                 maxlength="30" />
-              <div id="nickname-exists-message" hidden></div>
+              <div id="nickname-not-exists-message" hidden></div>
             </div>
-            <input
-              type="password"
-              name="password"
-              class="w-full rounded-lg border-0 bg-orange-200 focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-              placeholder="Пароль"
-              required
-              minlength="8"
-              maxlength="50" />
+            <div class="w-full">
+              <input
+                type="password"
+                name="password"
+                class="w-full rounded-lg border-0 bg-orange-200 focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+                placeholder="Пароль"
+                required
+                minlength="8"
+                maxlength="50" />
+              <div id="password-incorrect-message" hidden></div>
+            </div>
             <button
               type="submit"
               class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
               hx-post="/api/login"
-              hx-trigger="submit from:form">
+              hx-trigger="submit from:form"
+              hx-on::after-request="document.getElementById(event.detail.xhr.status==401?'password-incorrect-message':'nickname-not-exists-message').outerHTML=event.detail.xhr.response">
               Увійти
             </button>
           </form>

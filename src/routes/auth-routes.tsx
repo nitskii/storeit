@@ -67,10 +67,20 @@ const authRoutes = (app: Elysia) => app
       switch (message) {
       case 'Incorrect password':
         set.status = 401;
-        break;
+        set.headers['Content-Type']='text/html;charset=utf-8';
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            Невірний пароль
+          </div>
+        );
       case 'User not found':
         set.status = 404;
-        break;
+        set.headers['Content-Type']='text/html;charset=utf-8';
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            Нікнейм не знайдено
+          </div>
+        );
       case 'User exists':
         set.status = 409;
         set.headers['Content-Type']='text/html;charset=utf-8';
