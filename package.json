@@ -3,7 +3,8 @@
     "start": "bun src/app.ts",
     "dev": "bun --watch src/app.ts",
     "db:push": "bunx drizzle-kit push:sqlite",
-    "db:studio": "bunx drizzle-kit studio --host localhost"
+    "db:studio": "bunx drizzle-kit studio --host localhost",
+    "tw:watch": "bunx tailwindcss -i global.css -o public/tailwind.css --watch"
   },
   "dependencies": {
     "@elysiajs/cookie": "^0.6.1",
