@@ -1,7 +1,7 @@
 {
   "scripts": {
     "start": "bun src/app.ts",
-    "dev": "bun --watch src/app.ts",
+    "dev": "bun --hot src/app.ts",
     "db:push": "bunx drizzle-kit push:sqlite",
     "db:studio": "bunx drizzle-kit studio --host localhost",
     "tw:watch": "bunx tailwindcss -i global.css -o public/tailwind.css --watch"

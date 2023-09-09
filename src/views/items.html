@@ -11,8 +11,9 @@
     <header class="bg-orange-100">
       <nav class="flex justify-end space-x-2 p-2">
         <button
+          id="open-select-modal-button"
           class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('select-modal').classList.replace('hidden', 'flex')">
+          onclick="showSelectModal()">
           Додати
         </button>
         <button
@@ -36,24 +37,24 @@
         class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('select-modal').classList.replace('flex', 'hidden');document.getElementById('item-modal').classList.replace('hidden', 'flex')">
+          onclick="hideSelectModal();showItemModal()">
           Додати предмет
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('select-modal').classList.replace('flex', 'hidden');document.getElementById('location-modal').classList.replace('hidden', 'flex')">
+          onclick="hideSelectModal();showLocationModal()">
           Додати локацію
         </button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('select-modal').classList.replace('flex', 'hidden')">
+          onclick="hideSelectModal()">
           Закрити
         </button>
       </div>
     </div>
     <div
       id="item-modal"
-      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      class="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <form
         class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
         <input
@@ -93,7 +94,7 @@
             <button
               type="button"
               class="border-l-2 border-orange-100 bg-orange-200 px-4 py-2"
-              hx-on:click="addTagToList()">
+              onclick="addTagToList()">
               <svg
                 xmlns="http://www.w3.org/2000/svg"
                 fill="none"
@@ -120,13 +121,13 @@
         <button
           type="button"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('item-modal').classList.replace('flex', 'hidden');document.getElementById('select-modal').classList.replace('hidden', 'flex')">
+          onclick="hideItemModal();showSelectModal()">
           Назад
         </button>
         <button
           type="button"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('item-modal').classList.replace('flex', 'hidden')">
+          onclick="hideItemModal()">
           Закрити
         </button>
       </form>
@@ -146,17 +147,18 @@
           <input
             type="checkbox"
             class="mx-2 h-5 w-5 appearance-none rounded-md border-0 bg-orange-200 checked:bg-orange-300 hover:bg-orange-300 hover:checked:bg-orange-300 focus:ring-1 focus:ring-orange-300 focus:ring-offset-0 focus:checked:bg-orange-300 focus:checked:ring-orange-200"
-            hx-on:change="const ps=document.getElementById('parent-select');ps.classList.toggle('hidden');ps.disabled=!ps.disabled" />
+            onchange="toggleParentSelect()" />
           Має локацію-власника
         </label>
         <select
           id="parent-select"
           name="parentId"
-          class="hidden w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
+          class="w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
           hx-get="/api/locations"
           hx-params="none"
           hx-swap="beforeend"
           hx-trigger="load"
+          hidden
           disabled>
           <option disabled selected>Оберіть локацію</option>
         </select>
@@ -170,66 +172,18 @@
         <button
           type="button"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('location-modal').classList.replace('flex', 'hidden');document.getElementById('select-modal').classList.replace('hidden', 'flex')">
+          onclick="hideLocationModal();showSelectModal()">
           Назад
         </button>
         <button
           type="button"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-on:click="document.getElementById('location-modal').classList.replace('flex', 'hidden')">
+          onclick="hideLocationModal()">
           Закрити
         </button>
       </form>
     </div>
     <script src="/public/htmx.min.js"></script>
-    <script>
-      const addTagToList = () => {
-        const tagInput = document.getElementById('tag-input');
-
-        if (!tagInput.value) return;
-
-        const tagsList = document.getElementById('selected-tags-list');
-
-        const items = tagsList.getElementsByTagName('li');
-
-        for (let item of items) {
-          if (item.innerText === tagInput.value) {
-            return;
-          }
-        }
-
-        const removeButton = document.createElement('button');
-        removeButton.type = 'button';
-        removeButton.classList.add('cursor-pointer', 'p-2');
-        removeButton.innerHTML =
-          '<svg style="pointer-events:none" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24" stroke-width="2" stroke="currentColor" class="h-4 w-4"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12" /></svg>';
-        removeButton.addEventListener('click', (e) => {
-          e.target.parentElement.remove();
-          tagsList.children.length ||
-            tagsList.classList.replace('flex', 'hidden');
-        });
-
-        const tagHiddenInput = document.createElement('input');
-        tagHiddenInput.type = 'hidden';
-        tagHiddenInput.value = tagInput.value;
-        tagHiddenInput.name = 'tags';
-
-        const listItem = document.createElement('li');
-        listItem.classList.add(
-          'flex',
-          'items-center',
-          'rounded-lg',
-          'bg-orange-200',
-          'pl-2'
-        );
-        listItem.append(tagHiddenInput);
-        listItem.append(tagInput.value);
-        listItem.append(removeButton);
-
-        tagsList.append(listItem);
-        tagsList.classList.replace('hidden', 'flex');
-        tagInput.value = '';
-      };
-    </script>
+    <script src="/public/items.js"></script>
   </body>
 </html>
