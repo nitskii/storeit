@@ -59,7 +59,7 @@ const authRoutes = (app: Elysia) => app
       '/logout',
       async ({ set }) => {
         set.status = 204;
-        set.headers['Set-Cookie'] = 'auth=;Path=/;Expires=Thu, 01 Jan 1970 00:00:00 GMT';
+        set.headers['Set-Cookie'] = 'auth=;Path=/;Expires=Thu, 01 Jan 1970 00:00:00 GMT;SameSite=Strict';
         set.headers['HX-Redirect'] = '/login';
       }
     )
