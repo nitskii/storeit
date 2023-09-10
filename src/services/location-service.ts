@@ -85,7 +85,6 @@ const create = async (newLocation: NewLocation) => {
 const getAllForUser = async (userId: string) => {
   return await db
     .select({
-      id: locations.id,
       name: locations.name
     })
     .from(locations)

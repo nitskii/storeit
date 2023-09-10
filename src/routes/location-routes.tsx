@@ -23,8 +23,9 @@ const locationRoutes = (app: Elysia) => app
         });
 
         set.status = 204;
-      },
-      { body: 'location' }
+      }, {
+        body: 'location'
+      }
     )
     .get(
       '/locations',
@@ -32,9 +33,22 @@ const locationRoutes = (app: Elysia) => app
         const locations = await locationService.getAllForUser(userId);
 
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
+        set.headers['HX-Reswap'] = 'innerHTML';
+
+        if (!locations.length) {
+          return (
+            <div class="py-1 text-center text-sm text-gray-600">
+              Локації відсутні
+            </div>
+          );
+        }
 
         return locations
-          .map(({ id, name }) => <option value={id}>{name}</option>)
+          .map(({ name }) => (
+            <li class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300">
+              {name}
+            </li>)
+          )
           .join('');
       }
     )

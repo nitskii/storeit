@@ -767,8 +767,8 @@ select {
   height: 100vh;
 }
 
-.h-4 {
-  height: 1rem;
+.max-h-\[50\%\] {
+  max-height: 50%;
 }
 
 .w-5 {
@@ -781,10 +781,6 @@ select {
 
 .w-full {
   width: 100%;
-}
-
-.w-4 {
-  width: 1rem;
 }
 
 .cursor-pointer {
@@ -857,6 +853,10 @@ select {
   margin-bottom: calc(1rem * var(--tw-space-y-reverse));
 }
 
+.overflow-auto {
+  overflow: auto;
+}
+
 .overflow-hidden {
   overflow: hidden;
 }
@@ -873,8 +873,17 @@ select {
   border-width: 0px;
 }
 
+.border-b {
+  border-bottom-width: 1px;
+}
+
 .border-l-2 {
   border-left-width: 2px;
+}
+
+.border-black {
+  --tw-border-opacity: 1;
+  border-color: rgb(0 0 0 / var(--tw-border-opacity));
 }
 
 .border-orange-100 {
@@ -938,12 +947,12 @@ select {
   padding-left: 0.5rem;
 }
 
-.pt-1 {
-  padding-top: 0.25rem;
-}
-
 .pl-3 {
   padding-left: 0.75rem;
+}
+
+.pt-1 {
+  padding-top: 0.25rem;
 }
 
 .text-center {
@@ -1065,6 +1074,10 @@ select {
   color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 
+.last\:border-none:last-child {
+  border-style: none;
+}
+
 .checked\:bg-orange-300:checked {
   --tw-bg-opacity: 1;
   background-color: rgb(253 186 116 / var(--tw-bg-opacity));
@@ -1092,10 +1105,6 @@ select {
 
 .focus\:outline-2:focus {
   outline-width: 2px;
-}
-
-.focus\:outline-offset-0:focus {
-  outline-offset: 0px;
 }
 
 .focus\:outline-orange-300:focus {

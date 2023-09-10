@@ -1,33 +1,45 @@
 /* eslint-disable no-unused-vars */
 
-const selectModal = document.getElementById('select-modal');
+const actionSelectModal = document.getElementById('action-select-modal');
 
-const showSelectModal = () => {
-  selectModal.classList.replace('hidden', 'flex');
+const showActionSelectModal = () => {
+  actionSelectModal.classList.replace('hidden', 'flex');
 };
 
-const hideSelectModal = () => {
-  selectModal.classList.replace('flex', 'hidden');
+const hideActionSelectModal = () => {
+  actionSelectModal.classList.replace('flex', 'hidden');
 };
 
-const itemModal = document.getElementById('item-modal');
+const newItemModal = document.getElementById('new-item-modal');
 
-const showItemModal = () => {
-  itemModal.classList.replace('hidden', 'flex');
+const showNewItemModal = () => {
+  newItemModal.classList.replace('hidden', 'flex');
 };
 
-const hideItemModal = () => {
-  itemModal.classList.replace('flex', 'hidden');
+const hideNewItemModal = () => {
+  newItemModal.classList.replace('flex', 'hidden');
 };
 
-const locationModal = document.getElementById('location-modal');
+const newLocationModal = document.getElementById('new-location-modal');
 
-const showLocationModal = () => {
-  locationModal.classList.replace('hidden', 'flex');
+const showNewLocationModal = () => {
+  newLocationModal.classList.replace('hidden', 'flex');
 };
 
-const hideLocationModal = () => {
-  locationModal.classList.replace('flex', 'hidden');
+const hideNewLocationModal = () => {
+  newLocationModal.classList.replace('flex', 'hidden');
+};
+
+const parentLocationSelectModal = document.getElementById(
+  'parent-location-select-modal'
+);
+
+const showParentLocationSelectModal = () => {
+  parentLocationSelectModal.classList.replace('hidden', 'flex');
+};
+
+const hideParentLocationSelectModal = () => {
+  parentLocationSelectModal.classList.replace('flex', 'hidden');
 };
 
 const tagInput = document.getElementById('tag-input');
@@ -101,8 +113,10 @@ const addTagToList = () => {
   tagInput.value = '';
 };
 
-const parentSelect = document.getElementById('parent-select');
+const parentLocationSelectButton = document.getElementById(
+  'parent-location-select-button'
+);
 
-const toggleParentSelect = () => {
-  parentSelect.hidden = parentSelect.disabled = !parentSelect.disabled;
+const toggleParentLocationSelectButton = () => {
+  parentLocationSelectButton.hidden = !parentLocationSelectButton.hidden;
 };
