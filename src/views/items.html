@@ -57,17 +57,23 @@
       class="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <form
         class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
-        <input
-          type="text"
-          name="name"
-          class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-          placeholder="Назва предмету"
-          required />
-        <input
-          type="file"
-          name="image"
-          accept="image/*"
-          class="w-full rounded-lg text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-300 focus:outline-2 focus:outline-orange-300" />
+        <div class="w-full">
+          <input
+            type="text"
+            name="name"
+            class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+            placeholder="Назва предмету"
+            required
+            maxlength="50" />
+        </div>
+        <div class="w-full">
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            class="w-full rounded-lg text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-300 focus:outline-2 focus:outline-orange-300"
+            required />
+        </div>
         <select
           name="locationId"
           class="w-full rounded-lg border-0 bg-orange-200 focus:outline-2 focus:outline-offset-0 focus:outline-orange-300 focus:ring-0"
@@ -108,6 +114,9 @@
                   d="M12 4.5v15m7.5-7.5h-15" />
               </svg>
             </button>
+          </div>
+          <div id="tag-exists-message" class="pl-3 pt-1 text-red-500" hidden>
+            Тег вже додано
           </div>
         </div>
         <button
