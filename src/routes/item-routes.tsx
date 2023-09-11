@@ -1,6 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import * as elements from 'typed-html';
-
+import html from '@elysiajs/html';
 import { Elysia, t } from 'elysia';
 import authentication from '../middleware/authentication';
 import itemService from '../services/item-service';
@@ -10,6 +8,7 @@ const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 const itemRoutes = (app: Elysia) => app
   .group('/api', (app) => app
     .use(authentication)
+    .use(html())
     .model({
       item: t.Object({
         name: t.String(),
@@ -41,10 +40,8 @@ const itemRoutes = (app: Elysia) => app
     )
     .get(
       '/items',
-      async ({ userId, set }) => {
+      async ({ userId }) => {
         const items = await itemService.getAllForUser(userId);
-
-        set.headers['Content-Type'] = 'text/html; charset=utf-8';
 
         return items
           .map((item) => (

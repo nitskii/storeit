@@ -1,6 +1,4 @@
-// eslint-disable-next-line no-unused-vars
-import * as elements from 'typed-html';
-
+import html from '@elysiajs/html';
 import { Elysia, t } from 'elysia';
 import authentication from '../middleware/authentication';
 import locationService from '../services/location-service';
@@ -8,6 +6,7 @@ import locationService from '../services/location-service';
 const locationRoutes = (app: Elysia) => app
   .group('/api', app => app
     .use(authentication)
+    .use(html())
     .model({
       location: t.Object({
         name: t.String(),
@@ -32,7 +31,6 @@ const locationRoutes = (app: Elysia) => app
       async ({ userId, set }) => {
         const locations = await locationService.getAllForUser(userId);
 
-        set.headers['Content-Type'] = 'text/html;charset=utf-8';
         set.headers['HX-Reswap'] = 'innerHTML';
 
         if (!locations.length) {

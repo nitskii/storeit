@@ -15,6 +15,7 @@
     "noEmit": true,
     "types": ["bun-types"],
     "jsx": "react",
-    "jsxFactory": "elements.createElement"
+    "jsxFactory": "ElysiaJSX",
+    "jsxFragmentFactory": "ElysiaJSX.Fragment"
   }
 }
