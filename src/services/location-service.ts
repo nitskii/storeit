@@ -1,4 +1,4 @@
-import { and, eq } from 'drizzle-orm';
+import { and, eq, notInArray } from 'drizzle-orm';
 import db from '../db';
 import { NewLocation, locations, locationsToLocations } from '../db/schema';
 
@@ -82,13 +82,28 @@ const create = async (newLocation: NewLocation) => {
   }
 };
 
-const getAllForUser = async (userId: string) => {
-  return await db
+const getAllRootLocations = async (userId: string) => {
+  const childIds = (
+    await db
+      .select({
+        id: locationsToLocations.childId
+      })
+      .from(locationsToLocations)
+  ).map(r => r.id);
+
+  const rootLocations = await db
     .select({
       name: locations.name
     })
     .from(locations)
-    .where(eq(locations.userId, userId));
+    .where(
+      and(
+        eq(locations.userId, userId),
+        notInArray(locations.id, childIds.length ? childIds : [''])
+      )
+    );
+
+  return rootLocations;
 };
 
 const existsById = async (id: string) => {
@@ -105,6 +120,6 @@ const existsById = async (id: string) => {
 
 export default {
   create,
-  getAllForUser,
+  getAllRootLocations,
   existsById
 };

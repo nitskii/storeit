@@ -27,9 +27,9 @@ const locationRoutes = (app: Elysia) => app
       }
     )
     .get(
-      '/locations',
+      '/root-locations',
       async ({ userId, set }) => {
-        const locations = await locationService.getAllForUser(userId);
+        const locations = await locationService.getAllRootLocations(userId);
 
         set.headers['HX-Reswap'] = 'innerHTML';
 
