@@ -4,6 +4,7 @@
     "dev": "bun --hot src/app.ts",
     "db:push": "bunx drizzle-kit push:sqlite",
     "db:studio": "bunx drizzle-kit studio --host localhost",
+    "tw:build": "bunx tailwindcss -i global.css -o public/tailwind.css",
     "tw:watch": "bunx tailwindcss -i global.css -o public/tailwind.css --watch"
   },
   "dependencies": {
