@@ -101,14 +101,6 @@ const hideNewLocationModal = () => {
   newLocationModal.classList.replace('flex', 'hidden');
 };
 
-const parentLocationSelectButton = document.getElementById(
-  'parent-location-select-button'
-);
-
-const toggleParentLocationSelectButton = () => {
-  parentLocationSelectButton.hidden = !parentLocationSelectButton.hidden;
-};
-
 const parentLocationSelectModal = document.getElementById(
   'parent-location-select-modal'
 );
@@ -119,6 +111,17 @@ const showParentLocationSelectModal = () => {
 
 const hideParentLocationSelectModal = () => {
   parentLocationSelectModal.classList.replace('flex', 'hidden');
+};
+
+const parentLocationSelectButton = document.getElementById(
+  'parent-location-select-button'
+);
+
+const handleLocationResult = (form) => {
+  hideNewLocationModal();
+  form.reset();
+  parentLocationSelectButton.hidden = true;
+  showLocationResultModal();
 };
 
 const locationResultModal = document.getElementById('location-result-modal');
