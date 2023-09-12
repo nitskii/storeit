@@ -139,40 +139,21 @@
         </button>
       </form>
     </div>
-    <!-- Parent location select modal -->
-    <div
-      id="parent-location-select-modal"
-      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
-      <div
-        class="flex max-h-[50%] w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
-        <ul
-          class="scroll h-full w-full overflow-auto rounded-lg bg-orange-200"
-          hx-get="/api/root-locations"
-          hx-trigger="click from:#parent-location-select-button"
-          hx-indicator=".htmx-indicator">
-          <div class="htmx-indicator flex justify-center">
-            <img src="/public/loading.svg" />
-          </div>
-        </ul>
-        <button
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="hideParentLocationSelectModal();showNewLocationModal()">
-          Назад
-        </button>
-      </div>
-    </div>
     <!-- New location modal -->
     <div
       id="new-location-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <form
         class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
-        <input
-          type="text"
-          name="name"
-          class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-          placeholder="Назва локації"
-          required />
+        <div class="w-full">
+          <input
+            type="text"
+            name="name"
+            class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+            placeholder="Назва локації"
+            required />
+          <div id="location-exists-message" hidden></div>
+        </div>
         <label class="flex w-full cursor-pointer items-center">
           <input
             type="checkbox"
@@ -192,7 +173,11 @@
           type="submit"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
           hx-post="/api/location"
-          hx-swap="none">
+          hx-trigger="submit from:form"
+          hx-target="#location-result-message"
+          hx-swap="outerHTML"
+          hx-on::after-request="hideNewLocationModal();showLocationResultModal()"
+          hx-indicator="#location-result-message">
           Додати
         </button>
         <button
@@ -208,6 +193,54 @@
           Закрити
         </button>
       </form>
+    </div>
+    <!-- Parent location select modal -->
+    <div
+      id="parent-location-select-modal"
+      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      <div
+        class="flex max-h-[50%] w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
+        <ul
+          class="scroll h-full w-full overflow-auto rounded-lg bg-orange-200"
+          hx-get="/api/root-locations"
+          hx-trigger="click from:#parent-location-select-button">
+          <div class="htmx-indicator flex justify-center">
+            <img src="/public/loading.svg" />
+          </div>
+        </ul>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideParentLocationSelectModal();showNewLocationModal()">
+          Назад
+        </button>
+      </div>
+    </div>
+    <!-- Location result modal -->
+    <div
+      id="location-result-modal"
+      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      <div
+        class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
+        <div
+          id="location-result-message"
+          class="htmx-indicator flex justify-center">
+          <img src="/public/loading.svg" />
+        </div>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideLocationResultModal();resetLocationResultMessage();showNewLocationModal()">
+          Додати ще
+        </button>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+          Мої локації
+        </button>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideLocationResultModal();">
+          Закрити
+        </button>
+      </div>
     </div>
     <script src="/public/htmx.min.js"></script>
     <script src="/public/items.js"></script>

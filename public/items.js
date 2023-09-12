@@ -20,28 +20,6 @@ const hideNewItemModal = () => {
   newItemModal.classList.replace('flex', 'hidden');
 };
 
-const newLocationModal = document.getElementById('new-location-modal');
-
-const showNewLocationModal = () => {
-  newLocationModal.classList.replace('hidden', 'flex');
-};
-
-const hideNewLocationModal = () => {
-  newLocationModal.classList.replace('flex', 'hidden');
-};
-
-const parentLocationSelectModal = document.getElementById(
-  'parent-location-select-modal'
-);
-
-const showParentLocationSelectModal = () => {
-  parentLocationSelectModal.classList.replace('hidden', 'flex');
-};
-
-const hideParentLocationSelectModal = () => {
-  parentLocationSelectModal.classList.replace('flex', 'hidden');
-};
-
 const tagInput = document.getElementById('tag-input');
 const tagsList = document.getElementById('selected-tags-list');
 const tagExistsMessage = document.getElementById('tag-exists-message');
@@ -113,10 +91,42 @@ const addTagToList = () => {
   tagInput.value = '';
 };
 
+const newLocationModal = document.getElementById('new-location-modal');
+
+const showNewLocationModal = () => {
+  newLocationModal.classList.replace('hidden', 'flex');
+};
+
+const hideNewLocationModal = () => {
+  newLocationModal.classList.replace('flex', 'hidden');
+};
+
 const parentLocationSelectButton = document.getElementById(
   'parent-location-select-button'
 );
 
 const toggleParentLocationSelectButton = () => {
   parentLocationSelectButton.hidden = !parentLocationSelectButton.hidden;
+};
+
+const parentLocationSelectModal = document.getElementById(
+  'parent-location-select-modal'
+);
+
+const showParentLocationSelectModal = () => {
+  parentLocationSelectModal.classList.replace('hidden', 'flex');
+};
+
+const hideParentLocationSelectModal = () => {
+  parentLocationSelectModal.classList.replace('flex', 'hidden');
+};
+
+const locationResultModal = document.getElementById('location-result-modal');
+
+const showLocationResultModal = () => {
+  locationResultModal.classList.replace('hidden', 'flex');
+};
+
+const hideLocationResultModal = () => {
+  locationResultModal.classList.replace('flex', 'hidden');
 };

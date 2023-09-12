@@ -15,13 +15,18 @@ const locationRoutes = (app: Elysia) => app
     })
     .post(
       '/location',
-      async ({ body: newLocation, userId, set }) => {
+      async ({ body: newLocation, userId }) => {
         await locationService.create({
           ...newLocation,
           userId
         });
 
-        set.status = 204;
+        return (
+          <div id="location-result-message" class="flex items-center gap-2">
+          Додано
+            <img src='/public/checkmark.svg' width='16px' height='16px'/>
+          </div>
+        );
       }, {
         body: 'location'
       }
@@ -50,20 +55,22 @@ const locationRoutes = (app: Elysia) => app
           .join('');
       }
     )
-    .onError(({ error, set }) => {
-      switch (error.message) {
+    .onError(({ error: { message }, set }) => {
+      switch (message) {
       case 'Location not found':
       case 'Parent location not found':
         set.status = 404;
         break;
       case 'Location exists':
         set.status = 409;
-        break;
+        return (
+          <div class='pl-3 pt-1 text-red-500'>
+            Локація вже існує
+          </div>
+        );
       }
   
-      return {
-        message: error.message
-      };
+      return { message };
     })
   );
 
