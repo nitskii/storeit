@@ -1,11 +1,11 @@
 import html from '@elysiajs/html';
 import Elysia from 'elysia';
-import { authentication } from '../middleware';
+import { authenticator } from '../plugins';
 import tagService from '../services/tag-service';
 
 const tagRoutes = async (app: Elysia) => app
   .group('/api', app => app
-    .use(authentication)
+    .use(authenticator)
     .use(html())
     .get('/tags', async ({ userId }) => {
       const tags = await tagService.getAllForUser(userId);

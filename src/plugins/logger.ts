@@ -33,7 +33,7 @@ statusToColor.set(500,    COLOR_RED);
 const MAX_METHOD_LENGTH = 6;
 const MAX_PATH_LENGTH = 25;
 
-const logger = (app: Elysia) => app
+const logger = new Elysia({ name: 'logger' })
   .onResponse(({ request: { method }, path, set: { status } }) => {
     const methodColor = methodToColor.get(method);
     const statusColor = statusToColor.get(status);

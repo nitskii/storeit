@@ -1,11 +1,11 @@
 import html from '@elysiajs/html';
 import { Elysia, t } from 'elysia';
-import authentication from '../middleware/authentication';
 import locationService from '../services/location-service';
+import { authenticator } from '../plugins';
 
 const locationRoutes = (app: Elysia) => app
   .group('/api', app => app
-    .use(authentication)
+    .use(authenticator)
     .use(html())
     .model({
       location: t.Object({

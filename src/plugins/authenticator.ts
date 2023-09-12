@@ -2,7 +2,7 @@ import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import { Elysia } from 'elysia';
 
-export default (app: Elysia) => app
+const authenticator = new Elysia({ name: 'authenticator' })
   .use(cookie())
   .use(
     jwt({
@@ -38,3 +38,5 @@ export default (app: Elysia) => app
       message: error.message
     };
   });
+
+export default authenticator;

@@ -3,7 +3,7 @@ import jwt from '@elysiajs/jwt';
 import Elysia from 'elysia';
 import userService from '../services/user-service';
 
-const redirector = (app: Elysia) => app
+const redirector = new Elysia({ name: 'redirector' })
   .use(cookie())
   .use(
     jwt({

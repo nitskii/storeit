@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import Elysia from 'elysia';
-import { logger, redirector } from './middleware';
+import { logger, redirector } from './plugins';
 import { authRoutes, itemRoutes, locationRoutes } from './routes';
 import tagRoutes from './routes/tag-routes';
 
