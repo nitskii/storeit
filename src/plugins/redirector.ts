@@ -11,19 +11,19 @@ const redirector = new Elysia({ name: 'redirector' })
     })
   )
   .onBeforeHandle(async ({ path, cookie, jwt, set }) => {
-    if (['/', '/signup', '/login'].includes(path) && cookie.auth) {
+    if (['/signup', '/login'].includes(path) && cookie.auth) {
       const payload = await jwt.verify(cookie.auth);
       
       if (payload && await userService.existsById(payload.sub!)) {
-        set.redirect = '/items';
+        set.redirect = '/';
       }
-    } else if (path == '/items' && cookie.auth) {
+    } else if (path == '/' && cookie.auth) {
       const payload = await jwt.verify(cookie.auth);
       
       if (!payload || !await userService.existsById(payload.sub!)) {
         set.redirect = '/login';
       }
-    } else if (path == '/items' && !cookie.auth){
+    } else if (path == '/' && !cookie.auth){
       set.redirect = '/login';
     }
   });
