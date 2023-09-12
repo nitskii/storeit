@@ -177,7 +177,7 @@
           hx-trigger="submit from:form"
           hx-target="#location-result-message"
           hx-swap="outerHTML"
-          hx-on::after-request="handleLocationResult(this.form)"
+          hx-on::after-request="handleLocationResult(event.detail.xhr, this.form)"
           hx-indicator="#location-result-message">
           Додати
         </button>

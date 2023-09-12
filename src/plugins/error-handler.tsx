@@ -45,6 +45,7 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
         </div>
       );
     case 'Location exists':
+    case 'Parent location already has such child':
       set.status = 409;
       return (
         <div class='pl-2 pt-1 text-red-500'>

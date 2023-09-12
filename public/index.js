@@ -117,7 +117,14 @@ const parentLocationSelectButton = document.getElementById(
   'parent-location-select-button'
 );
 
-const handleLocationResult = (form) => {
+const locationExistsMessage = document.getElementById('location-exists-message');
+
+const handleLocationResult = ({ status, response }, form) => {
+  if (status == 409) {
+    locationExistsMessage.outerHTML = response;
+    return;
+  } 
+
   hideNewLocationModal();
   form.reset();
   parentLocationSelectButton.hidden = true;
