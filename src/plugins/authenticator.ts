@@ -9,34 +9,22 @@ const authenticator = new Elysia({ name: 'authenticator' })
       secret: process.env.SECRET
     })
   )
-  .derive(async ({ cookie, jwt }) => {
-    if (!cookie.auth) {
-      throw new Error('Unauthorized');
-    }
+  .derive(
+    async ({ cookie, jwt }) => {
+      if (!cookie.auth) {
+        throw new Error('Unauthorized');
+      }
 
-    const payload = await jwt.verify(cookie.auth);
+      const payload = await jwt.verify(cookie.auth);
 
-    if (!payload) {
-      throw new Error('JWT is invalid or expired');
-    }
+      if (!payload) {
+        throw new Error('JWT is invalid or expired');
+      }
 
-    return {
-      userId: payload.sub!
-    };
-  })
-  .onError(({ error, set }) => {
-    switch (error.message) {
-    case 'JWT is invalid or expired':
-      set.status = 400;
-      break;
-    case 'Unauthorized':
-      set.status = 401;
-      break;
+      return {
+        userId: payload.sub!
+      };
     }
-  
-    return {
-      message: error.message
-    };
-  });
+  );
 
 export default authenticator;

@@ -4,7 +4,7 @@ import jwt from '@elysiajs/jwt';
 import { Elysia, t } from 'elysia';
 import userService from '../services/auth-service';
 
-const authRoutes = (app: Elysia) => app
+const authRoutes = new Elysia()
   .group('/api', app => app
     .use(cookie({
       maxAge: process.env.COOKIE_MAX_AGE,
@@ -13,7 +13,6 @@ const authRoutes = (app: Elysia) => app
     .use(jwt({
       secret: process.env.SECRET
     }))
-    .use(html())
     .model({
       user: t.Object({
         nickname: t.String({
@@ -26,6 +25,7 @@ const authRoutes = (app: Elysia) => app
         })
       })
     })
+    .use(html())
     .post(
       '/signup',
       async ({ body: credentials, jwt, setCookie, set }) => {
@@ -35,7 +35,7 @@ const authRoutes = (app: Elysia) => app
         setCookie('auth', token);
 
         set.status = 204;
-        set.headers['HX-Redirect'] = '/items';
+        set.headers['HX-Redirect'] = '/';
       }, {
         body: 'user'
       }
@@ -49,7 +49,7 @@ const authRoutes = (app: Elysia) => app
         setCookie('auth', token);
 
         set.status = 204;
-        set.headers['HX-Redirect'] = '/items';
+        set.headers['HX-Redirect'] = '/';
       }, {
         body: 'user'
       }
@@ -62,33 +62,6 @@ const authRoutes = (app: Elysia) => app
         set.headers['HX-Redirect'] = '/login';
       }
     )
-    .onError(({ error: { message }, set }) => {
-      switch (message) {
-      case 'Incorrect password':
-        set.status = 401;
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Невірний пароль
-          </div>
-        );
-      case 'User not found':
-        set.status = 404;
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Нікнейм не знайдено
-          </div>
-        );
-      case 'User exists':
-        set.status = 409;
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Нікнейм вже існує
-          </div>
-        );
-      }
-
-      return { message };
-    })
   );
 
 export default authRoutes;

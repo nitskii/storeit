@@ -1,6 +1,6 @@
 import { v2 as cloudinary } from 'cloudinary';
 import Elysia from 'elysia';
-import { logger, redirector } from './plugins';
+import { errorHandler, logger, redirector } from './plugins';
 import { authRoutes, itemRoutes, locationRoutes } from './routes';
 import tagRoutes from './routes/tag-routes';
 
@@ -10,26 +10,20 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-const VIEWS_DIR = './src/views/';
+process.env.VIEWS_DIR = './src/views/';
 
 new Elysia()
   .use(logger)
   .use(authRoutes)
   .use(redirector)
-  .get('/', () => Bun.file(`${VIEWS_DIR}index.html`))
-  .get('/signup', () => Bun.file(`${VIEWS_DIR}signup.html`))
-  .get('/login', () => Bun.file(`${VIEWS_DIR}login.html`))
+  .get('/', () => Bun.file(`${process.env.VIEWS_DIR}index.html`))
+  .get('/signup', () => Bun.file(`${process.env.VIEWS_DIR}signup.html`))
+  .get('/login', () => Bun.file(`${process.env.VIEWS_DIR}login.html`))
   .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
   .use(locationRoutes)
   .use(tagRoutes)
   .use(itemRoutes)
-  .onError(({ error: { message }, code }) => {
-    process.env.NODE_ENV == 'development' && console.log(message);
-
-    if (code === 'NOT_FOUND') {
-      return Bun.file(`${VIEWS_DIR}404.html`);
-    }
-  })
+  .use(errorHandler)
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);
   });

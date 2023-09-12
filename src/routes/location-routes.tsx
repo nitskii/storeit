@@ -1,18 +1,18 @@
 import html from '@elysiajs/html';
 import { Elysia, t } from 'elysia';
-import locationService from '../services/location-service';
 import { authenticator } from '../plugins';
+import locationService from '../services/location-service';
 
-const locationRoutes = (app: Elysia) => app
+const locationRoutes = new Elysia()
   .group('/api', app => app
     .use(authenticator)
-    .use(html())
     .model({
       location: t.Object({
         name: t.String(),
         parentId: t.Optional(t.String())
       })
     })
+    .use(html())
     .post(
       '/location',
       async ({ body: newLocation, userId }) => {
@@ -55,23 +55,6 @@ const locationRoutes = (app: Elysia) => app
           .join('');
       }
     )
-    .onError(({ error: { message }, set }) => {
-      switch (message) {
-      case 'Location not found':
-      case 'Parent location not found':
-        set.status = 404;
-        break;
-      case 'Location exists':
-        set.status = 409;
-        return (
-          <div class='pl-3 pt-1 text-red-500'>
-            Локація вже існує
-          </div>
-        );
-      }
-  
-      return { message };
-    })
   );
 
 export default locationRoutes;
