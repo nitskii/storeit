@@ -1,4 +1,4 @@
-/* eslint-disable no-unused-vars */
+/* eslint-disable */
 
 const actionSelectModal = document.getElementById('action-select-modal');
 
@@ -117,13 +117,22 @@ const parentLocationSelectButton = document.getElementById(
   'parent-location-select-button'
 );
 
-const locationExistsMessage = document.getElementById('location-exists-message');
+const locationNameInput = document.getElementById('location-name-input');
+const locationExistsMessage = document.getElementById(
+  'location-exists-message'
+);
 
-const handleLocationResult = ({ status, response }, form) => {
-  if (status == 409) {
-    locationExistsMessage.outerHTML = response;
+const handlePostLocationResult = ({ target: { form }, xhr: { status } }) => {
+  if (status != 204) {
+    locationExistsMessage.hidden = false;
+    locationNameInput.addEventListener(
+      'input',
+      () => (locationExistsMessage.hidden = true),
+      { once: true }
+    );
+
     return;
-  } 
+  }
 
   hideNewLocationModal();
   form.reset();

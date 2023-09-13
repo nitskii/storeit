@@ -14,18 +14,13 @@ const locationRoutes = new Elysia()
   .use(html())
   .post(
     '/location',
-    async ({ body: newLocation, userId }) => {
+    async ({ body: newLocation, userId, set }) => {
       await locationService.create({
         ...newLocation,
         userId
       });
 
-      return (
-        <div id="location-result-message" class="flex items-center gap-2">
-          Додано
-          <img src='/public/checkmark.svg' width='16px' height='16px'/>
-        </div>
-      );
+      set.status = 204;
     }, {
       body: 'location'
     }
