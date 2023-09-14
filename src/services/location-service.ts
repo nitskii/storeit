@@ -83,16 +83,15 @@ const create = async (newLocation: NewLocation) => {
 };
 
 const getAllRootLocations = async (userId: string) => {
-  const childIds = (
-    await db
-      .select({
-        id: locationsToLocations.childId
-      })
-      .from(locationsToLocations)
-  ).map(r => r.id);
+  const parentsChildren = await db
+    .select()
+    .from(locationsToLocations);
 
+  const childIds= parentsChildren.map(r => r.childId);
+  
   const rootLocations = await db
     .select({
+      id: locations.id,
       name: locations.name
     })
     .from(locations)
@@ -101,7 +100,12 @@ const getAllRootLocations = async (userId: string) => {
         eq(locations.userId, userId),
         notInArray(locations.id, childIds.length ? childIds : [''])
       )
-    );
+    ) as { id: string, name: string, hasChildren?: boolean }[];
+      
+  const parentIds = parentsChildren.map(r => r.parentId);
+
+  rootLocations
+    .forEach(l => l.hasChildren = parentIds.includes(l.id));
 
   return rootLocations;
 };

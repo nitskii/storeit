@@ -113,6 +113,40 @@ const hideParentLocationSelectModal = () => {
   parentLocationSelectModal.classList.replace('flex', 'hidden');
 };
 
+const selectParentLocationButton = document.getElementById(
+  'select-parent-location-button'
+);
+
+const changeSelectedLocation = (selectedItem) => {
+  selectedItem.classList.add('bg-orange-300');
+  [...selectedItem.parentElement.children]
+    .filter((c) => c.innerText != selectedItem.innerText)
+    .forEach((c) => c.classList.remove('bg-orange-300'));
+  selectParentLocationButton.innerText = `Обрати локацію ${selectedItem.innerText}`;
+  selectParentLocationButton.dataset['id'] = selectedItem.dataset.id;
+  selectParentLocationButton.dataset['value'] = selectedItem.innerText;
+  selectParentLocationButton.hidden = false;
+};
+
+const selectedParentLocationMessage = document.getElementById(
+  'selected-parent-location-message'
+);
+
+const parentIdInput = document.getElementById('parent-id-input');
+
+const selectParentLocation = (target) => {
+  selectedParentLocationMessage.innerText = `Обрано локацію ${target.dataset.value}`;
+  selectedParentLocationMessage.hidden = false;
+  parentIdInput.value = target.dataset.id;
+  parentIdInput.disabled = false;
+  hideParentLocationSelectModal();
+  showNewLocationModal();
+};
+
+const parentLocationSelectBlock = document.getElementById(
+  'parent-location-select-block'
+);
+
 const parentLocationSelectButton = document.getElementById(
   'parent-location-select-button'
 );
@@ -136,7 +170,8 @@ const handlePostLocationResult = ({ target: { form }, xhr: { status } }) => {
 
   hideNewLocationModal();
   form.reset();
-  parentLocationSelectButton.hidden = true;
+  parentLocationSelectBlock.hidden = true;
+  selectedParentLocationMessage.hidden = true;
   showLocationResultModal();
 };
 

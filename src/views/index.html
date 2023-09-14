@@ -165,17 +165,23 @@
             id="parent-location-checkbox"
             type="checkbox"
             class="mx-2 h-5 w-5 appearance-none rounded-md border-0 bg-orange-200 checked:bg-orange-300 hover:bg-orange-300 hover:checked:bg-orange-300 focus:ring-1 focus:ring-orange-300 focus:ring-offset-0 focus:checked:bg-orange-300 focus:checked:ring-orange-200"
-            onchange="parentLocationSelectButton.hidden = !this.checked" />
+            onchange="parentLocationSelectBlock.hidden = !this.checked" />
           Належить до іншої локації
         </label>
-        <button
-          id="parent-location-select-button"
-          type="button"
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="hideNewLocationModal();showParentLocationSelectModal()"
-          hidden>
-          Оберіть локацію
-        </button>
+        <div id="parent-location-select-block" class="w-full" hidden>
+          <div
+            id="selected-parent-location-message"
+            class="pb-1 pl-2 text-sm text-gray-600"
+            hidden></div>
+          <input type="hidden" id="parent-id-input" name="parentId" disabled />
+          <button
+            id="parent-location-select-button"
+            type="button"
+            class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+            onclick="hideNewLocationModal();showParentLocationSelectModal()">
+            Оберіть локацію
+          </button>
+        </div>
         <button
           type="submit"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
@@ -213,6 +219,11 @@
             <img src="/public/loading.svg" />
           </div>
         </ul>
+        <button
+          id="select-parent-location-button"
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="selectParentLocation(event.target)"
+          hidden></button>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
           onclick="hideParentLocationSelectModal();showNewLocationModal()">

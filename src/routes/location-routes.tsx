@@ -27,10 +27,8 @@ const locationRoutes = new Elysia()
   )
   .get(
     '/root-locations',
-    async ({ userId, set }) => {
+    async ({ userId }) => {
       const locations = await locationService.getAllRootLocations(userId);
-
-      set.headers['HX-Reswap'] = 'innerHTML';
 
       if (!locations.length) {
         return (
@@ -41,8 +39,12 @@ const locationRoutes = new Elysia()
       }
 
       return locations
-        .map(({ name }) => (
-          <li class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300">
+        .map(({ id, name, hasChildren }) => (
+          <li
+            data-id={id}
+            data-has-children={String(hasChildren)}
+            class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
+            onclick="changeSelectedLocation(event.target)">
             {name}
           </li>)
         )
