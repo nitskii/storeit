@@ -1,24 +1,30 @@
 /* eslint-disable */
 
 const actionSelectModal = document.getElementById('action-select-modal');
+const      newItemModal = document.getElementById(     'new-item-modal');
+const  newLocationModal = document.getElementById( 'new-location-modal');
 
-const showActionSelectModal = () => {
-  actionSelectModal.classList.replace('hidden', 'flex');
-};
+const     buttonShowActionSelectModal = document.getElementById(     'button-show-action-select-modal');
+const     buttonHideActionSelectModal = document.getElementById(     'button-hide-action-select-modal');
+const          buttonHideNewItemModal = document.getElementById(          'button-hide-new-item-modal');
+const      buttonHideNewLocationModal = document.getElementById(      'button-hide-new-location-modal');
+const     buttonActionSelectToNewItem = document.getElementById(    'button-action-select-to-new-item');
+const buttonActionSelectToNewLocation = document.getElementById('button-action-select-to-new-location');
+const     buttonNewItemToActionSelect = document.getElementById(    'button-new-item-to-action-select');
+const buttonNewLocationToActionSelect = document.getElementById('button-new-location-to-action-select');
 
-const hideActionSelectModal = () => {
-  actionSelectModal.classList.replace('flex', 'hidden');
-};
+const    showElement =                (element) => {     element.classList.replace('hidden', 'flex') }
+const    hideElement =                (element) => {     element.classList.replace('flex', 'hidden') }
+const replaceElement = (oldElement, newElement) => { hideElement(oldElement);showElement(newElement) }
 
-const newItemModal = document.getElementById('new-item-modal');
-
-const showNewItemModal = () => {
-  newItemModal.classList.replace('hidden', 'flex');
-};
-
-const hideNewItemModal = () => {
-  newItemModal.classList.replace('flex', 'hidden');
-};
+    buttonShowActionSelectModal.addEventListener('click', () =>    showElement(                   actionSelectModal));
+    buttonHideActionSelectModal.addEventListener('click', () =>    hideElement(                   actionSelectModal));
+         buttonHideNewItemModal.addEventListener('click', () =>    hideElement(                        newItemModal));
+     buttonHideNewLocationModal.addEventListener('click', () =>    hideElement(                    newLocationModal));
+    buttonActionSelectToNewItem.addEventListener('click', () => replaceElement(actionSelectModal,      newItemModal));
+buttonActionSelectToNewLocation.addEventListener('click', () => replaceElement(actionSelectModal,  newLocationModal));
+    buttonNewItemToActionSelect.addEventListener('click', () => replaceElement(     newItemModal, actionSelectModal));
+buttonNewLocationToActionSelect.addEventListener('click', () => replaceElement( newLocationModal, actionSelectModal));
 
 const tagInput = document.getElementById('tag-input');
 const tagsList = document.getElementById('selected-tags-list');
@@ -37,6 +43,7 @@ const addTagToList = () => {
         () => (tagExistsMessage.hidden = true),
         { once: true }
       );
+
       return;
     }
   }
@@ -64,9 +71,10 @@ const addTagToList = () => {
     'click',
     (e) => {
       e.target.parentElement.remove();
-      tagsList.children.length || tagsList.classList.replace('flex', 'hidden');
-    },
-    { once: true }
+      tagsList.childElementCount || hideElement(tagsList);
+    }, {
+      once: true
+    }
   );
 
   const tagHiddenInput = document.createElement('input');
@@ -91,16 +99,8 @@ const addTagToList = () => {
   tagInput.value = '';
 };
 
-const newLocationModal = document.getElementById('new-location-modal');
-
-const showNewLocationModal = () => {
-  newLocationModal.classList.replace('hidden', 'flex');
-};
-
-const hideNewLocationModal = () => {
-  newLocationModal.classList.replace('flex', 'hidden');
-};
-
+// Location
+c
 const parentLocationSelectModal = document.getElementById(
   'parent-location-select-modal'
 );
@@ -140,7 +140,7 @@ const selectParentLocation = (target) => {
   parentIdInput.value = target.dataset.id;
   parentIdInput.disabled = false;
   hideParentLocationSelectModal();
-  showNewLocationModal();
+  buttonActionSelectToNewLocation();
 };
 
 const parentLocationSelectBlock = document.getElementById(
