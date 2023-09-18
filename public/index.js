@@ -87,9 +87,8 @@ const handlePostLocationResult = ({ target: { form }, xhr: { status } }) => {
     return;
   }
 
-  hideNewLocationModal();
+  replaceElement(newLocationModal, locationResultModal);
   form.reset();
-  parentLocationSelectBlock.hidden = true;
+  parentSelectionBlock.hidden = true;
   selectedParentMessage.hidden = true;
-  showLocationResultModal();
 };
