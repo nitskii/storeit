@@ -3,6 +3,56 @@ import { Elysia, t } from 'elysia';
 import { authenticator } from '../plugins';
 import locationService from '../services/location-service';
 
+type Location = {
+  id: string,
+  name: string,
+  hasChildren: boolean
+}
+
+const mapLocationsToListItems = (locations: Location[]) => {
+  if (!locations.length) {
+    return (
+      <div class="py-1 text-center text-sm text-gray-600">
+          Локації відсутні
+      </div>
+    );
+  }
+
+  return locations
+    .map(({ id, name, hasChildren }) => {
+
+      if (hasChildren) {
+        return (
+          <li
+            class="flex w-full cursor-pointer items-center justify-between border-b border-black last:border-none">
+            <div
+              data-id={id}
+              class="w-full py-2 pl-2 hover:bg-orange-300"
+              onclick="changeSelectedLocation(event.target)">
+              {name}
+            </div>
+            <button 
+              class="border-l border-black px-4 py-2 hover:bg-orange-300"
+              hx-get={`/api/location/${id}/children`}
+              hx-target='#locations-list'>
+            &gt;
+            </button>
+          </li>
+        );
+      }
+
+      return (
+        <li
+          data-id={id}
+          class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
+          onclick="changeSelectedLocation(event.target)">
+          {name}
+        </li>
+      );
+    })
+    .join('');
+};
+
 const locationRoutes = new Elysia()
   .use(authenticator)
   .model({
@@ -30,87 +80,15 @@ const locationRoutes = new Elysia()
     async ({ userId }) => {
       const locations = await locationService.getAllRootLocations(userId);
 
-      if (!locations.length) {
-        return (
-          <div class="py-1 text-center text-sm text-gray-600">
-              Локації відсутні
-          </div>
-        );
-      }
-
-      return locations
-        .map(({ id, name, hasChildren }) => {
-
-          if (hasChildren) {
-            return (
-              <li
-                class="flex w-full cursor-pointer items-center justify-between border-b border-black last:border-none">
-                <div
-                  data-id={id}
-                  class="w-full py-2 pl-2 hover:bg-orange-300"
-                  onclick="changeSelectedLocation(event.target)">
-                  {name}
-                </div>
-                <button 
-                  class="border-l border-black px-4 py-2 hover:bg-orange-300"
-                  hx-get={`/api/location/${id}/children`}
-                  hx-target='#locations-list'>
-                  &gt;
-                </button>
-              </li>
-            );
-          }
-
-          return (
-            <li
-              data-id={id}
-              class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
-              onclick="changeSelectedLocation(event.target)">
-              {name}
-            </li>
-          );
-        })
-        .join('');
+      return mapLocationsToListItems(locations); 
     }
   )
   .get(
     '/location/:id/children',
     async ({ params: { id } }) => {
-      const children = await locationService.getChildrenById(id);
+      const locations = await locationService.getChildrenById(id);
 
-      return children
-        .map(({ id, name, hasChildren }) => {
-
-          if (hasChildren) {
-            return (
-              <li
-                class="flex w-full cursor-pointer items-center justify-between border-b border-black last:border-none">
-                <div
-                  data-id={id}
-                  class="w-full py-2 pl-2 hover:bg-orange-300"
-                  onclick="changeSelectedLocation(event.target)">
-                  {name}
-                </div>
-                <button 
-                  class="border-l border-black px-4 py-2 hover:bg-orange-300"
-                  hx-get={`/api/location/${id}/children`}
-                  hx-target='#locations-list'>
-                &gt;
-                </button>
-              </li>
-            );
-          }
-
-          return (
-            <li
-              data-id={id}
-              class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
-              onclick="changeSelectedLocation(event.target)">
-              {name}
-            </li>
-          );
-        })
-        .join('');
+      return mapLocationsToListItems(locations);
     }
   );
 

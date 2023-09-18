@@ -100,7 +100,7 @@ const getAllRootLocations = async (userId: string) => {
         eq(locations.userId, userId),
         notInArray(locations.id, childIds.length ? childIds : [''])
       )
-    ) as { id: string, name: string, hasChildren?: boolean }[];
+    ) as { id: string, name: string, hasChildren: boolean }[];
       
   const parentIds = parentsChildren.map(r => r.parentId);
 
@@ -139,7 +139,7 @@ const getChildrenById = async (locationId: string) => {
     .from(locations)
     .where(
       inArray(locations.id, childIds)
-    ) as { id: string, name: string, hasChildren?: boolean }[];
+    ) as { id: string, name: string, hasChildren: boolean }[];
 
   const parentIds = (
     await db
