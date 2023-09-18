@@ -1,4 +1,4 @@
-import { and, eq, notInArray } from 'drizzle-orm';
+import { and, eq, inArray, notInArray } from 'drizzle-orm';
 import db from '../db';
 import { NewLocation, locations, locationsToLocations } from '../db/schema';
 
@@ -87,7 +87,7 @@ const getAllRootLocations = async (userId: string) => {
     .select()
     .from(locationsToLocations);
 
-  const childIds= parentsChildren.map(r => r.childId);
+  const childIds = parentsChildren.map(r => r.childId);
   
   const rootLocations = await db
     .select({
@@ -104,8 +104,7 @@ const getAllRootLocations = async (userId: string) => {
       
   const parentIds = parentsChildren.map(r => r.parentId);
 
-  rootLocations
-    .forEach(l => l.hasChildren = parentIds.includes(l.id));
+  rootLocations.forEach(l => l.hasChildren = parentIds.includes(l.id));
 
   return rootLocations;
 };
@@ -122,8 +121,42 @@ const existsById = async (id: string) => {
   ).length == 1;
 };
 
+const getChildrenById = async (locationId: string) => {
+  const childIds = (
+    await db
+      .select({
+        id: locationsToLocations.childId
+      })
+      .from(locationsToLocations)
+      .where(eq(locationsToLocations.parentId, locationId))
+  ).map(c => c.id);
+
+  const children = await db
+    .select({
+      id: locations.id,
+      name: locations.name
+    })
+    .from(locations)
+    .where(
+      inArray(locations.id, childIds)
+    ) as { id: string, name: string, hasChildren?: boolean }[];
+
+  const parentIds = (
+    await db
+      .select({
+        id: locationsToLocations.parentId
+      })
+      .from(locationsToLocations)
+  ).map(p => p.id);
+
+  children.forEach(c => c.hasChildren = parentIds.includes(c.id));
+
+  return children;
+};
+
 export default {
   create,
   getAllRootLocations,
-  existsById
+  existsById,
+  getChildrenById
 };

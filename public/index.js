@@ -53,6 +53,13 @@ const    buttonSelectParent = document.getElementById(   'button-select-parent')
 const selectedParentMessage = document.getElementById('selected-parent-message');
 const         parentIdInput = document.getElementById(        'parent-id-input');
 
+const changeSelectedLocation = (selectedItem) => {
+  buttonSelectParent.innerText = `Обрати локацію ${selectedItem.innerText}`;
+  buttonSelectParent.dataset['id'] = selectedItem.dataset.id;
+  buttonSelectParent.dataset['value'] = selectedItem.innerText;
+  buttonSelectParent.hidden = false;
+};
+
 buttonSelectParent.addEventListener(
   'click',
   (e) => {
@@ -63,17 +70,6 @@ buttonSelectParent.addEventListener(
     replaceElement(parentSelectModal, newLocationModal);
   }
 );
-
-const changeSelectedLocation = (selectedItem) => {
-  selectedItem.classList.add('bg-orange-300');
-  [...selectedItem.parentElement.children]
-    .filter((c) => c.innerText != selectedItem.innerText)
-    .forEach((c) => c.classList.remove('bg-orange-300'));
-  buttonSelectParent.innerText = `Обрати локацію ${selectedItem.innerText}`;
-  buttonSelectParent.dataset['id'] = selectedItem.dataset.id;
-  buttonSelectParent.dataset['value'] = selectedItem.innerText;
-  buttonSelectParent.hidden = false;
-};
 
 const handlePostLocationResult = ({ target: { form }, xhr: { status } }) => {
   if (status != 204) {

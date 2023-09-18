@@ -39,15 +39,77 @@ const locationRoutes = new Elysia()
       }
 
       return locations
-        .map(({ id, name, hasChildren }) => (
-          <li
-            data-id={id}
-            data-has-children={String(hasChildren)}
-            class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
-            onclick="changeSelectedLocation(event.target)">
-            {name}
-          </li>)
-        )
+        .map(({ id, name, hasChildren }) => {
+
+          if (hasChildren) {
+            return (
+              <li
+                class="flex w-full cursor-pointer items-center justify-between border-b border-black last:border-none">
+                <div
+                  data-id={id}
+                  class="w-full py-2 pl-2 hover:bg-orange-300"
+                  onclick="changeSelectedLocation(event.target)">
+                  {name}
+                </div>
+                <button 
+                  class="border-l border-black px-4 py-2 hover:bg-orange-300"
+                  hx-get={`/api/location/${id}/children`}
+                  hx-target='#locations-list'>
+                  &gt;
+                </button>
+              </li>
+            );
+          }
+
+          return (
+            <li
+              data-id={id}
+              class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
+              onclick="changeSelectedLocation(event.target)">
+              {name}
+            </li>
+          );
+        })
+        .join('');
+    }
+  )
+  .get(
+    '/location/:id/children',
+    async ({ params: { id } }) => {
+      const children = await locationService.getChildrenById(id);
+
+      return children
+        .map(({ id, name, hasChildren }) => {
+
+          if (hasChildren) {
+            return (
+              <li
+                class="flex w-full cursor-pointer items-center justify-between border-b border-black last:border-none">
+                <div
+                  data-id={id}
+                  class="w-full py-2 pl-2 hover:bg-orange-300"
+                  onclick="changeSelectedLocation(event.target)">
+                  {name}
+                </div>
+                <button 
+                  class="border-l border-black px-4 py-2 hover:bg-orange-300"
+                  hx-get={`/api/location/${id}/children`}
+                  hx-target='#locations-list'>
+                &gt;
+                </button>
+              </li>
+            );
+          }
+
+          return (
+            <li
+              data-id={id}
+              class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
+              onclick="changeSelectedLocation(event.target)">
+              {name}
+            </li>
+          );
+        })
         .join('');
     }
   );
