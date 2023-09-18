@@ -31,7 +31,6 @@ statusToColor.set(409, COLOR_ORANGE);
 statusToColor.set(500,    COLOR_RED);
 
 const MAX_METHOD_LENGTH = 6;
-const MAX_PATH_LENGTH = 25;
 
 const logger = new Elysia({ name: 'logger' })
   .onResponse(({ request: { method }, path, set: { status } }) => {
@@ -39,9 +38,9 @@ const logger = new Elysia({ name: 'logger' })
     const statusColor = statusToColor.get(status);
 
     const result = 
-      `${F_BOLD}${methodColor}${method}${NO_FORMAT}${' '.repeat(MAX_METHOD_LENGTH - method.length)}` +
-      ` ${path} ${' '.repeat(MAX_PATH_LENGTH - path.length)} - ` + 
-      `${F_BOLD}${statusColor}${status}${NO_FORMAT}`;
+      `${F_BOLD}${statusColor}${status}${NO_FORMAT}: ` +
+      `${' '.repeat(MAX_METHOD_LENGTH - method.length)}${F_BOLD}${methodColor}${method}${NO_FORMAT} ` +
+      `${path}`;
 
     console.log(result);
   });
