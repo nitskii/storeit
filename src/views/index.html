@@ -92,12 +92,11 @@
               <datalist
                 id="tags-list"
                 hx-get="/api/tags"
-                hx-swap="innerHTML"
-                hx-trigger="load"></datalist>
+                hx-trigger="click from:button-action-select-to-new-item"></datalist>
               <button
+                id="button-add-tag"
                 type="button"
-                class="border-l-2 border-orange-100 bg-orange-200 px-4 py-2"
-                onclick="addTagToList()">
+                class="border-l-2 border-orange-100 bg-orange-200 px-4 py-2">
                 <svg
                   xmlns="http://www.w3.org/2000/svg"
                   fill="none"
@@ -142,7 +141,7 @@
     <!-- New location modal -->
     <div
       id="new-location-modal"
-      class="fixed left-0 top-0 flex h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div
         class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
         <form class="flex w-full flex-col items-center space-y-4">
@@ -163,15 +162,14 @@
           </div>
           <label class="flex w-full cursor-pointer items-center">
             <input
-              id="parent-location-checkbox"
+              id="parent-selection-block-toggler"
               type="checkbox"
-              class="mx-2 h-5 w-5 appearance-none rounded-md border-0 bg-orange-200 checked:bg-orange-300 hover:bg-orange-300 hover:checked:bg-orange-300 focus:ring-1 focus:ring-orange-300 focus:ring-offset-0 focus:checked:bg-orange-300 focus:checked:ring-orange-200"
-              onchange="parentLocationSelectBlock.hidden = !this.checked" />
+              class="mx-2 h-5 w-5 appearance-none rounded-md border-0 bg-orange-200 checked:bg-orange-300 hover:bg-orange-300 hover:checked:bg-orange-300 focus:ring-1 focus:ring-orange-300 focus:ring-offset-0 focus:checked:bg-orange-300 focus:checked:ring-orange-200" />
             Належить до іншої локації
           </label>
-          <div id="parent-location-select-block" class="w-full" hidden>
+          <div id="parent-selection-block" class="w-full" hidden>
             <div
-              id="selected-parent-location-message"
+              id="selected-parent-message"
               class="pb-1 pl-2 text-sm text-gray-600"
               hidden></div>
             <input
@@ -180,10 +178,9 @@
               name="parentId"
               disabled />
             <button
-              id="parent-location-select-button"
+              id="button-new-location-to-parent-select"
               type="button"
-              class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-              onclick="hideNewLocationModal();showParentLocationSelectModal()">
+              class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
               Оберіть локацію
             </button>
           </div>
@@ -211,28 +208,27 @@
         </button>
       </div>
     </div>
-    <!-- Parent location select modal -->
+    <!-- Parent select modal -->
     <div
-      id="parent-location-select-modal"
+      id="parent-select-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div
         class="flex max-h-[50%] w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
         <ul
           class="scroll h-full w-full overflow-auto rounded-lg bg-orange-200"
           hx-get="/api/root-locations"
-          hx-trigger="click from:#parent-location-select-button">
+          hx-trigger="click from:#button-new-location-to-parent-select">
           <div class="htmx-indicator flex justify-center">
             <img src="/public/loading.svg" />
           </div>
         </ul>
         <button
-          id="select-parent-location-button"
+          id="button-select-parent"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="selectParentLocation(event.target)"
           hidden></button>
         <button
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="hideParentLocationSelectModal();showNewLocationModal()">
+          id="button-parent-select-to-new-location"
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
           Назад
         </button>
       </div>
@@ -248,8 +244,8 @@
           <img src="/public/checkmark.svg" width="16px" height="16px" />
         </div>
         <button
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="hideLocationResultModal();showNewLocationModal()">
+          id="button-location-result-to-new-location"
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
           Додати ще
         </button>
         <button
@@ -257,13 +253,14 @@
           Мої локації
         </button>
         <button
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="hideLocationResultModal();">
+          id="button-hide-location-result-modal"
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
           Закрити
         </button>
       </div>
     </div>
     <script src="/public/htmx.min.js"></script>
     <script src="/public/index.js"></script>
+    <script src="/public/index.tags.js"></script>
   </body>
 </html>
