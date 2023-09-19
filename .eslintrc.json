@@ -21,5 +21,6 @@
   },
   "globals": {
     "Bun": true
-  }
+  },
+  "ignorePatterns": ["*.js"]
 }

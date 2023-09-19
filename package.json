@@ -9,19 +9,21 @@
   },
   "dependencies": {
     "@elysiajs/cookie": "^0.6.1",
-    "@elysiajs/html": "^0.6.4",
-    "@elysiajs/jwt": "^0.6.3",
+    "@elysiajs/html": "^0.6.6",
+    "@elysiajs/jwt": "^0.6.4",
+    "@kitajs/html": "^2.2.2",
+    "@kitajs/ts-html-plugin": "^1.0.1",
     "@libsql/client": "0.3.2",
     "@tailwindcss/aspect-ratio": "^0.4.2",
-    "@tailwindcss/forms": "^0.5.6",
+    "@tailwindcss/forms": "^0c.5.6",
     "cloudinary": "^1.40.0",
     "drizzle-orm": "^0.28.6",
-    "elysia": "^0.6.22"
+    "elysia": "^0.6.24"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.6.0",
-    "@typescript-eslint/parser": "^6.6.0",
-    "bun-types": "^1.0.1",
+    "@typescript-eslint/eslint-plugin": "^6.7.2",
+    "@typescript-eslint/parser": "^6.7.2",
+    "bun-types": "^1.0.2",
     "drizzle-kit": "^0.19.13",
     "eslint": "^8.49.0",
     "prettier": "^3.0.3",

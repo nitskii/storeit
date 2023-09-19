@@ -1,7 +1,13 @@
-/* eslint-disable */
+const newItemModal = document.getElementById('new-item-modal');
 
-const     buttonAddTag = document.getElementById(    'button-add-tag');
-const         tagInput = document.getElementById(         'tag-input');
+document
+  .getElementById('button-hide-new-item-modal')
+  .addEventListener('click', () => hideElement(newItemModal));
+document
+  .getElementById('button-new-item-to-action-select')
+  .addEventListener('click', () => replaceElement(newItemModal, actionSelectModal));
+
+const tagInput = document.getElementById('tag-input');
 const selectedTagsList = document.getElementById('selected-tags-list');
 const tagExistsMessage = document.getElementById('tag-exists-message');
 
@@ -37,8 +43,8 @@ const addTagToList = () => {
       e.target.parentElement.parentElement.remove();
       selectedTagsList.childElementCount || hideElement(selectedTagsList);
     }, {
-      once: true
-    }
+    once: true
+  }
   );
 
   const tagHiddenInput = document.createElement('input');
@@ -63,4 +69,6 @@ const addTagToList = () => {
   tagInput.value = '';
 };
 
-buttonAddTag.addEventListener('click', () => addTagToList());
+document
+  .getElementById('button-add-tag')
+  .addEventListener('click', () => addTagToList());

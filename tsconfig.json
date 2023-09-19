@@ -15,7 +15,8 @@
     "noEmit": true,
     "types": ["bun-types"],
     "jsx": "react",
-    "jsxFactory": "ElysiaJSX",
-    "jsxFragmentFactory": "ElysiaJSX.Fragment"
+    "jsxFactory": "Html.createElement",
+    "jsxFragmentFactory": "Html.Fragment",
+    "plugins": [{ "name": "@kitajs/ts-html-plugin" }]
   }
 }
