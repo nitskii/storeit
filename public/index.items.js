@@ -2,10 +2,10 @@ const newItemModal = document.getElementById('new-item-modal');
 
 document
   .getElementById('button-hide-new-item-modal')
-  .addEventListener('click', () => hideElement(newItemModal));
+  .addEventListener('click', () => hideModal(newItemModal));
 document
   .getElementById('button-new-item-to-action-select')
-  .addEventListener('click', () => replaceElement(newItemModal, actionSelectModal));
+  .addEventListener('click', () => replaceModal(newItemModal, actionSelectModal));
 
 const tagInput = document.getElementById('tag-input');
 const selectedTagsList = document.getElementById('selected-tags-list');
@@ -41,7 +41,7 @@ const addTagToList = () => {
     'click',
     (e) => {
       e.target.parentElement.parentElement.remove();
-      selectedTagsList.childElementCount || hideElement(selectedTagsList);
+      selectedTagsList.childElementCount || selectedTagsList.classList.replace('flex', 'hidden');
     }, {
     once: true
   }

@@ -1,18 +1,18 @@
-const showElement = (element) => { element.classList.replace('hidden', 'flex') };
-const hideElement = (element) => { element.classList.replace('flex', 'hidden') };
-const replaceElement = (oldElement, newElement) => { hideElement(oldElement);showElement(newElement) };
+const showModal = (element) => { element.classList.replace('hidden', 'flex') };
+const hideModal = (element) => { element.classList.replace('flex', 'hidden') };
+const replaceModal = (oldElement, newElement) => { hideModal(oldElement);showModal(newElement) };
 
 const actionSelectModal = document.getElementById('action-select-modal');
 
 document
   .getElementById('button-show-action-select-modal')
-  .addEventListener('click', () => showElement(actionSelectModal));
+  .addEventListener('click', () => showModal(actionSelectModal));
 document
   .getElementById('button-hide-action-select-modal')
-  .addEventListener('click', () => hideElement(actionSelectModal));
+  .addEventListener('click', () => hideModal(actionSelectModal));
 document
   .getElementById('button-action-select-to-new-item')
-  .addEventListener('click', () => replaceElement(actionSelectModal, newItemModal));
+  .addEventListener('click', () => replaceModal(actionSelectModal, newItemModal));
 document
   .getElementById('button-action-select-to-new-location')
-  .addEventListener('click', () => replaceElement(actionSelectModal, newLocationModal));
+  .addEventListener('click', () => replaceModal(actionSelectModal, newLocationModal));

@@ -4,22 +4,22 @@ const locationResultModal = document.getElementById('location-result-modal');
 
 document
   .getElementById('button-hide-new-location-modal')
-  .addEventListener('click', () => hideElement(newLocationModal));
+  .addEventListener('click', () => hideModal(newLocationModal));
 document
   .getElementById('button-hide-location-result-modal')
-  .addEventListener('click', () => hideElement(locationResultModal));
+  .addEventListener('click', () => hideModal(locationResultModal));
 document
   .getElementById('button-new-location-to-action-select')
-  .addEventListener('click', () => replaceElement(newLocationModal, actionSelectModal));
+  .addEventListener('click', () => replaceModal(newLocationModal, actionSelectModal));
 document
   .getElementById('button-new-location-to-parent-select')
-  .addEventListener('click', () => replaceElement(newLocationModal, parentSelectModal));
+  .addEventListener('click', () => replaceModal(newLocationModal, parentSelectModal));
 document
   .getElementById('button-parent-select-to-new-location')
-  .addEventListener('click', () => replaceElement(parentSelectModal, newLocationModal));
+  .addEventListener('click', () => replaceModal(parentSelectModal, newLocationModal));
 document
   .getElementById('button-location-result-to-new-location')
-  .addEventListener('click', () => replaceElement(locationResultModal, newLocationModal));
+  .addEventListener('click', () => replaceModal(locationResultModal, newLocationModal));
 
 const parentSelectionBlock = document.getElementById('parent-selection-block');
 
@@ -40,7 +40,7 @@ buttonSelectParent.addEventListener(
   'click',
   () => {
     parentIdInput.disabled = false;
-    replaceElement(parentSelectModal, newLocationModal);
+    replaceModal(parentSelectModal, newLocationModal);
   }
 );
 
@@ -59,7 +59,7 @@ const handlePostLocationResult = ({ target: { form }, xhr: { status } }) => {
     return;
   }
 
-  replaceElement(newLocationModal, locationResultModal);
+  replaceModal(newLocationModal, locationResultModal);
   form.reset();
   parentSelectionBlock.hidden = true;
 };
