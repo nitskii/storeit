@@ -1,4 +1,4 @@
-import html from '@elysiajs/html';
+import { html } from '@elysiajs/html';
 import Elysia from 'elysia';
 import { authenticator } from '../plugins';
 import tagService from '../services/tag-service';

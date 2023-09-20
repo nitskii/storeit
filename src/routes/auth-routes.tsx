@@ -1,5 +1,5 @@
 import cookie from '@elysiajs/cookie';
-import html from '@elysiajs/html';
+import { html } from '@elysiajs/html';
 import jwt from '@elysiajs/jwt';
 import { Elysia, t } from 'elysia';
 import userService from '../services/auth-service';
