@@ -15,9 +15,6 @@ document
   .getElementById('button-new-location-to-parent-select')
   .addEventListener('click', () => replaceModal(newLocationModal, parentSelectModal));
 document
-  .getElementById('button-parent-select-to-new-location')
-  .addEventListener('click', () => replaceModal(parentSelectModal, newLocationModal));
-document
   .getElementById('button-location-result-to-new-location')
   .addEventListener('click', () => replaceModal(locationResultModal, newLocationModal));
 
@@ -26,6 +23,10 @@ const parentSelectionBlock = document.getElementById('parent-selection-block');
 document
   .getElementById('parent-selection-block-toggler')
   .addEventListener('change', (e) => (parentSelectionBlock.hidden = !e.target.checked));
+
+document
+  .getElementById('button-parent-select-back')
+  .addEventListener('click', () => replaceModal(parentSelectModal, newLocationModal));
 
 const buttonSelectParent = document.getElementById('button-select-parent');
 const parentIdInput = document.getElementById('parent-id-input');

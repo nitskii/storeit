@@ -60,6 +60,10 @@ const create = async (newLocation: NewLocation) => {
   } else if (existingLocation && !hasParent) {
     throw new Error('Location exists');
   } else {
+    if (existingLocation.id == newLocation.parentId) {
+      throw new Error('Parent location can\'t be a child of itself');
+    }
+
     const [ recordExists ] = await db
       .select()
       .from(locationsToLocations)

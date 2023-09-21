@@ -26,6 +26,7 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
       return;
     case 'Location exists':
     case 'Parent location already has such child':
+    case 'Parent location can\'t be a child of itself':
       set.status = 409;
       return '';
     }
