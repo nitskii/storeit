@@ -24,9 +24,32 @@ document
   .getElementById('parent-selection-block-toggler')
   .addEventListener('change', (e) => (parentSelectionBlock.hidden = !e.target.checked));
 
+let currentLevel = '/api/root-locations';
+const history = [];
+
+const saveHistory = (path) => {
+  history.push(currentLevel);
+  currentLevel = path;
+}
+
 document
   .getElementById('button-parent-select-back')
-  .addEventListener('click', () => replaceModal(parentSelectModal, newLocationModal));
+  .addEventListener(
+    'click',
+    async () => {
+      if(history.length) {
+        await htmx.ajax('GET', history.pop(), '#locations-list');
+
+        if (history.length == 0) {
+          currentLevel = '/api/root-locations';
+        }
+
+        return;
+      }
+
+      replaceModal(parentSelectModal, newLocationModal);
+    }
+  );
 
 const buttonSelectParent = document.getElementById('button-select-parent');
 const parentIdInput = document.getElementById('parent-id-input');

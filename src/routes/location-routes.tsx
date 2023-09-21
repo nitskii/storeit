@@ -21,6 +21,8 @@ const mapLocationsToListItems = (locations: Location[]) => {
   return locations
     .map(({ id, name, hasChildren }) => {
 
+      const requestPath = `/api/location/${id}/children`;
+
       if (hasChildren) {
         return (
           <li
@@ -33,8 +35,9 @@ const mapLocationsToListItems = (locations: Location[]) => {
             </div>
             <button 
               class="border-l border-black px-4 py-2 hover:bg-orange-300"
-              hx-get={`/api/location/${id}/children`}
-              hx-target='#locations-list'>
+              hx-get={requestPath}
+              hx-target='#locations-list'
+              hx-on={`htmx:beforeRequest: saveHistory('${requestPath}')`}>
             &gt;
             </button>
           </li>
