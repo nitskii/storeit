@@ -24,12 +24,23 @@ document
   .getElementById('parent-selection-block-toggler')
   .addEventListener('change', (e) => (parentSelectionBlock.hidden = !e.target.checked));
 
-let currentLevel = '/api/root-locations';
-const history = [];
+const INITIAL_PATH = '/api/root-locations';
+let currentPath = INITIAL_PATH;
+const pathHistory = [];
+const currentLocationChainMessage = document.getElementById('current-location-chain-message');
 
-const saveHistory = (path) => {
-  history.push(currentLevel);
-  currentLevel = path;
+const handleLoadButtonClick = (path, name) => {
+  pathHistory.push(currentPath);
+  currentPath = path;
+
+  currentLocationChainMessage.innerText = currentLocationChainMessage.innerText.trim();
+
+  if (currentLocationChainMessage.innerText) {
+    currentLocationChainMessage.innerText += ` > ${name}`;
+  } else {
+    currentLocationChainMessage.innerText = name;
+    currentLocationChainMessage.hidden = false;
+  }
 }
 
 document
@@ -37,11 +48,14 @@ document
   .addEventListener(
     'click',
     async () => {
-      if(history.length) {
-        await htmx.ajax('GET', history.pop(), '#locations-list');
+      if(pathHistory.length) {
+        await htmx.ajax('GET', pathHistory.pop(), '#locations-list');
 
-        if (history.length == 0) {
-          currentLevel = '/api/root-locations';
+        if (pathHistory.length == 0) {
+          currentPath = INITIAL_PATH;
+          currentLocationChainMessage.innerText = "";
+        } else {
+          currentLocationChainMessage.innerText = currentLocationChainMessage.innerText.slice(0, currentLocationChainMessage.innerText.lastIndexOf('>'))
         }
 
         return;
@@ -52,17 +66,22 @@ document
   );
 
 const buttonSelectParent = document.getElementById('button-select-parent');
+const selectedParentMessage = document.getElementById('selected-parent-message');
 const parentIdInput = document.getElementById('parent-id-input');
 
 const changeSelectedLocation = (selectedItem) => {
   buttonSelectParent.innerText = `Обрати локацію ${selectedItem.innerText}`;
   buttonSelectParent.hidden = false;
+  buttonSelectParent.dataset['name'] = selectedItem.innerText;
   parentIdInput.value = selectedItem.dataset.id;
 };
 
 buttonSelectParent.addEventListener(
   'click',
   () => {
+    selectedParentMessage.innerText = `Обрано локацію ${currentLocationChainMessage.innerText ? `${currentLocationChainMessage.innerText} >` : ""} ${buttonSelectParent.dataset.name}`;
+    currentLocationChainMessage.innerText = "";
+    selectedParentMessage.hidden = false;
     parentIdInput.disabled = false;
     replaceModal(parentSelectModal, newLocationModal);
   }
