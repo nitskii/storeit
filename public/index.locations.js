@@ -22,7 +22,18 @@ const parentSelectionBlock = document.getElementById('parent-selection-block');
 
 document
   .getElementById('parent-selection-block-toggler')
-  .addEventListener('change', (e) => (parentSelectionBlock.hidden = !e.target.checked));
+  .addEventListener(
+    'change',
+    (e) => {
+      parentSelectionBlock.hidden = !e.target.checked
+
+      if (e.target.checked && parentIdInput.value) {
+        parentIdInput.disabled = false;
+      } else {
+        parentIdInput.disabled = true;
+      }
+    }
+  );
 
 const INITIAL_PATH = '/api/root-locations';
 let currentPath = INITIAL_PATH;
@@ -104,5 +115,11 @@ const handlePostLocationResult = ({ target: { form }, xhr: { status } }) => {
 
   replaceModal(newLocationModal, locationResultModal);
   form.reset();
+  parentIdInput.value = "";
+  parentIdInput.disabled = true;
+  currentLocationChainMessage.innerText = "";
+  selectedParentMessage.innerText = "";
+  currentPath = INITIAL_PATH;
+  buttonSelectParent.hidden = true;
   parentSelectionBlock.hidden = true;
 };
