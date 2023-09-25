@@ -79,7 +79,6 @@ const getAllForUser = async (userId: string): Promise<ResponseItem[]> => {
     .rightJoin(itemsSubquery, eq(tagsToItems.itemId, itemsSubquery.id))
     .leftJoin(tags, eq(tagsToItems.tagId, tags.id))
     .innerJoin(locations, eq(itemsSubquery.locationId, locations.id));
-
   
   return [
     ...rows

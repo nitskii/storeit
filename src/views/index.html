@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <link href="/public/favicon.ico" rel="icon" />
     <link href="/public/tailwind.css" rel="stylesheet" />
-    <title>Шафа - Предмети</title>
+    <title>Шафа - Головна</title>
   </head>
   <body>
     <header class="bg-orange-100">
@@ -55,24 +55,22 @@
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div
         class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
-        <form class="flex w-full flex-col items-center space-y-4">
-          <div class="w-full">
-            <input
-              type="text"
-              name="name"
-              class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-              placeholder="Назва предмету"
-              required
-              maxlength="50" />
-          </div>
-          <div class="w-full">
-            <input
-              type="file"
-              name="image"
-              accept="image/*"
-              class="w-full rounded-lg text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-300 focus:outline-2 focus:outline-orange-300"
-              required />
-          </div>
+        <form
+          id="item-form"
+          class="flex w-full flex-col items-center space-y-4">
+          <input
+            type="text"
+            name="name"
+            class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+            placeholder="Назва предмету"
+            required
+            maxlength="50" />
+          <input
+            type="file"
+            name="image"
+            accept="image/*"
+            class="w-full rounded-lg text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-300 focus:outline-2 focus:outline-orange-300"
+            required />
           <button
             type="button"
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
@@ -85,30 +83,19 @@
             <div class="flex w-full overflow-hidden rounded-lg">
               <input
                 id="tag-input"
-                list="tags-list"
+                list="tags-datalist"
                 type="text"
                 class="block w-full border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
                 placeholder="Теги" />
               <datalist
-                id="tags-list"
+                id="tags-datalist"
                 hx-get="/api/tags"
                 hx-trigger="click from:button-action-select-to-new-item"></datalist>
               <button
                 id="button-add-tag"
                 type="button"
                 class="border-l-2 border-orange-100 bg-orange-200 px-4 py-2">
-                <svg
-                  xmlns="http://www.w3.org/2000/svg"
-                  fill="none"
-                  viewBox="0 0 24 24"
-                  stroke-width="1.5"
-                  stroke="currentColor"
-                  class="h-6 w-6">
-                  <path
-                    stroke-linecap="round"
-                    stroke-linejoin="round"
-                    d="M12 4.5v15m7.5-7.5h-15" />
-                </svg>
+                <img src="/public/plus.svg" class="h-6 w-6" />
               </button>
             </div>
             <div id="tag-exists-message" class="pl-2 pt-1 text-red-500" hidden>
@@ -116,11 +103,12 @@
             </div>
           </div>
           <button
+            id="button-submit-new-item"
             type="submit"
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
             hx-post="/api/item"
             hx-encoding="multipart/form-data"
-            hx-swap="none">
+            hx-trigger="submit from:#item-form">
             Додати
           </button>
         </form>
@@ -144,7 +132,9 @@
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div
         class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
-        <form class="flex w-full flex-col items-center space-y-4">
+        <form
+          id="location-form"
+          class="flex w-full flex-col items-center space-y-4">
           <div class="w-full">
             <input
               id="location-name-input"
@@ -188,7 +178,7 @@
             type="submit"
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
             hx-post="/api/location"
-            hx-trigger="submit from:form"
+            hx-trigger="submit from:#location-form"
             hx-on::after-request="handlePostLocationResult(event.detail)">
             Додати
           </button>
