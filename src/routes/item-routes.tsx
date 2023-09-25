@@ -16,7 +16,7 @@ const itemRoutes = (app: Elysia) => app
         // type: 'image',
         maxSize: MAX_IMAGE_SIZE
       }),
-      locationId: t.String(),
+      locationId: t.Optional(t.String()),
       tags: t.Optional(t.Union([t.Array(t.String()), t.String()]))
     })
   })

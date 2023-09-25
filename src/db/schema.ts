@@ -48,7 +48,7 @@ export type NewLocation = Omit<InferInsertModel<typeof locations> & { parentId?:
 export type NewItem = {
   name: string,
   image: Blob,
-  locationId: string,
+  locationId?: string,
   tags?: string[]
   userId: string,
 }
@@ -56,6 +56,6 @@ export type ResponseItem = {
   id: string,
   name: string,
   image: string
-  location: string,
+  location?: string,
   tags: string[]
 };

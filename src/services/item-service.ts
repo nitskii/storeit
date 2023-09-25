@@ -8,10 +8,12 @@ import tagService from './tag-service';
 const create = async (newItem: NewItem) => {
   const { locationId, tags, image, userId } = newItem;
 
-  const locationExists = await locationService.existsById(locationId);
-
-  if (!locationExists) {
-    throw new Error('Location not found');
+  if (locationId) {
+    const locationExists = await locationService.existsById(locationId);
+    
+    if (!locationExists) {
+      throw new Error('Location not found');
+    }
   }
   
   const newTags: { id: string }[] = [];
