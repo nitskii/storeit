@@ -1,29 +1,26 @@
-/* eslint-disable */
+const loginNicknameInput = document.getElementById('login-nickname-input');
+const nicknameNotFoundMessage = document.getElementById('nickname-not-found-message');
 
-const passwordInput = document.getElementById('password-input');
-const passwordIncorrectMessage = document.getElementById(
-  'password-incorrect-message'
-);
-
-const nicknameInput = document.getElementById('nickname-input');
-const nicknameNotFoundMessage = document.getElementById(
-  'nickname-not-found-message'
-);
+const loginPasswordInput = document.getElementById('login-password-input');
+const passwordIncorrectMessage = document.getElementById('password-incorrect-message');
 
 const handleLoginResult = (status) => {
-  if (status == 401) {
-    passwordIncorrectMessage.hidden = false;
-    passwordInput.addEventListener(
-      'input',
-      () => (passwordIncorrectMessage.hidden = true),
-      { once: true }
-    );
-  } else if (status == 404) {
-    nicknameNotFoundMessage.hidden = false;
-    nicknameInput.addEventListener(
-      'input',
-      () => (nicknameNotFoundMessage.hidden = true),
-      { once: true }
-    );
+  switch (status) {
+    case 401:
+      passwordIncorrectMessage.hidden = false;
+      loginPasswordInput.addEventListener(
+        'input',
+        () => (passwordIncorrectMessage.hidden = true),
+        { once: true }
+      );
+      break;
+    case 404:
+      nicknameNotFoundMessage.hidden = false;
+      loginNicknameInput.addEventListener(
+        'input',
+        () => (nicknameNotFoundMessage.hidden = true),
+        { once: true }
+      );
+      break;
   }
 };
