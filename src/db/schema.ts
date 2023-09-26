@@ -56,6 +56,6 @@ export type ResponseItem = {
   id: string,
   name: string,
   image: string
-  location?: string,
+  location: string | null,
   tags: string[]
 };
