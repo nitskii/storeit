@@ -32,7 +32,7 @@ const itemRoutes = (app: Elysia) => app
       });
         
       set.status = 204;
-      set.headers['HX-Refresh'] = 'true';
+      set.headers['HX-Trigger'] = 'itemsUpdate';
     }, {
       body: 'item'
     }
