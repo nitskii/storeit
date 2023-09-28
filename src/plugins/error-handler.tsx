@@ -20,10 +20,10 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
       return '';
     case 'JWT is invalid or expired':
       set.status = 400;
-      return;
+      return '';
     case 'Unauthorized':
       set.status = 401;
-      return;
+      return '';
     case 'Location exists':
     case 'Parent location already has such child':
     case 'Parent location can\'t be a child of itself':
@@ -33,11 +33,7 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
 
     console.log(message);
 
-    return (
-      <div class='pl-2 pt-1 text-red-500'>
-        Щось пішло не так
-      </div>
-    );
+    return { message: 'Internal Server Error' };
   });
 
 export default errorHandler;

@@ -19,8 +19,6 @@ cloudinary.config({
   api_secret: process.env.CLOUDINARY_API_SECRET
 });
 
-process.env.VIEWS_DIR = './src/views/';
-
 new Elysia()
   .use(logger)
   .use(redirector)

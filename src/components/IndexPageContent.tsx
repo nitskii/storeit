@@ -1,13 +1,5 @@
-<!doctype html>
-<html lang="uk" class="bg-orange-50">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/public/favicon.ico" rel="icon" />
-    <link href="/public/tailwind.css" rel="stylesheet" />
-    <title>Шафа - Головна</title>
-  </head>
-  <body>
+const IndexPageContent = () => (
+  <>
     <header class="bg-orange-100">
       <nav class="flex justify-end space-x-2 p-2">
         <button
@@ -26,7 +18,6 @@
       class="grid grid-cols-1 gap-y-4 p-4 sm:grid-cols-2 sm:gap-x-4 lg:grid-cols-4"
       hx-get="/api/items"
       hx-trigger="load, itemsUpdate from:body"></main>
-    <!-- Action select modal -->
     <div
       id="action-select-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
@@ -49,7 +40,6 @@
         </button>
       </div>
     </div>
-    <!-- New item modal -->
     <div
       id="new-item-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
@@ -63,14 +53,13 @@
             name="name"
             class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-black focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
             placeholder="Назва предмету"
-            required
-            maxlength="50" />
+            required="" />
           <input
             type="file"
             name="image"
             accept="image/*"
             class="w-full rounded-lg text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-300 focus:outline-2 focus:outline-orange-300"
-            required />
+            required="" />
           <button
             type="button"
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
@@ -126,7 +115,6 @@
         </button>
       </div>
     </div>
-    <!-- New location modal -->
     <div
       id="new-location-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
@@ -142,7 +130,7 @@
               name="name"
               class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
               placeholder="Назва локації"
-              required />
+              required="" />
             <div
               id="location-exists-message"
               class="pl-2 pt-1 text-red-500"
@@ -179,7 +167,7 @@
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
             hx-post="/api/location"
             hx-trigger="submit from:#location-form"
-            hx-on::after-request="handlePostLocationResult(event.detail)">
+            hx-on="htmx:afterRequest: handlePostLocationResult(event.detail)">
             Додати
           </button>
         </form>
@@ -197,7 +185,6 @@
         </button>
       </div>
     </div>
-    <!-- Parent select modal -->
     <div
       id="parent-select-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
@@ -229,7 +216,6 @@
         </button>
       </div>
     </div>
-    <!-- Location result modal -->
     <div
       id="location-result-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
@@ -259,5 +245,7 @@
     <script src="/public/index.base.js"></script>
     <script src="/public/index.items.js"></script>
     <script src="/public/index.locations.js"></script>
-  </body>
-</html>
+  </>
+);
+
+export default IndexPageContent;

@@ -1,13 +1,5 @@
-<!doctype html>
-<html lang="uk" class="h-full bg-orange-50">
-  <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <link href="/public/favicon.ico" rel="icon" />
-    <link href="/public/tailwind.css" rel="stylesheet" />
-    <title>Шафа - Реєстрація</title>
-  </head>
-  <body class="h-full">
+const SignupPageContent = () => (
+  <>
     <main class="h-full">
       <section
         class="flex h-full flex-col justify-center px-4 sm:mx-auto sm:max-w-md">
@@ -23,9 +15,7 @@
                 name="nickname"
                 class="w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
                 placeholder="Нікнейм"
-                required
-                minlength="3"
-                maxlength="30" />
+                required="" />
               <div
                 id="nickname-exists-message"
                 class="pl-2 pt-1 text-red-500"
@@ -38,15 +28,13 @@
               name="password"
               class="w-full rounded-lg border-0 bg-orange-200 focus:ring-0 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
               placeholder="Пароль"
-              required
-              minlength="8"
-              maxlength="50" />
+              required="" />
             <button
               type="submit"
               class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
               hx-post="/api/signup"
               hx-trigger="submit from:form"
-              hx-on::after-request="handleSignupResult(event.detail.xhr.status)">
+              hx-on="htmx:afterRequest: handleSignupResult(event.detail.xhr.status)">
               Зареєструватись
             </button>
           </form>
@@ -61,5 +49,7 @@
     </main>
     <script src="/public/htmx.min.js"></script>
     <script src="/public/signup.js"></script>
-  </body>
-</html>
+  </>
+);
+
+export default SignupPageContent;
