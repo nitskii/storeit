@@ -2,7 +2,7 @@ import PageBase from './PageBase';
 import SignupPageContent from './SignupPageContent';
 
 const SignupPage = () => (
-  <PageBase title="Реєстрація">
+  <PageBase>
     <SignupPageContent />
   </PageBase>
 );

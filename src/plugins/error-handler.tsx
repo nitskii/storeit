@@ -5,7 +5,7 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
     switch(message) {
       case 'Invalid nickname':
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
-        set.headers['X-Input-ID'] = '#nickname-input';
+        set.headers['X-Field'] = 'nickname';
 
         return (
           <div class="pl-2 pt-1 text-red-500">
@@ -14,7 +14,7 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
         );
       case 'Invalid password':
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
-        set.headers['X-Input-ID'] = '#password-input';
+        set.headers['X-Field'] = 'password';
 
         return (
           <div class="pl-2 pt-1 text-red-500">
@@ -23,14 +23,28 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
         );
       case 'Incorrect password':
         set.status = 401;
-        return;
+        set.headers['Content-Type'] = 'text/html;charset=utf-8';
+        set.headers['X-Field'] = 'password';
+
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            Невірний пароль
+          </div>
+        );
       case 'User not found':
         set.status = 404;
-        return;
+        set.headers['Content-Type'] = 'text/html;charset=utf-8';
+        set.headers['X-Field'] = 'nickname';
+
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            Нікнейм не знайдено
+          </div>
+        );
       case 'User exists':
         set.status = 409;
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
-        set.headers['X-Input-ID'] = '#nickname-input';
+        set.headers['X-Field'] = 'nickname';
 
         return (
           <div class="pl-2 pt-1 text-red-500">

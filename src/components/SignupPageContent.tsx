@@ -1,5 +1,8 @@
 const SignupPageContent = () => (
   <>
+    <head>
+      <title>Реєстрація</title>
+    </head>
     <main class="h-full">
       <section
         class="flex h-full flex-col justify-center px-4 sm:mx-auto sm:max-w-md">
@@ -26,7 +29,7 @@ const SignupPageContent = () => (
             <button
               class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
               hx-post="/api/signup"
-              hx-on="htmx:afterRequest: handleSignupResult(event.detail.xhr)">
+              hx-on="htmx:afterRequest: handleSignupResult(event.detail)">
               Зареєструватись
             </button>
           </form>
