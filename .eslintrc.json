@@ -22,5 +22,5 @@
   "globals": {
     "Bun": true
   },
-  "ignorePatterns": ["*.js"]
+  "ignorePatterns": ["/*", "!/src"]
 }
