@@ -9,17 +9,11 @@ import {
   SignupPage,
   SignupPageContent
 } from '../components';
+import LocationsPage from '../components/LocationsPage';
+import LocationsPageContent from '../components/LocationsPageContent';
 
 const pageRoutes = new Elysia({ name: 'pageRoutes' })
   .use(html())
-  .get(
-    '/',
-    ({ headers }) => (
-      headers['hx-request']
-        ? <IndexPageContent />
-        : <IndexPage />
-    )
-  )
   .get(
     '/signup',
     ({ headers }) => (
@@ -34,6 +28,22 @@ const pageRoutes = new Elysia({ name: 'pageRoutes' })
       headers['hx-request']
         ? <LoginPageContent />
         : <LoginPage />
+    )
+  )
+  .get(
+    '/',
+    ({ headers }) => (
+      headers['hx-request']
+        ? <IndexPageContent />
+        : <IndexPage />
+    )
+  )
+  .get(
+    '/locations',
+    ({ headers }) => (
+      headers['hx-request']
+        ? <LocationsPageContent />
+        : <LocationsPage />
     )
   )
   .get(

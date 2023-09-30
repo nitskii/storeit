@@ -1,3 +1,5 @@
+/// <reference types="@kitajs/html/htmx.d.ts" />
+
 import Html from '@kitajs/html';
 
 const PageBase = ({ children }: Html.PropsWithChildren) => (

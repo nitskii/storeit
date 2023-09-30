@@ -2,7 +2,7 @@ import IndexPageContent from './IndexPageContent';
 import PageBase from './PageBase';
 
 const IndexPage = () => (
-  <PageBase title="Головна">
+  <PageBase>
     <IndexPageContent />
   </PageBase>
 );
