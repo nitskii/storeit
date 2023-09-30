@@ -1,3 +1,4 @@
+import staticPlugin from '@elysiajs/static';
 import { v2 as cloudinary } from 'cloudinary';
 import Elysia from 'elysia';
 import {
@@ -22,7 +23,7 @@ cloudinary.config({
 new Elysia()
   .use(logger)
   .use(redirector)
-  .use(pageRoutes)
+  .use(staticPlugin())
   .use(authRoutes)
   .group(
     '/api',
@@ -31,6 +32,7 @@ new Elysia()
       .use(tagRoutes)
       .use(itemRoutes)
   )
+  .use(pageRoutes)
   .use(errorHandler)
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);

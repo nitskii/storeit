@@ -1,8 +1,16 @@
 import { html } from '@elysiajs/html';
 import Elysia from 'elysia';
-import { IndexPage, IndexPageContent, LoginPage, LoginPageContent, NotFoundPage, SignupPage, SignupPageContent } from '../components';
+import {
+  IndexPage,
+  IndexPageContent,
+  LoginPage,
+  LoginPageContent,
+  NotFoundPage,
+  SignupPage,
+  SignupPageContent
+} from '../components';
 
-const pageRoutes = new Elysia()
+const pageRoutes = new Elysia({ name: 'pageRoutes' })
   .use(html())
   .get(
     '/',
@@ -28,14 +36,15 @@ const pageRoutes = new Elysia()
         : <LoginPage />
     )
   )
-  .get('/public/:file', ({ params: { file } }) => Bun.file(`./public/${file}`))
   .get(
     '/*',
-    ({ path }) => (
-      path.startsWith('/api')
+    ({ path, set }) => {
+      set.status = 404;
+
+      return path.startsWith('/api')
         ? { message: 'Endpoint not found' }
-        : <NotFoundPage />
-    )
+        : <NotFoundPage />;
+    }
   );
 
 export default pageRoutes;

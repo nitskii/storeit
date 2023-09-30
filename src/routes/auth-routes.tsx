@@ -17,11 +17,13 @@ const authRoutes = new Elysia()
       user: t.Object({
         nickname: t.String({
           minLength: 3,
-          maxLength: 30
+          maxLength: 30,
+          error: 'Invalid nickname'
         }),
         password: t.String({
           minLength: 8,
-          maxLength: 50
+          maxLength: 50,
+          error: 'Invalid password'
         })
       })
     })
