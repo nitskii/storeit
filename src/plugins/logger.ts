@@ -31,14 +31,22 @@ statusToColor.set(409, COLOR_ORANGE);
 statusToColor.set(500,    COLOR_RED);
 
 const MAX_METHOD_LENGTH = 6;
+const MAX_DURATION_LENGTH = 4;
+
+let requestStart = 0;
 
 const logger = new Elysia({ name: 'logger' })
+  .onRequest(() => {
+    requestStart = Date.now();
+  })
   .onResponse(({ request: { method }, path, set: { status } }) => {
     const methodColor = methodToColor.get(method);
     const statusColor = statusToColor.get(status);
+    const duration = Date.now() - requestStart;
 
-    const result = 
-      `${F_BOLD}${statusColor}${status}${NO_FORMAT}: ` +
+    const result =
+      `${F_BOLD}${statusColor}${status}${NO_FORMAT}, ` +
+      `${' '.repeat(MAX_DURATION_LENGTH - duration.toString().length)}${duration} ms: ` +
       `${' '.repeat(MAX_METHOD_LENGTH - method.length)}${F_BOLD}${methodColor}${method}${NO_FORMAT} ` +
       `${path}`;
 
