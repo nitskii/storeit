@@ -1,79 +1,30 @@
-const handleSignupResult = (detail) => {
-  if (result.status >= 400) {
-    const { xhr: result, elt: signupButton } = detail;
+const handleAuthResult = (detail) => {
+  const targetId = detail.xhr.getResponseHeader('HX-Retarget');
+  const inputBlock = htmx.find(targetId);
 
-    const errorMessage = new DOMParser()
-    .parseFromString(result.response, 'text/html')
-    .body
-    .firstChild;
+  if (inputBlock.childElementCount == 1) {
+    detail.shouldSwap = true;
 
-    const field = result.getResponseHeader('X-Field');
-
-    htmx
-      .find(`#${field}-input-block`)
-      .append(errorMessage);
-
-    htmx
-      .find(`#${field}-input`)
-      .addEventListener(
-        'input',
-        () => (htmx.remove(errorMessage)),
-        { once: true }
-      );
-
-    signupButton
-      .addEventListener(
-        'click',
-        () => (htmx.remove(errorMessage)),
-        { once: true }
-      );
-  }
-};
-
-const handleLoginResult = (detail) => {
-  if (result.status >= 400) {
-    const { xhr: result, elt: loginButton } = detail;
-    
-    const errorMessage = new DOMParser()
-    .parseFromString(result.response, 'text/html')
-    .body
-    .firstChild;
-
-    const field = result.getResponseHeader('X-Field');
-
-    htmx
-      .find(`#${field}-input-block`)
-      .append(errorMessage);
-
-    htmx
-      .find(`#${field}-input`)
-      .addEventListener(
-        'input',
-        () => (htmx.remove(errorMessage)),
-        { once: true }
-      );
-
-    loginButton
-      .addEventListener(
-        'click',
-        () => (htmx.remove(errorMessage)),
-        { once: true }
-      );
+    inputBlock.firstChild.addEventListener(
+      'input',
+      () => htmx.remove(inputBlock.lastChild),
+      { once: true }
+    );
   }
 };
 
 htmx.replaceClass = (elt, oldClass, newClass) => {
   htmx.addClass(elt, newClass);
   htmx.removeClass(elt, oldClass);
-}
+};
 
 const showItemModal = () => {
-  htmx.replaceClass(htmx.find('#item-modal'), "hidden", "flex");
-}
+  htmx.replaceClass(htmx.find('#item-modal'), 'hidden', 'flex');
+};
 
 const hideItemModal = () => {
-  htmx.replaceClass(htmx.find('#item-modal'), "flex", "hidden");
-}
+  htmx.replaceClass(htmx.find('#item-modal'), 'flex', 'hidden');
+};
 
 const tagExistsMessage = document.createElement('div');
 tagExistsMessage.innerText = 'Тег вже додано';
@@ -84,7 +35,7 @@ htmx.addClass(tagExistsMessage, 'text-red-500');
 const addTagToList = () => {
   const tagInput = htmx.find('#tag-input');
 
-  if (tagInput.value == "") {
+  if (tagInput.value == '') {
     return;
   }
 
@@ -93,15 +44,10 @@ const addTagToList = () => {
 
   for (let addedTag of addedTags) {
     if (addedTag.innerText == tagInput.value) {
-      htmx
-        .find('#tag-input-block')
-        .append(tagExistsMessage);
-      tagInput
-        .addEventListener(
-          'input',
-          () => (htmx.remove(tagExistsMessage)),
-          { once: true }
-        );
+      htmx.find('#tag-input-block').append(tagExistsMessage);
+      tagInput.addEventListener('input', () => htmx.remove(tagExistsMessage), {
+        once: true
+      });
 
       return;
     }
@@ -122,8 +68,10 @@ const addTagToList = () => {
     'click',
     () => {
       htmx.remove(newTag);
-      addedTagsList.childElementCount || htmx.replaceClass(addedTagsList, 'flex', 'hidden');
-    }, {
+      addedTagsList.childElementCount ||
+        htmx.replaceClass(addedTagsList, 'flex', 'hidden');
+    },
+    {
       once: true
     }
   );
@@ -145,4 +93,4 @@ const addTagToList = () => {
   addedTagsList.append(newTag);
   htmx.replaceClass(addedTagsList, 'hidden', 'flex');
   tagInput.value = '';
-}
+};
