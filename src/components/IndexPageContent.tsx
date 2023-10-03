@@ -73,9 +73,6 @@ const IndexPageContent = () => (
                 <img src="/public/plus.svg" class="h-6 w-6" />
               </button>
             </div>
-            {/* <div id="tag-exists-message" class="pl-2 pt-1 text-red-500" hidden>
-              Тег вже додано
-            </div> */}
           </div>
           <button
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
