@@ -29,7 +29,7 @@ const SignupPageContent = () => (
             <button
               class="w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
               hx-post="/api/signup"
-              hx-on="htmx:beforeSwap: handleAuthResult(event.detail)">
+              hx-on="htmx:beforeSwap: handleRequestResult(event.detail)">
               Зареєструватись
             </button>
           </form>

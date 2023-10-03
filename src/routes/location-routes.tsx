@@ -60,7 +60,10 @@ const locationRoutes = new Elysia()
   .use(authenticator)
   .model({
     location: t.Object({
-      name: t.String(),
+      name: t.String({
+        minLength: 1,
+        error: 'Invalid location name'
+      }),
       parentId: t.Optional(t.String())
     })
   })

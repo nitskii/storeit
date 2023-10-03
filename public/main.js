@@ -1,21 +1,28 @@
-const handleAuthResult = (detail) => {
+htmx.replaceClass = (elt, oldClass, newClass) => {
+  htmx.addClass(elt, newClass);
+  htmx.removeClass(elt, oldClass);
+};
+
+const handleRequestResult = (detail) => {
   const targetId = detail.xhr.getResponseHeader('HX-Retarget');
+
+  if (!targetId) {
+    return;
+  }
+
   const inputBlock = htmx.find(targetId);
 
   if (inputBlock.childElementCount == 1) {
     detail.shouldSwap = true;
 
-    inputBlock.firstChild.addEventListener(
-      'input',
-      () => htmx.remove(inputBlock.lastChild),
-      { once: true }
-    );
+    inputBlock
+      .firstChild
+      .addEventListener(
+        'input',
+        () => htmx.remove(inputBlock.lastChild),
+        { once: true }
+      );
   }
-};
-
-htmx.replaceClass = (elt, oldClass, newClass) => {
-  htmx.addClass(elt, newClass);
-  htmx.removeClass(elt, oldClass);
 };
 
 const showItemModal = () => {
@@ -44,10 +51,15 @@ const addTagToList = () => {
 
   for (let addedTag of addedTags) {
     if (addedTag.innerText == tagInput.value) {
-      htmx.find('#tag-input-block').append(tagExistsMessage);
-      tagInput.addEventListener('input', () => htmx.remove(tagExistsMessage), {
-        once: true
-      });
+      htmx
+        .find('#tag-input-block')
+        .append(tagExistsMessage);
+        
+      tagInput.addEventListener(
+        'input',
+        () => htmx.remove(tagExistsMessage),
+        { once: true }
+      );
 
       return;
     }
@@ -70,8 +82,7 @@ const addTagToList = () => {
       htmx.remove(newTag);
       addedTagsList.childElementCount ||
         htmx.replaceClass(addedTagsList, 'flex', 'hidden');
-    },
-    {
+    }, {
       once: true
     }
   );
@@ -94,3 +105,21 @@ const addTagToList = () => {
   htmx.replaceClass(addedTagsList, 'hidden', 'flex');
   tagInput.value = '';
 };
+
+const showLocationModal = () => {
+  htmx.replaceClass(htmx.find('#location-modal'), 'hidden', 'flex');
+};
+
+const hideLocationModal = () => {
+  htmx.replaceClass(htmx.find('#location-modal'), 'flex', 'hidden');
+};
+
+const toggleParentSelectionBlock = (checked) => {
+  htmx
+    .find('#parent-selection-block')
+    .hidden = !checked;
+
+  const parentIdInput = htmx.find('#parent-id-input');
+
+  parentIdInput.disabled = !(checked && parentIdInput.value);
+}

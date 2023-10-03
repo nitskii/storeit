@@ -5,6 +5,12 @@ const IndexPageContent = () => (
     </head>
     <header class="bg-orange-100">
       <nav class="flex justify-end space-x-2 p-2">
+        <a
+          href="/locations"
+          hx-boost="true"
+          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus:outline focus:outline-2 focus:outline-orange-300">
+          Локації
+        </a>
         <button
           id="button-show-item-modal"
           class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
@@ -49,7 +55,9 @@ const IndexPageContent = () => (
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
             Оберіть локацію
           </button>
-          <div id="tag-input-block" class="flex w-full flex-col justify-between">
+          <div
+            id="tag-input-block"
+            class="flex w-full flex-col justify-between">
             <ul id="added-tags-list" class="mb-4 hidden flex-wrap gap-2" />
             <div class="flex w-full overflow-hidden rounded-lg">
               <div class="w-full">

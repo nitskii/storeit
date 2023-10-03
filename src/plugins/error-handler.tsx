@@ -23,6 +23,22 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
             Пароль повинен мати від 8 до 50 символів
           </div>
         );
+      case 'JWT is invalid or expired':
+        set.status = 400;
+        return;
+      case 'Invalid location name':
+        set.headers['Content-Type'] = 'text/html;charset=utf-8';
+        set.headers['HX-Retarget'] = '#location-name-input-block';
+        set.headers['HX-Reswap'] = 'beforeend';
+
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            Локація має мати назву
+          </div> 
+        );
+      case 'Unauthorized':
+        set.status = 401;
+        return;
       case 'Incorrect password':
         set.status = 401;
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
@@ -56,20 +72,21 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
             Нікнейм вже існує
           </div>
         );
-      case 'JWT is invalid or expired':
-        set.status = 400;
-        return;
-      case 'Unauthorized':
-        set.status = 401;
-        return;
       case 'Location exists':
       case 'Parent location already has such child':
       case 'Parent location can\'t be a child of itself':
         set.status = 409;
-        return;
+        set.headers['Content-Type'] = 'text/html;charset=utf-8';
+        set.headers['HX-Retarget'] = '#location-name-input-block';
+        set.headers['HX-Reswap'] = 'beforeend';
+
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            Локація вже існує
+          </div> 
+        );
     }
 
-    console.log(message);
   });
 
 export default errorHandler;

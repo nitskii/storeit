@@ -746,6 +746,10 @@ select {
   display: none;
 }
 
+.h-4 {
+  height: 1rem;
+}
+
 .h-5 {
   height: 1.25rem;
 }
@@ -767,16 +771,12 @@ select {
   height: 100vh;
 }
 
-.h-2 {
-  height: 0.5rem;
-}
-
-.h-4 {
-  height: 1rem;
-}
-
 .max-h-\[50\%\] {
   max-height: 50%;
+}
+
+.w-4 {
+  width: 1rem;
 }
 
 .w-5 {
@@ -789,14 +789,6 @@ select {
 
 .w-full {
   width: 100%;
-}
-
-.w-2 {
-  width: 0.5rem;
-}
-
-.w-4 {
-  width: 1rem;
 }
 
 .cursor-pointer {
@@ -1121,6 +1113,10 @@ select {
 .hover\:checked\:bg-orange-300:checked:hover {
   --tw-bg-opacity: 1;
   background-color: rgb(253 186 116 / var(--tw-bg-opacity));
+}
+
+.focus\:outline:focus {
+  outline-style: solid;
 }
 
 .focus\:outline-2:focus {
