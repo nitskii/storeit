@@ -7,6 +7,8 @@ let parentSelectionBlock = null;
 let parentIdInput = null;
 let parentSelectionModal = null;
 let buttonSelectParent = null;
+let currentLocationChainMessage = null;
+let selectedParentMessage = null;
 
 htmx.onLoad(() => {
   itemModal = htmx.find('#item-modal');
@@ -18,6 +20,8 @@ htmx.onLoad(() => {
   parentIdInput = htmx.find('#parent-id-input');
   parentSelectionModal = htmx.find('#parent-selection-modal');
   buttonSelectParent = htmx.find('#button-select-parent');
+  currentLocationChainMessage = htmx.find('#current-location-chain-message');
+  selectedParentMessage = htmx.find('#selected-parent-message');
 })
 
 const handleRequestResult = (detail) => {
@@ -151,3 +155,61 @@ const updateButtonSelectParentState = ({ id, name }) => {
   buttonSelectParent.dataset['id'] = id;
   buttonSelectParent.dataset['name'] = name;
 };
+
+const INITIAL_PATH = '/api/root-locations';
+let currentPath = INITIAL_PATH;
+const pathHistory = [];
+let currentLocationChain = "";
+
+const handleLoadButtonClick = ({ path, name }) => {
+  pathHistory.push(currentPath);
+  currentPath = path;
+
+  if (currentLocationChain) {
+    currentLocationChain += ` > ${name}`;
+  } else {
+    currentLocationChain = name;
+    currentLocationChainMessage.hidden = false;
+  }
+  
+  currentLocationChainMessage.innerText = currentLocationChain;
+};
+
+const handleBackButtonClick = async () => {
+  if (pathHistory.length) {
+    await htmx.ajax('GET', pathHistory.pop(), '#locations-list');
+
+    if (pathHistory.length) {
+      const lastLocationIndex = currentLocationChain.lastIndexOf('>');
+      currentLocationChain = currentLocationChain.slice(0, lastLocationIndex);
+      currentLocationChainMessage.innerText = currentLocationChain;
+    } else {
+      currentPath = INITIAL_PATH;
+      currentLocationChain = "";
+      currentLocationChainMessage.innerText = currentLocationChain;
+    }
+
+    return;
+  }
+
+  hideParentSelectionModal();
+  showLocationModal();
+}
+
+const handleSelectButtonClick = () => {
+  const finalLocation = buttonSelectParent.dataset.name;
+
+  if (currentLocationChain) {
+    selectedParentMessage.innerText = `${currentLocationChain} > ${finalLocation}`;
+  } else {
+    selectedParentMessage.innerText = finalLocation;
+  }
+
+  currentLocationChain = "";
+  currentLocationChainMessage.innerText = currentLocationChain;
+  selectedParentMessage.hidden = false;
+  parentIdInput.disabled = false;
+  
+  hideParentSelectionModal();
+  showLocationModal();
+}

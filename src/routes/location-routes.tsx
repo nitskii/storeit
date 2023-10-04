@@ -37,7 +37,7 @@ const mapLocationsToListItems = (locations: Location[]) => {
               class="border-l border-black px-4 py-2 hover:bg-orange-300"
               hx-get={requestPath}
               hx-target='#locations-list'
-              hx-on={`htmx:beforeRequest: handleLoadButtonClick('${requestPath}', '${name}');`}>
+              hx-on={`htmx:beforeRequest: handleLoadButtonClick({ path: '${requestPath}', name: '${name}' });`}>
             &gt;
             </button>
           </li>
