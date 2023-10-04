@@ -30,7 +30,7 @@ const mapLocationsToListItems = (locations: Location[]) => {
             <div
               data-id={id}
               class="w-full py-2 pl-2 hover:bg-orange-300"
-              onclick="changeSelectedLocation(event.target)">
+              onclick={`updateButtonSelectParentState({ id: '${id}', name: '${name}' })`}>
               {name}
             </div>
             <button 
@@ -48,7 +48,7 @@ const mapLocationsToListItems = (locations: Location[]) => {
         <li
           data-id={id}
           class="cursor-pointer border-b border-black p-2 last:border-none hover:bg-orange-300"
-          onclick="changeSelectedLocation(event.target)">
+          onclick={`updateButtonSelectParentState({ id: '${id}', name: '${name}' })`}>
           {name}
         </li>
       );

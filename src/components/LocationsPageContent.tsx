@@ -47,10 +47,7 @@ const LocationsPageContent = () => (
             Належить до іншої локації
           </label>
           <div id="parent-selection-block" class="w-full" hidden>
-            <div
-              class="px-2 pb-1 text-sm text-gray-600"
-              hidden
-            />
+            <div class="px-2 pb-1 text-sm text-gray-600" hidden />
             <input
               type="hidden"
               id="parent-id-input"
@@ -58,8 +55,10 @@ const LocationsPageContent = () => (
               disabled
             />
             <button
+              id="button-show-parent-selection-modal"
               type="button"
-              class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+              class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+              onclick="hideLocationModal();showParentSelectionModal()">
               Оберіть локацію
             </button>
           </div>
@@ -78,19 +77,15 @@ const LocationsPageContent = () => (
       </div>
     </div>
     <div
-      id="parent-select-modal"
+      id="parent-selection-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div class="flex max-h-[50%] w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
         <div class="w-full">
-          <div
-            id="current-location-chain-message"
-            class="px-2 pb-1 text-sm text-gray-600"
-            hidden></div>
+          <div class="px-2 pb-1 text-sm text-gray-600" hidden />
           <ul
-            id="locations-list"
             class="scroll h-full w-full overflow-auto rounded-lg bg-orange-200"
             hx-get="/api/root-locations"
-            hx-trigger="click from:#button-new-location-to-parent-select">
+            hx-trigger="click from:#button-show-parent-selection-modal">
             <div class="htmx-indicator flex justify-center">
               <img src="/public/loading.svg" />
             </div>
@@ -99,10 +94,11 @@ const LocationsPageContent = () => (
         <button
           id="button-select-parent"
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hidden></button>
+          hidden
+        />
         <button
-          id="button-parent-select-back"
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideParentSelectionModal();showLocationModal()">
           Назад
         </button>
       </div>
@@ -116,16 +112,13 @@ const LocationsPageContent = () => (
           <img src="/public/checkmark.svg" class="h-4 w-4" />
         </div>
         <button
-          id="button-location-result-to-new-location"
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideLocationResultModal();showLocationModal()">
           Додати ще
         </button>
-        <button class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
-          Мої локації
-        </button>
         <button
-          id="button-hide-location-result-modal"
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideLocationResultModal()">
           Закрити
         </button>
       </div>

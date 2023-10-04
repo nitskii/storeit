@@ -1,7 +1,24 @@
-htmx.replaceClass = (elt, oldClass, newClass) => {
-  htmx.addClass(elt, newClass);
-  htmx.removeClass(elt, oldClass);
-};
+let itemModal = null;
+let tagInput = null;
+let addedTagsList = null;
+let tagInputBlock = null;
+let locationModal = null;
+let parentSelectionBlock = null;
+let parentIdInput = null;
+let parentSelectionModal = null;
+let buttonSelectParent = null;
+
+htmx.onLoad(() => {
+  itemModal = htmx.find('#item-modal');
+  tagInput = htmx.find('#tag-input');
+  addedTagsList = htmx.find('#added-tags-list');
+  tagInputBlock = htmx.find('#tag-input-block');
+  locationModal = htmx.find('#location-modal');
+  parentSelectionBlock = htmx.find('#parent-selection-block');
+  parentIdInput = htmx.find('#parent-id-input');
+  parentSelectionModal = htmx.find('#parent-selection-modal');
+  buttonSelectParent = htmx.find('#button-select-parent');
+})
 
 const handleRequestResult = (detail) => {
   const targetId = detail.xhr.getResponseHeader('HX-Retarget');
@@ -25,12 +42,17 @@ const handleRequestResult = (detail) => {
   }
 };
 
+htmx.replaceClass = (elt, oldClass, newClass) => {
+  htmx.addClass(elt, newClass);
+  htmx.removeClass(elt, oldClass);
+};
+
 const showItemModal = () => {
-  htmx.replaceClass(htmx.find('#item-modal'), 'hidden', 'flex');
+  htmx.replaceClass(itemModal, 'hidden', 'flex');
 };
 
 const hideItemModal = () => {
-  htmx.replaceClass(htmx.find('#item-modal'), 'flex', 'hidden');
+  htmx.replaceClass(itemModal, 'flex', 'hidden');
 };
 
 const tagExistsMessage = document.createElement('div');
@@ -40,20 +62,15 @@ htmx.addClass(tagExistsMessage, 'pt-1');
 htmx.addClass(tagExistsMessage, 'text-red-500');
 
 const addTagToList = () => {
-  const tagInput = htmx.find('#tag-input');
-
   if (tagInput.value == '') {
     return;
   }
 
-  const addedTagsList = htmx.find('#added-tags-list');
   const addedTags = addedTagsList.children;
 
   for (let addedTag of addedTags) {
     if (addedTag.innerText == tagInput.value) {
-      htmx
-        .find('#tag-input-block')
-        .append(tagExistsMessage);
+      tagInputBlock.append(tagExistsMessage);
         
       tagInput.addEventListener(
         'input',
@@ -107,19 +124,30 @@ const addTagToList = () => {
 };
 
 const showLocationModal = () => {
-  htmx.replaceClass(htmx.find('#location-modal'), 'hidden', 'flex');
+  htmx.replaceClass(locationModal, 'hidden', 'flex');
 };
 
 const hideLocationModal = () => {
-  htmx.replaceClass(htmx.find('#location-modal'), 'flex', 'hidden');
+  htmx.replaceClass(locationModal, 'flex', 'hidden');
 };
 
 const toggleParentSelectionBlock = (checked) => {
-  htmx
-    .find('#parent-selection-block')
-    .hidden = !checked;
-
-  const parentIdInput = htmx.find('#parent-id-input');
+  parentSelectionBlock.hidden = !checked;
 
   parentIdInput.disabled = !(checked && parentIdInput.value);
-}
+};
+
+const showParentSelectionModal = () => {
+  htmx.replaceClass(parentSelectionModal, 'hidden', 'flex');
+};
+
+const hideParentSelectionModal = () => {
+  htmx.replaceClass(parentSelectionModal, 'flex', 'hidden');
+};
+
+const updateButtonSelectParentState = ({ id, name }) => {
+  buttonSelectParent.innerText = `Обрати локацію ${name}`;
+  buttonSelectParent.hidden = false;
+  buttonSelectParent.dataset['id'] = id;
+  buttonSelectParent.dataset['name'] = name;
+};
