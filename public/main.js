@@ -9,6 +9,7 @@ let parentSelectionModal = null;
 let buttonSelectParent = null;
 let currentLocationChainMessage = null;
 let selectedParentMessage = null;
+let locationResultModal = null;
 
 htmx.onLoad(() => {
   itemModal = htmx.find('#item-modal');
@@ -22,6 +23,7 @@ htmx.onLoad(() => {
   buttonSelectParent = htmx.find('#button-select-parent');
   currentLocationChainMessage = htmx.find('#current-location-chain-message');
   selectedParentMessage = htmx.find('#selected-parent-message');
+  locationResultModal = htmx.find('#location-result-modal');
 })
 
 const handleRequestResult = (detail) => {
@@ -208,8 +210,33 @@ const handleSelectButtonClick = () => {
   currentLocationChain = "";
   currentLocationChainMessage.innerText = currentLocationChain;
   selectedParentMessage.hidden = false;
+  parentIdInput.value = buttonSelectParent.dataset.id;
   parentIdInput.disabled = false;
-  
+
   hideParentSelectionModal();
   showLocationModal();
+}
+
+const showLocationResultModal = () => {
+  htmx.replaceClass(locationResultModal, 'hidden', 'flex');
+}
+
+const hideLocationResultModal = () => {
+  htmx.replaceClass(locationResultModal, 'flex', 'hidden');
+}
+
+const handlePostLocationResult = (detail) => {
+  handleRequestResult(detail);
+
+  hideLocationModal();
+  showLocationResultModal();
+  detail.target.form.reset();
+  currentLocationChain = "";
+  currentLocationChainMessage.innerText = currentLocationChain;
+  parentIdInput.value = "";
+  parentIdInput.disabled = true;
+  selectedParentMessage.innerText = "";
+  currentPath = INITIAL_PATH;
+  buttonSelectParent.hidden = true;
+  parentSelectionBlock.hidden = true;
 }

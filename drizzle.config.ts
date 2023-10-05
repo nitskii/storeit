@@ -8,5 +8,6 @@ export default {
     authToken: process.env.DATABASE_AUTH_TOKEN
   },
   verbose: true,
-  strict: true
+  strict: true,
+  tablesFilter: ["!libsql_wasm_func_table"]
 } satisfies Config;

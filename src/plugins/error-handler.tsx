@@ -87,6 +87,7 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
         );
     }
 
+    console.log(message);
   });
 
 export default errorHandler;
