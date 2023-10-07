@@ -1,7 +1,8 @@
 import { randomBytes } from 'crypto';
 import { eq } from 'drizzle-orm';
 import db from '../db';
-import { UserCredentials, users } from '../db/schema';
+import { users } from '../db/schema';
+import { UserCredentials } from '../types';
 
 const signup = async (credentials: UserCredentials) => {
   const [ existingUser ] = await db

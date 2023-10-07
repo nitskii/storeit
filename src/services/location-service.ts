@@ -1,6 +1,7 @@
 import { and, eq, inArray, notInArray } from 'drizzle-orm';
 import db from '../db';
-import { NewLocation, locations, locationsToLocations } from '../db/schema';
+import { locations, locationsToLocations } from '../db/schema';
+import { NewLocation } from '../types';
 
 const create = async (newLocation: NewLocation) => {
   const [ existingLocation ] = await db
