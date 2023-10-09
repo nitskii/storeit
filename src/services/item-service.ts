@@ -1,13 +1,11 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { eq } from 'drizzle-orm';
+import { eq, sql } from 'drizzle-orm';
 import db from '../db';
 import {
   items,
-  locations,
-  tags,
   tagsToItems
 } from '../db/schema';
-import { NewItem, ResponseItem } from '../types';
+import { NewItem } from '../types';
 import locationService from './location-service';
 import tagService from './tag-service';
 
@@ -22,10 +20,10 @@ const create = async (newItem: NewItem) => {
     }
   }
   
-  const newTags: { id: string }[] = [];
+  const tagIds: { id: string }[] = [];
 
   if (tags) {
-    newTags.push(...await tagService.createMany(tags, userId));
+    tagIds.push(...await tagService.createMany(tags, userId));
   }
 
   const buffer = Buffer.from(await image.arrayBuffer());
@@ -46,65 +44,53 @@ const create = async (newItem: NewItem) => {
     );
   });
 
-  const [{ id: newItemId }] = await db
+  const [{ newItemId }] = await db
     .insert(items)
     .values({
       ...newItem,
       image: imageUrl
     })
-    .returning({ id: items.id });
+    .returning({ newItemId: items.id });
 
-  newTags.length && await db
+  tagIds.length && await db
     .insert(tagsToItems)
     .values(
-      newTags.map(tag => ({ tagId: tag.id, itemId: newItemId }))
+      tagIds.map(tag => ({ tagId: tag.id, itemId: newItemId }))
     );
 };
 
-const getAllForUser = async (userId: string): Promise<ResponseItem[]> => {
-  const itemsSubquery = db
-    .select({
-      id: items.id,
-      name: items.name,
-      image: items.image,
-      locationId: items.locationId
-    })
-    .from(items)
-    .where(eq(items.userId, userId))
-    .as('itemsSubquery');
+const itemsQuery = db.query.items
+  .findMany({
+    columns: {
+      id: true,
+      name: true,
+      image: true
+    },
+    where: eq(items.userId, sql.placeholder('userId')),
+    with: {
+      tags: {
+        columns: {},
+        with: {
+          tag: {
+            columns: { name: true }
+          }
+        }
+      },
+      location: {
+        columns: { name: true }
+      }
+    }
+  })
+  .prepare();
 
-  const rows = await db
-    .select({
-      id: itemsSubquery.id,
-      name: itemsSubquery.name,
-      image: itemsSubquery.image,
-      location: locations.name,
-      tag: tags.name
-    })
-    .from(tagsToItems)
-    .rightJoin(itemsSubquery, eq(tagsToItems.itemId, itemsSubquery.id))
-    .leftJoin(tags, eq(tagsToItems.tagId, tags.id))
-    .leftJoin(locations, eq(itemsSubquery.locationId, locations.id));
-  
-  return [
-    ...rows
-      .reduce(
-        (result, row) => {
-          result.has(row.id)
-            ? result.get(row.id)!.tags.push(row.tag!)
-            : result.set(row.id, {
-              id: row.id,
-              name: row.name,
-              image: row.image,
-              location: row.location,
-              tags: row.tag ? [ row.tag ] : []
-            });
-      
-          return result;
-        },
-        new Map<string, ResponseItem>())
-      .values()
-  ];
+const getAllForUser = async (userId: string) => {
+  const rows = await itemsQuery.execute({ userId });
+
+  return rows.map(r => ({
+    ...r,
+    location: r.location && r.location.name,
+    tags: r.tags.map(t => t.tag.name)})
+  );
 };
 
 export default {
