@@ -1,30 +1,28 @@
 import { eq, inArray } from 'drizzle-orm';
 import db from '../db';
-import { tags as tagsTable } from '../db/schema';
+import { tags } from '../db/schema';
 
-const createMany = async (tags: string[], userId: string) => {
+const createMany = async (tagNames: string[], userId: string) => {
   await db
-    .insert(tagsTable)
-    .values(tags.map(tag => ({ name: tag, userId })))
-    .onConflictDoNothing({
-      target: [tagsTable.name, tagsTable.userId]
-    });
+    .insert(tags)
+    .values(tagNames.map(name => ({ name, userId })))
+    .onConflictDoNothing();
 
-  return await db
-    .select({
-      id: tagsTable.id
-    })
-    .from(tagsTable)
-    .where(inArray(tagsTable.name, tags));
+  const tagIds = await db.query.tags.findMany({
+    columns: { id: true },
+    where: inArray(tags.name, tagNames)
+  });
+
+  return tagIds;
 };
 
 const getAllForUser = async (userId: string) => {
-  return await db
-    .select({
-      name: tagsTable.name
-    })
-    .from(tagsTable)
-    .where(eq(tagsTable.userId, userId));
+  const tagNames = await db.query.tags.findMany({
+    columns: { name: true },
+    where: eq(tags.userId, userId)
+  });
+
+  return tagNames;
 };
 
 export default {
