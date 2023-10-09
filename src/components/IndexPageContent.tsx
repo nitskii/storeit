@@ -12,9 +12,8 @@ const IndexPageContent = () => (
           Локації
         </a>
         <button
-          id="button-show-item-modal"
           class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="showItemModal()">
+          onclick="htmx.trigger('#tags-datalist', 'itemModalOpened');showItemModal()">
           Додати
         </button>
         <button
@@ -72,7 +71,7 @@ const IndexPageContent = () => (
               <datalist
                 id="tags-datalist"
                 hx-get="/api/tags"
-                hx-trigger="click from:button-show-item-modal"
+                hx-trigger="itemModalOpened"
               />
               <button
                 type="button"
