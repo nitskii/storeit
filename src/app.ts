@@ -13,6 +13,7 @@ import {
   pageRoutes,
   tagRoutes
 } from './routes';
+import searchRoutes from './routes/search-routes';
 
 cloudinary.config({
   cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
@@ -24,13 +25,14 @@ new Elysia()
   .use(logger)
   .use(redirector)
   .use(staticPlugin())
-  .use(authRoutes)
   .group(
     '/api',
     app => app
+      .use(authRoutes)
       .use(locationRoutes)
       .use(tagRoutes)
       .use(itemRoutes)
+      .use(searchRoutes)
   )
   .use(pageRoutes)
   .use(errorHandler)
