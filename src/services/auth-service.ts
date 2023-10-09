@@ -5,13 +5,10 @@ import { users } from '../db/schema';
 import { UserCredentials } from '../types';
 
 const signup = async (credentials: UserCredentials) => {
-  const [ existingUser ] = await db
-    .select({
-      id: users.id
-    })
-    .from(users)
-    .where(eq(users.nickname, credentials.nickname))
-    .limit(1);
+  const existingUser = await db.query.users.findFirst({
+    columns: { id: true },
+    where: eq(users.nickname, credentials.nickname)
+  });
 
   if (existingUser) {
     throw new Error('User exists');
@@ -24,27 +21,28 @@ const signup = async (credentials: UserCredentials) => {
     'bcrypt'
   );
 
-  const [ newUser ] = await db
+  const [{ newUserId }] = await db
     .insert(users)
     .values({
       ...credentials,
       salt
     })
-    .returning();
+    .returning({
+      newUserId: users.id
+    });
 
-  return newUser.id;
+  return newUserId;
 };
 
 const login = async (credentials: UserCredentials) => {
-  const [ existingUser ] = await db
-    .select({
-      id: users.id,
-      password: users.password,
-      salt: users.salt
-    })
-    .from(users)
-    .where(eq(users.nickname, credentials.nickname))
-    .limit(1);
+  const existingUser = await db.query.users.findFirst({
+    columns: {
+      id: true,
+      password: true,
+      salt: true
+    },
+    where: eq(users.nickname, credentials.nickname)
+  });
 
   if (!existingUser) {
     throw new Error('User not found');
