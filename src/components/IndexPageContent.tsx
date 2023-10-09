@@ -5,6 +5,21 @@ const IndexPageContent = () => (
     </head>
     <header class="bg-orange-100">
       <nav class="flex justify-end space-x-2 p-2">
+        <div class="flex w-full overflow-hidden rounded-lg">
+          <input
+            type="search"
+            name="q"
+            placeholder="Пошук предмету"
+            class="w-full border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+          />
+          <button
+            class="flex justify-center items-center border-l-2 border-orange-100 bg-orange-200 w-12"
+            hx-get="/api/search"
+            hx-include="[name='q']"
+            hx-swap="none">
+            <img src="/public/search.svg" class="h-4" />
+          </button>
+        </div>
         <a
           href="/locations"
           hx-boost="true"
