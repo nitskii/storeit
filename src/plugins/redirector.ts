@@ -16,21 +16,15 @@ const redirector = new Elysia({ name: 'redirector' })
       
       if (payload && await userService.existsById(payload.sub!)) {
         set.redirect = '/';
-
-        return '';
       }
     } else if (path == '/' && cookie.auth) {
       const payload = await jwt.verify(cookie.auth);
       
       if (!payload || !await userService.existsById(payload.sub!)) {
         set.redirect = '/login';
-
-        return '';
       }
     } else if (path == '/' && !cookie.auth){
       set.redirect = '/login';
-
-      return '';
     }
   });
 

@@ -13,7 +13,7 @@ export type NewItem = {
   name: string,
   image: Blob
   locationId?: string,
-  tags: string[],
+  tags?: string[],
   userId: string
 };
 
