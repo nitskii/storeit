@@ -14,9 +14,7 @@ const PageBase = ({ children }: Html.PropsWithChildren) => (
         <script defer src="/public/htmx.min.js" />
         <script defer src="/public/main.js" />
       </head>
-      <body class="h-full">
-        {children}
-      </body>
+      <body class="flex h-screen flex-col">{children}</body>
     </html>
   </>
 );

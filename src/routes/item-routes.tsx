@@ -2,6 +2,7 @@ import { html } from '@elysiajs/html';
 import { Elysia, t } from 'elysia';
 import { authenticator } from '../plugins';
 import itemService from '../services/item-service';
+import { mapItemsToHTML } from '../utils';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
@@ -42,30 +43,7 @@ const itemRoutes = (app: Elysia) => app
     async ({ userId }) => {
       const items = await itemService.getAllForUser(userId);
 
-      return items
-        .map((item) => (
-          <div class="group h-fit">
-            <div class="overflow-hidden rounded-lg group-hover:opacity-75">
-              <img src={item.image} alt={item.id} />
-            </div>
-            <div class="mt-1 flex flex-col items-center space-y-1">
-              <span class="text-lg text-gray-700">{item.name}</span>
-              {item.location && (
-                <span class="block text-sm text-gray-500">
-                  {item.location}
-                </span>
-              )}
-              <div class="space-x-1">
-                {item.tags.map((t) => (
-                  <span class="rounded-lg bg-orange-200 px-2 py-1 text-xs uppercase">
-                    {t}
-                  </span>
-                ))}
-              </div>
-            </div>
-          </div>
-        ))
-        .join('');
+      return mapItemsToHTML(items);
     });
 
 export default itemRoutes;

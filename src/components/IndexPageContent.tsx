@@ -3,7 +3,7 @@ const IndexPageContent = () => (
     <head>
       <title>Головна</title>
     </head>
-    <header class="bg-orange-100">
+    <header class="flex-none bg-orange-100">
       <nav class="flex justify-end space-x-2 p-2">
         <div class="flex w-full overflow-hidden rounded-lg">
           <input
@@ -11,14 +11,12 @@ const IndexPageContent = () => (
             name="q"
             placeholder="Пошук предмету"
             class="w-full border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
-          />
-          <button
-            class="flex justify-center items-center border-l-2 border-orange-100 bg-orange-200 w-12"
             hx-get="/api/search"
+            hx-target="#items-container"
             hx-include="[name='q']"
-            hx-swap="none">
-            <img src="/public/search.svg" class="h-4" />
-          </button>
+            hx-trigger="keyup changed delay:200ms, search"
+            hx-indicator=".htmx-indicator"
+          />
         </div>
         <a
           href="/locations"
@@ -38,11 +36,17 @@ const IndexPageContent = () => (
         </button>
       </nav>
     </header>
-    <main
-      class="grid grid-cols-1 gap-y-4 p-4 sm:grid-cols-2 sm:gap-x-4 lg:grid-cols-4"
-      hx-get="/api/items"
-      hx-trigger="load, itemsUpdate from:body"
-    />
+    <main class="flex-grow">
+      <div class="flex h-full items-center justify-center htmx-indicator">
+        <img src="/public/loading.svg" />
+      </div>
+      <section
+        id="items-container"
+        class="grid grid-cols-1 gap-y-4 p-4 sm:grid-cols-2 sm:gap-x-4 lg:grid-cols-4"
+        hx-get="/api/items"
+        hx-trigger="load, itemsUpdate from:body"
+      />
+    </main>
     <div
       id="item-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">

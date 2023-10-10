@@ -16,3 +16,11 @@ export type NewItem = {
   tags?: string[],
   userId: string
 };
+
+export type Item = {
+  id: string,
+  name: string,
+  image: string,
+  location: string | null,
+  tags: string[]
+};
