@@ -1,3 +1,5 @@
+import LocationSelectionModal from './LocationSelectionModal';
+
 const LocationsPageContent = () => (
   <>
     <head>
@@ -42,27 +44,27 @@ const LocationsPageContent = () => (
             <input
               type="checkbox"
               class="mx-2 h-5 w-5 appearance-none rounded-md border-0 bg-orange-200 checked:bg-orange-300 hover:bg-orange-300 hover:checked:bg-orange-300 focus:ring-1 focus:ring-orange-300 focus:ring-offset-0 focus:checked:bg-orange-300 focus:checked:ring-orange-200"
-              onchange="toggleParentSelectionBlock(event.target.checked)"
+              onchange="toggleLocationSelectionBlock(event.target.checked)"
             />
             Належить до іншої локації
           </label>
-          <div id="parent-selection-block" class="w-full" hidden>
+          <div id="location-selection-block" class="w-full" hidden>
             <div
-              id="selected-parent-message"
+              id="selected-location-message"
               class="px-2 pb-1 text-sm text-gray-600"
               hidden
             />
             <input
               type="hidden"
-              id="parent-id-input"
+              id="location-id-input"
               name="parentId"
               disabled
             />
             <button
-              id="button-show-parent-selection-modal"
+              id="button-show-location-selection-modal"
               type="button"
               class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-              onclick="hideLocationModal();showParentSelectionModal()">
+              onclick="showLocationSelectionModal()">
               Оберіть локацію
             </button>
           </div>
@@ -80,39 +82,7 @@ const LocationsPageContent = () => (
         </button>
       </div>
     </div>
-    <div
-      id="parent-selection-modal"
-      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
-      <div class="flex max-h-[50%] w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
-        <div class="w-full">
-          <div
-            id="current-location-chain-message"
-            class="px-2 pb-1 text-sm text-gray-600"
-            hidden
-          />
-          <ul
-            id="locations-list"
-            class="scroll h-full w-full overflow-auto rounded-lg bg-orange-200"
-            hx-get="/api/root-locations"
-            hx-trigger="click from:#button-show-parent-selection-modal">
-            <div class="htmx-indicator flex justify-center">
-              <img src="/public/loading.svg" />
-            </div>
-          </ul>
-        </div>
-        <button
-          id="button-select-parent"
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="handleSelectButtonClick()"
-          hidden
-        />
-        <button
-          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="handleBackButtonClick()">
-          Назад
-        </button>
-      </div>
-    </div>
+    <LocationSelectionModal />
     <div
       id="location-result-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">

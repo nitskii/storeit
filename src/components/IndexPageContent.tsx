@@ -1,3 +1,5 @@
+import LocationSelectionModal from './LocationSelectionModal';
+
 const IndexPageContent = () => (
   <>
     <head>
@@ -87,11 +89,26 @@ const IndexPageContent = () => (
               class="w-full rounded-lg text-gray-600 file:mr-4 file:rounded-lg file:border-0 file:bg-orange-200 file:px-4 file:py-2 hover:file:bg-orange-300 focus:outline-2 focus:outline-orange-300"
             />
           </div>
-          <button
-            type="button"
-            class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
-            Оберіть локацію
-          </button>
+          <div id="location-selection-block" class="w-full">
+            <div
+              id="selected-location-message"
+              class="px-2 pb-1 text-sm text-gray-600"
+              hidden
+            />
+            <input
+              type="hidden"
+              id="location-id-input"
+              name="locationId"
+              disabled
+            />
+            <button
+              id="button-show-location-selection-modal"
+              type="button"
+              class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+              onclick="showLocationSelectionModal()">
+              Оберіть локацію
+            </button>
+          </div>
           <div
             id="tag-input-block"
             class="flex w-full flex-col justify-between">
@@ -133,6 +150,7 @@ const IndexPageContent = () => (
         </button>
       </div>
     </div>
+    <LocationSelectionModal />
   </>
 );
 

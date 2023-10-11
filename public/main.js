@@ -3,12 +3,12 @@ let tagInput = null;
 let addedTagsList = null;
 let tagInputBlock = null;
 let locationModal = null;
-let parentSelectionBlock = null;
-let parentIdInput = null;
-let parentSelectionModal = null;
-let buttonSelectParent = null;
+let locationSelectionBlock = null;
+let locationIdInput = null;
+let locationSelectionModal = null;
+let buttonSelectLocation = null;
 let currentLocationChainMessage = null;
-let selectedParentMessage = null;
+let selectedLocationMessage = null;
 let locationResultModal = null;
 let menu = null;
 
@@ -18,12 +18,12 @@ htmx.onLoad(() => {
   addedTagsList = htmx.find('#added-tags-list');
   tagInputBlock = htmx.find('#tag-input-block');
   locationModal = htmx.find('#location-modal');
-  parentSelectionBlock = htmx.find('#parent-selection-block');
-  parentIdInput = htmx.find('#parent-id-input');
-  parentSelectionModal = htmx.find('#parent-selection-modal');
-  buttonSelectParent = htmx.find('#button-select-parent');
+  locationSelectionBlock = htmx.find('#location-selection-block');
+  locationIdInput = htmx.find('#location-id-input');
+  locationSelectionModal = htmx.find('#location-selection-modal');
+  buttonSelectLocation = htmx.find('#button-select-location');
   currentLocationChainMessage = htmx.find('#current-location-chain-message');
-  selectedParentMessage = htmx.find('#selected-parent-message');
+  selectedLocationMessage = htmx.find('#selected-location-message');
   locationResultModal = htmx.find('#location-result-modal');
   menu = htmx.find('#menu');
 });
@@ -139,25 +139,25 @@ const hideLocationModal = () => {
   htmx.replaceClass(locationModal, 'flex', 'hidden');
 };
 
-const toggleParentSelectionBlock = (checked) => {
-  parentSelectionBlock.hidden = !checked;
+const toggleLocationSelectionBlock = (checked) => {
+  locationSelectionBlock.hidden = !checked;
 
-  parentIdInput.disabled = !(checked && parentIdInput.value);
+  locationIdInput.disabled = !(checked && locationIdInput.value);
 };
 
-const showParentSelectionModal = () => {
-  htmx.replaceClass(parentSelectionModal, 'hidden', 'flex');
+const showLocationSelectionModal = () => {
+  htmx.replaceClass(locationSelectionModal, 'hidden', 'flex');
 };
 
-const hideParentSelectionModal = () => {
-  htmx.replaceClass(parentSelectionModal, 'flex', 'hidden');
+const hideLocationSelectionModal = () => {
+  htmx.replaceClass(locationSelectionModal, 'flex', 'hidden');
 };
 
-const updateButtonSelectParentState = ({ id, name }) => {
-  buttonSelectParent.innerText = `Обрати локацію ${name}`;
-  buttonSelectParent.hidden = false;
-  buttonSelectParent.dataset['id'] = id;
-  buttonSelectParent.dataset['name'] = name;
+const updateButtonSelectLocationState = ({ id, name }) => {
+  buttonSelectLocation.innerText = `Обрати локацію ${name}`;
+  buttonSelectLocation.hidden = false;
+  buttonSelectLocation.dataset['id'] = id;
+  buttonSelectLocation.dataset['name'] = name;
 };
 
 const INITIAL_PATH = '/api/root-locations';
@@ -196,27 +196,25 @@ const handleBackButtonClick = async () => {
     return;
   }
 
-  hideParentSelectionModal();
-  showLocationModal();
+  hideLocationSelectionModal();
 };
 
-const handleSelectButtonClick = () => {
-  const finalLocation = buttonSelectParent.dataset.name;
+const handleSelectLocationButtonClick = () => {
+  const finalLocation = buttonSelectLocation.dataset.name;
 
   if (currentLocationChain) {
-    selectedParentMessage.innerText = `${currentLocationChain} > ${finalLocation}`;
+    selectedLocationMessage.innerText = `${currentLocationChain} > ${finalLocation}`;
   } else {
-    selectedParentMessage.innerText = finalLocation;
+    selectedLocationMessage.innerText = finalLocation;
   }
 
   currentLocationChain = '';
   currentLocationChainMessage.innerText = currentLocationChain;
-  selectedParentMessage.hidden = false;
-  parentIdInput.value = buttonSelectParent.dataset.id;
-  parentIdInput.disabled = false;
+  selectedLocationMessage.hidden = false;
+  locationIdInput.value = buttonSelectLocation.dataset.id;
+  locationIdInput.disabled = false;
 
-  hideParentSelectionModal();
-  showLocationModal();
+  hideLocationSelectionModal();
 };
 
 const showLocationResultModal = () => {
@@ -235,12 +233,12 @@ const handlePostLocationResult = (detail) => {
   detail.target.form.reset();
   currentLocationChain = '';
   currentLocationChainMessage.innerText = currentLocationChain;
-  parentIdInput.value = '';
-  parentIdInput.disabled = true;
-  selectedParentMessage.innerText = '';
+  locationIdInput.value = '';
+  locationIdInput.disabled = true;
+  selectedLocationMessage.innerText = '';
   currentPath = INITIAL_PATH;
-  buttonSelectParent.hidden = true;
-  parentSelectionBlock.hidden = true;
+  buttonSelectLocation.hidden = true;
+  locationSelectionBlock.hidden = true;
 };
 
 const toggleMenu = () => {
