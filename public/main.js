@@ -11,6 +11,7 @@ let currentLocationChainMessage = null;
 let selectedLocationMessage = null;
 let locationResultModal = null;
 let menu = null;
+let itemResultModal = null;
 
 htmx.onLoad(() => {
   itemModal = htmx.find('#item-modal');
@@ -26,6 +27,7 @@ htmx.onLoad(() => {
   selectedLocationMessage = htmx.find('#selected-location-message');
   locationResultModal = htmx.find('#location-result-modal');
   menu = htmx.find('#menu');
+  itemResultModal = htmx.find('#item-result-modal');
 });
 
 const handleRequestResult = (detail) => {
@@ -245,4 +247,26 @@ const toggleMenu = () => {
   menu.classList.toggle('hidden');
   menu.classList.toggle('w-full');
   menu.classList.toggle('h-screen');
+};
+
+const showItemResultModal = () => {
+  htmx.replaceClass(itemResultModal, 'hidden', 'flex');
+};
+
+const hideItemResultModal = () => {
+  htmx.replaceClass(itemResultModal, 'flex', 'hidden');
+};
+
+const handlePostItemResult = (detail) => {
+  handleRequestResult(detail);
+
+  hideItemModal();
+  showItemResultModal();
+  detail.target.form.reset();
+  currentLocationChain = '';
+  currentLocationChainMessage.innerText = currentLocationChain;
+  locationIdInput.value = '';
+  selectedLocationMessage.innerText = '';
+  currentPath = INITIAL_PATH;
+  buttonSelectLocation.hidden = true;
 };

@@ -139,7 +139,8 @@ const IndexPageContent = () => (
           <button
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
             hx-post="/api/item"
-            hx-encoding="multipart/form-data">
+            hx-encoding="multipart/form-data"
+            hx-on="htmx:beforeSwap: handlePostItemResult(event.detail)">
             Додати
           </button>
         </form>
@@ -151,6 +152,26 @@ const IndexPageContent = () => (
       </div>
     </div>
     <LocationSelectionModal />
+    <div
+      id="item-result-modal"
+      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      <div class="flex w-full flex-col items-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
+        <div class="flex items-center gap-2">
+          Додано
+          <img src="/public/checkmark.svg" class="h-4 w-4" />
+        </div>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideItemResultModal();showItemModal()">
+          Додати ще
+        </button>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideItemResultModal()">
+          Закрити
+        </button>
+      </div>
+    </div>
   </>
 );
 
