@@ -13,11 +13,9 @@ const create = async (newLocation: NewLocation) => {
   });
 
   if (!existingLocation && !newLocation.parentId) {
-    await db
-      .insert(locations)
-      .values({
-        ...newLocation
-      });
+    await db.insert(locations).values({
+      ...newLocation
+    });
   } else if (!existingLocation && newLocation.parentId) {
     const existingParent = await db.query.locations.findFirst({
       columns: { id: true },
@@ -26,7 +24,7 @@ const create = async (newLocation: NewLocation) => {
         eq(locations.id, newLocation.parentId!)
       )
     });
-          
+
     if (!existingParent) {
       throw new Error('Parent location not found');
     }
@@ -41,18 +39,17 @@ const create = async (newLocation: NewLocation) => {
       });
 
     if (newLocation.parentId) {
-      await db
-        .insert(locationsToLocations)
-        .values({
-          parentId: newLocation.parentId,
-          childId: newLocationId
-        });
+      await db.insert(locationsToLocations).values({
+        parentId: newLocation.parentId,
+        childId: newLocationId
+      });
     }
   } else if (existingLocation && !newLocation.parentId) {
     throw new Error('Location exists');
   } else if (existingLocation && newLocation.parentId) {
     if (existingLocation.id == newLocation.parentId) {
-      throw new Error('Parent location can\'t be a child of itself');
+      // eslint-disable-next-line quotes
+      throw new Error("Parent location can't be a child of itself");
     }
 
     const recordExists = await db.query.locationsToLocations.findFirst({
@@ -66,34 +63,29 @@ const create = async (newLocation: NewLocation) => {
       throw new Error('Parent location already has such child');
     }
 
-    await db
-      .insert(locationsToLocations)
-      .values({
-        parentId: newLocation.parentId,
-        childId: existingLocation.id
-      });
+    await db.insert(locationsToLocations).values({
+      parentId: newLocation.parentId,
+      childId: existingLocation.id
+    });
   }
 };
 
 const getAllRootLocations = async (userId: string) => {
   const parentsChildren = await db.query.locationsToLocations.findMany();
 
-  const childIds = parentsChildren.map(r => r.childId);
-  
-  const rootLocations = await db.query.locations.findMany({
+  const childIds = parentsChildren.map((r) => r.childId);
+
+  const rootLocations = (await db.query.locations.findMany({
     columns: {
       id: true,
       name: true
     },
-    where: and(
-      eq(locations.userId, userId),
-      notInArray(locations.id, childIds)
-    )
-  }) as { id: string, name: string, hasChildren: boolean }[];
-    
-  const parentIds = parentsChildren.map(r => r.parentId);
+    where: and(eq(locations.userId, userId), notInArray(locations.id, childIds))
+  })) as { id: string; name: string; hasChildren: boolean }[];
 
-  rootLocations.forEach(l => l.hasChildren = parentIds.includes(l.id));
+  const parentIds = parentsChildren.map((r) => r.parentId);
+
+  rootLocations.forEach((l) => (l.hasChildren = parentIds.includes(l.id)));
 
   return rootLocations;
 };
@@ -107,33 +99,84 @@ const existsById = async (id: string) => {
   return Boolean(exists);
 };
 
-const getChildrenById = async (locationId: string) => {
+const getChildrenById = async (parentId: string) => {
   const childIds = (
     await db.query.locationsToLocations.findMany({
       columns: { childId: true },
-      where: eq(locationsToLocations.parentId, locationId)
+      where: eq(locationsToLocations.parentId, parentId)
     })
-  ).map(row => row.childId);
+  ).map((row) => row.childId);
 
-  const children = await db.query.locations.findMany({
+  const children = (await db.query.locations.findMany({
     columns: { id: true, name: true },
     where: inArray(locations.id, childIds)
-  }) as { id: string, name: string, hasChildren: boolean }[];
+  })) as { id: string; name: string; hasChildren: boolean }[];
 
   const parentIds = (
     await db.query.locationsToLocations.findMany({
       columns: { parentId: true }
     })
-  ).map(r => r.parentId);
+  ).map((r) => r.parentId);
 
-  children.forEach(c => c.hasChildren = parentIds.includes(c.id));
+  children.forEach((c) => (c.hasChildren = parentIds.includes(c.id)));
 
   return children;
+};
+
+type LocationWithChildren = {
+  id: string;
+  name: string;
+  children: LocationWithChildren[];
+};
+
+const getChildrenByIdRecursively = async (
+  parentId: string
+): Promise<LocationWithChildren[]> => {
+  const childIds = (
+    await db.query.locationsToLocations.findMany({
+      columns: { childId: true },
+      where: eq(locationsToLocations.parentId, parentId)
+    })
+  ).map((row) => row.childId);
+
+  const children = await db.query.locations.findMany({
+    columns: { id: true, name: true },
+    where: inArray(locations.id, childIds)
+  });
+
+  const parentIds = (
+    await db.query.locationsToLocations.findMany({
+      columns: { parentId: true }
+    })
+  ).map((r) => r.parentId);
+
+  return await Promise.all(
+    children.map(async (c) => ({
+      ...c,
+      children: parentIds.includes(c.id)
+        ? await getChildrenByIdRecursively(c.id)
+        : []
+    }))
+  );
+};
+
+const getAllLocations = async (userId: string) => {
+  const rootLocations = await getAllRootLocations(userId);
+
+  const result = await Promise.all(
+    rootLocations.map(async (rl) => ({
+      ...rl,
+      children: rl.hasChildren ? await getChildrenByIdRecursively(rl.id) : []
+    }))
+  );
+
+  return result;
 };
 
 export default {
   create,
   getAllRootLocations,
   existsById,
-  getChildrenById
+  getChildrenById,
+  getAllLocations
 };
