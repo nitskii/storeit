@@ -4,7 +4,7 @@ const IndexPageContent = () => (
       <title>Головна</title>
     </head>
     <header class="flex-none bg-orange-100">
-      <nav class="flex justify-end space-x-2 p-2">
+      <nav class="flex justify-between space-x-2 p-2 md:space-x-0">
         <div class="flex w-full overflow-hidden rounded-lg">
           <input
             type="search"
@@ -18,26 +18,45 @@ const IndexPageContent = () => (
             hx-indicator=".htmx-indicator"
           />
         </div>
-        <a
-          href="/locations"
-          hx-boost="true"
-          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus:outline focus:outline-2 focus:outline-orange-300">
-          Локації
-        </a>
-        <button
-          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="htmx.trigger('#tags-datalist', 'itemModalOpened');showItemModal()">
-          Додати
-        </button>
-        <button
-          class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          hx-post="/api/logout">
-          Вийти
+        <ul
+          id="menu"
+          class="fixed right-0 top-0 z-50 hidden space-y-2 bg-orange-100 px-10
+                py-16 md:relative md:flex md:space-x-2 md:space-y-0 md:bg-transparent md:p-0">
+          <li class="z-90 fixed right-6 top-4 md:hidden">
+            <button class="text-right text-4xl" onclick="toggleMenu()">
+              &times;
+            </button>
+          </li>
+          <li>
+            <a
+              href="/locations"
+              hx-boost="true"
+              class="block w-full rounded-lg bg-orange-200 p-2 text-center hover:bg-orange-300 focus:outline focus:outline-2 focus:outline-orange-300">
+              Локації
+            </a>
+          </li>
+          <li>
+            <button
+              class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+              onclick="htmx.trigger('#tags-datalist', 'itemModalOpened');showItemModal()">
+              Додати
+            </button>
+          </li>
+          <li>
+            <button
+              class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+              hx-post="/api/logout">
+              Вийти
+            </button>
+          </li>
+        </ul>
+        <button class="text-4xl md:hidden" onclick="toggleMenu()">
+          &#9776;
         </button>
       </nav>
     </header>
     <main class="flex-grow">
-      <div class="flex h-full items-center justify-center htmx-indicator">
+      <div class="htmx-indicator flex h-full items-center justify-center">
         <img src="/public/loading.svg" />
       </div>
       <section
