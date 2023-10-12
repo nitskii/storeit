@@ -1,7 +1,7 @@
 import { and, eq, inArray, notInArray } from 'drizzle-orm';
 import db from '../db';
 import { locations, locationsToLocations } from '../db/schema';
-import { NewLocation } from '../types';
+import { LocationWithChildren, NewLocation } from '../types';
 
 const create = async (newLocation: NewLocation) => {
   const existingLocation = await db.query.locations.findFirst({
@@ -123,12 +123,6 @@ const getChildrenById = async (parentId: string) => {
   return children;
 };
 
-type LocationWithChildren = {
-  id: string;
-  name: string;
-  children: LocationWithChildren[];
-};
-
 const getChildrenByIdRecursively = async (
   parentId: string
 ): Promise<LocationWithChildren[]> => {
@@ -165,7 +159,8 @@ const getAllLocations = async (userId: string) => {
 
   const result = await Promise.all(
     rootLocations.map(async (rl) => ({
-      ...rl,
+      id: rl.id,
+      name: rl.name,
       children: rl.hasChildren ? await getChildrenByIdRecursively(rl.id) : []
     }))
   );

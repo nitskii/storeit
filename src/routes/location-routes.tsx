@@ -2,12 +2,7 @@ import { html } from '@elysiajs/html';
 import { Elysia, t } from 'elysia';
 import { authenticator } from '../plugins';
 import locationService from '../services/location-service';
-
-type Location = {
-  id: string;
-  name: string;
-  hasChildren: boolean;
-};
+import { Location, LocationWithChildren } from '../types';
 
 const mapLocationsToListItems = (locations: Location[]) => {
   if (!locations.length) {
@@ -52,6 +47,22 @@ const mapLocationsToListItems = (locations: Location[]) => {
     .join('');
 };
 
+const mapLocationsToListItemsRecursively = (
+  locations: LocationWithChildren[]
+) =>
+  locations
+    .map((l) => (
+      <li>
+        {l.name}
+        {l.children.length ? (
+          <ul>{mapLocationsToListItemsRecursively(l.children)}</ul>
+        ) : (
+          <></>
+        )}
+      </li>
+    ))
+    .join('');
+
 const locationRoutes = new Elysia()
   .use(authenticator)
   .model({
@@ -87,6 +98,11 @@ const locationRoutes = new Elysia()
     const locations = await locationService.getChildrenById(id);
 
     return mapLocationsToListItems(locations);
+  })
+  .get('/locations', async ({ userId }) => {
+    const locations = await locationService.getAllLocations(userId);
+
+    return <ul>{mapLocationsToListItemsRecursively(locations)}</ul>;
   });
 
 export default locationRoutes;
