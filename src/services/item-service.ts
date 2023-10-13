@@ -1,10 +1,7 @@
 import { v2 as cloudinary } from 'cloudinary';
-import { eq, sql } from 'drizzle-orm';
+import { and, eq, sql } from 'drizzle-orm';
 import db from '../db';
-import {
-  items,
-  tagsToItems
-} from '../db/schema';
+import { items, tagsToItems } from '../db/schema';
 import { NewItem } from '../types';
 import locationService from './location-service';
 import tagService from './tag-service';
@@ -14,16 +11,16 @@ const create = async (newItem: NewItem) => {
 
   if (locationId) {
     const locationExists = await locationService.existsById(locationId);
-    
+
     if (!locationExists) {
       throw new Error('Location not found');
     }
   }
-  
+
   const tagIds: { id: string }[] = [];
 
   if (tags) {
-    tagIds.push(...await tagService.createMany(tags, userId));
+    tagIds.push(...(await tagService.createMany(tags, userId)));
   }
 
   const buffer = Buffer.from(await image.arrayBuffer());
@@ -52,11 +49,10 @@ const create = async (newItem: NewItem) => {
     })
     .returning({ newItemId: items.id });
 
-  tagIds.length && await db
-    .insert(tagsToItems)
-    .values(
-      tagIds.map(tag => ({ tagId: tag.id, itemId: newItemId }))
-    );
+  tagIds.length &&
+    (await db
+      .insert(tagsToItems)
+      .values(tagIds.map((tag) => ({ tagId: tag.id, itemId: newItemId }))));
 };
 
 const itemsQuery = db.query.items
@@ -86,14 +82,56 @@ const itemsQuery = db.query.items
 const getAllForUser = async (userId: string) => {
   const rows = await itemsQuery.execute({ userId });
 
-  return rows.map(r => ({
-    ...r,
-    location: r.location && r.location.name,
-    tags: r.tags.map(t => t.tag.name)})
-  );
+  return rows.map((row) => ({
+    ...row,
+    location: row.location && row.location.name,
+    tags: row.tags.map((t) => t.tag.name)
+  }));
+};
+
+const itemQuery = db.query.items
+  .findFirst({
+    columns: {
+      id: true,
+      name: true,
+      image: true
+    },
+    where: and(
+      eq(items.userId, sql.placeholder('userId')),
+      eq(items.id, sql.placeholder('itemId'))
+    ),
+    with: {
+      tags: {
+        columns: {},
+        with: {
+          tag: {
+            columns: { name: true }
+          }
+        }
+      },
+      location: {
+        columns: { name: true }
+      }
+    }
+  })
+  .prepare();
+
+const getOneForUser = async (userId: string, itemId: string) => {
+  const item = await itemQuery.execute({ userId, itemId });
+
+  if (!item) {
+    throw new Error('Item not found');
+  }
+
+  return {
+    ...item,
+    location: item.location && item.location.name,
+    tags: item.tags.map((t) => t.tag.name)
+  };
 };
 
 export default {
   create,
-  getAllForUser
+  getAllForUser,
+  getOneForUser
 };

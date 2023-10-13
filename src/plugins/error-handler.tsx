@@ -1,8 +1,8 @@
 import Elysia from 'elysia';
 
-const errorHandler = new Elysia({ name: 'errorHandler' })
-  .onError(({ error: { message }, set }) => {
-    switch(message) {
+const errorHandler = new Elysia({ name: 'errorHandler' }).onError(
+  ({ error: { message }, set }) => {
+    switch (message) {
       case 'Invalid nickname':
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
         set.headers['HX-Retarget'] = '#nickname-input-block';
@@ -31,11 +31,7 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
         set.headers['HX-Retarget'] = '#location-name-input-block';
         set.headers['HX-Reswap'] = 'beforeend';
 
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Локація має мати назву
-          </div> 
-        );
+        return <div class="pl-2 pt-1 text-red-500">Локація має мати назву</div>;
       case 'Unauthorized':
         set.status = 401;
         return;
@@ -45,49 +41,39 @@ const errorHandler = new Elysia({ name: 'errorHandler' })
         set.headers['HX-Retarget'] = '#password-input-block';
         set.headers['HX-Reswap'] = 'beforeend';
 
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Невірний пароль
-          </div>
-        );
+        return <div class="pl-2 pt-1 text-red-500">Невірний пароль</div>;
       case 'User not found':
         set.status = 404;
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
         set.headers['HX-Retarget'] = '#nickname-input-block';
         set.headers['HX-Reswap'] = 'beforeend';
 
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Нікнейм не знайдено
-          </div>
-        );
+        return <div class="pl-2 pt-1 text-red-500">Нікнейм не знайдено</div>;
+      case 'Item not found':
+        set.status = 404;
+        set.headers['Content-Type'] = 'text/html;charset=utf-8';
+
+        return 'Item not found';
       case 'User exists':
         set.status = 409;
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
         set.headers['HX-Retarget'] = '#nickname-input-block';
         set.headers['HX-Reswap'] = 'beforeend';
 
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Нікнейм вже існує
-          </div>
-        );
+        return <div class="pl-2 pt-1 text-red-500">Нікнейм вже існує</div>;
       case 'Location exists':
       case 'Parent location already has such child':
-      case 'Parent location can\'t be a child of itself':
+      case "Parent location can't be a child of itself":
         set.status = 409;
         set.headers['Content-Type'] = 'text/html;charset=utf-8';
         set.headers['HX-Retarget'] = '#location-name-input-block';
         set.headers['HX-Reswap'] = 'beforeend';
 
-        return (
-          <div class="pl-2 pt-1 text-red-500">
-            Локація вже існує
-          </div> 
-        );
+        return <div class="pl-2 pt-1 text-red-500">Локація вже існує</div>;
     }
 
     console.log(message);
-  });
+  }
+);
 
 export default errorHandler;
