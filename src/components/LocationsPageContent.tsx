@@ -26,6 +26,11 @@ const LocationsPageContent = () => (
         </button>
       </nav>
     </header>
+    <main
+      class="flex h-full items-center justify-center"
+      hx-get="/api/locations"
+      hx-trigger="load"
+    />
     <div
       id="location-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">

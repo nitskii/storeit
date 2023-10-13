@@ -55,7 +55,7 @@ const mapLocationsToListItemsRecursively = (
       <li>
         {l.name}
         {l.children.length ? (
-          <ul>{mapLocationsToListItemsRecursively(l.children)}</ul>
+          <ul class="pl-2">{mapLocationsToListItemsRecursively(l.children)}</ul>
         ) : (
           <></>
         )}
