@@ -43,6 +43,7 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
       </nav>
     </header>
     <main
+      class="flex-grow p-4"
       hx-get={`/api/item/${itemId}`}
       hx-trigger="load"
       {...{

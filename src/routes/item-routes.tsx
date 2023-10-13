@@ -46,7 +46,58 @@ const itemRoutes = (app: Elysia) =>
     .get('/item/:itemId', async ({ userId, params: { itemId } }) => {
       const item = await itemService.getOneForUser(userId, itemId);
 
-      return item;
+      return (
+        <>
+          {/* <div>
+            <img src={item.image} alt={item.id} />
+          </div>
+          <div>
+            <div>
+              <div>{item.name}</div>
+              <div>{item.location}</div>
+              <ul>
+                {item.tags.map((t) => (
+                  <li>{t}</li>
+                ))}
+              </ul>
+            </div>
+            <div>
+              <button>Редагувати</button>
+              <button>Видалити</button>
+            </div>
+          </div> */}
+          <div class="flex h-full w-full">
+            <div class="flex w-full flex-col space-y-2 rounded-lg bg-orange-100 p-2 shadow-lg md:flex-row md:space-x-2 md:space-y-0">
+              <div class="h-fit overflow-hidden rounded-lg md:w-1/3">
+                <img src={item.image} alt={item.id} />
+              </div>
+              <div class="flex w-full flex-grow flex-col justify-between space-y-2 p-2 md:w-2/3">
+                <div class="space-y-2">
+                  <h3 class="text-xl md:text-3xl">{item.name}</h3>
+                  <p class="text-base text-gray-600 md:text-lg">
+                    {item.location}
+                  </p>
+                  <ul class="flex flex-wrap space-x-2">
+                    {item.tags.map((tagName) => (
+                      <li class="rounded-lg bg-orange-200 px-2 py-1 text-xs uppercase">
+                        {tagName}
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+                <div class="flex justify-end space-x-2">
+                  <button class=" rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+                    Редагувати
+                  </button>
+                  <button class=" rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+                    Видалити
+                  </button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </>
+      );
     });
 
 export default itemRoutes;
