@@ -3,7 +3,7 @@ import { Item } from './types';
 export const mapItemsToHTML = (items: Item[]) => {
   return items
     .map((item) => (
-      <div class="group h-fit">
+      <a class="group h-fit" href={`/item/${item.id}`} hx-boost="true">
         <div class="overflow-hidden rounded-lg group-hover:opacity-75">
           <img src={item.image} alt={item.id} />
         </div>
@@ -20,7 +20,7 @@ export const mapItemsToHTML = (items: Item[]) => {
             ))}
           </div>
         </div>
-      </div>
+      </a>
     ))
     .join('');
 };
