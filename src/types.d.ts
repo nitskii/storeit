@@ -37,6 +37,12 @@ export type Item = {
   tags: string[];
 };
 
+export type UpdateNameItem = {
+  userId: string;
+  itemId: string;
+  name: string;
+};
+
 export type DeleteItem = {
   userId: string;
   itemId: string;

@@ -2,7 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { and, eq, sql } from 'drizzle-orm';
 import db from '../db';
 import { items, tagsToItems } from '../db/schema';
-import { DeleteItem, NewItem } from '../types';
+import { DeleteItem, NewItem, UpdateNameItem } from '../types';
 import locationService from './location-service';
 import tagService from './tag-service';
 
@@ -79,7 +79,7 @@ const itemsQuery = db.query.items
   })
   .prepare();
 
-const getAllForUser = async (userId: string) => {
+const getAll = async (userId: string) => {
   const rows = await itemsQuery.execute({ userId });
 
   return rows.map((row) => ({
@@ -116,7 +116,7 @@ const itemQuery = db.query.items
   })
   .prepare();
 
-const getOneForUser = async (userId: string, itemId: string) => {
+const getOne = async (userId: string, itemId: string) => {
   const item = await itemQuery.execute({ userId, itemId });
 
   if (!item) {
@@ -128,6 +128,20 @@ const getOneForUser = async (userId: string, itemId: string) => {
     location: item.location && item.location.name,
     tags: item.tags.map((t) => t.tag.name)
   };
+};
+
+const updateName = async ({ userId, itemId, name }: UpdateNameItem) => {
+  const [updatedItem] = await db
+    .update(items)
+    .set({ name })
+    .where(and(eq(items.id, itemId), eq(items.userId, userId)))
+    .returning({
+      id: items.id
+    });
+
+  if (!updatedItem) {
+    throw new Error('Item not found');
+  }
 };
 
 const deleteOne = async ({ userId, itemId }: DeleteItem) => {
@@ -159,7 +173,8 @@ const deleteOne = async ({ userId, itemId }: DeleteItem) => {
 
 export default {
   create,
-  getAllForUser,
-  getOneForUser,
+  getAll,
+  getOne,
+  updateName,
   deleteOne
 };

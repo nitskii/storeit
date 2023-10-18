@@ -39,12 +39,12 @@ const itemRoutes = (app: Elysia) =>
       }
     )
     .get('/items', async ({ userId }) => {
-      const items = await itemService.getAllForUser(userId);
+      const items = await itemService.getAll(userId);
 
       return mapItemsToHTML(items);
     })
     .get('/item/:itemId', async ({ userId, params: { itemId } }) => {
-      const item = await itemService.getOneForUser(userId, itemId);
+      const item = await itemService.getOne(userId, itemId);
 
       return (
         <>
@@ -81,10 +81,24 @@ const itemRoutes = (app: Elysia) =>
         </>
       );
     })
+    .patch(
+      '/item/:itemId/name',
+      async ({ userId, params: { itemId }, body: { name }, set }) => {
+        await itemService.updateName({ userId, itemId, name });
+
+        set.status = 204;
+      },
+      {
+        body: t.Object({
+          name: t.String()
+        })
+      }
+    )
     .delete('/item/:itemId', async ({ userId, params: { itemId }, set }) => {
       await itemService.deleteOne({ userId, itemId });
 
       set.headers['HX-Redirect'] = '/';
+      set.status = 204;
     });
 
 export default itemRoutes;
