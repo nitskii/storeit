@@ -2,7 +2,7 @@ import { v2 as cloudinary } from 'cloudinary';
 import { and, eq, sql } from 'drizzle-orm';
 import db from '../db';
 import { items, tagsToItems } from '../db/schema';
-import { NewItem } from '../types';
+import { DeleteItem, NewItem } from '../types';
 import locationService from './location-service';
 import tagService from './tag-service';
 
@@ -130,8 +130,36 @@ const getOneForUser = async (userId: string, itemId: string) => {
   };
 };
 
+const deleteOne = async ({ userId, itemId }: DeleteItem) => {
+  try {
+    await db.transaction(async (tx) => {
+      const itemToDelete = await tx.query.items.findFirst({
+        columns: { id: true, userId: true },
+        where: and(eq(items.id, itemId), eq(items.userId, userId))
+      });
+
+      if (!itemToDelete) {
+        tx.rollback();
+        return;
+      }
+
+      await tx
+        .delete(items)
+        .where(
+          and(
+            eq(items.id, itemToDelete.id),
+            eq(items.userId, itemToDelete.userId)
+          )
+        );
+    });
+  } catch (err) {
+    throw new Error('Item not found');
+  }
+};
+
 export default {
   create,
   getAllForUser,
-  getOneForUser
+  getOneForUser,
+  deleteOne
 };

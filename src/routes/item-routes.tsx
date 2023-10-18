@@ -48,24 +48,6 @@ const itemRoutes = (app: Elysia) =>
 
       return (
         <>
-          {/* <div>
-            <img src={item.image} alt={item.id} />
-          </div>
-          <div>
-            <div>
-              <div>{item.name}</div>
-              <div>{item.location}</div>
-              <ul>
-                {item.tags.map((t) => (
-                  <li>{t}</li>
-                ))}
-              </ul>
-            </div>
-            <div>
-              <button>Редагувати</button>
-              <button>Видалити</button>
-            </div>
-          </div> */}
           <div class="flex h-full w-full">
             <div class="flex w-full flex-col space-y-2 rounded-lg bg-orange-100 p-2 shadow-lg md:flex-row md:space-x-2 md:space-y-0">
               <div class="h-fit overflow-hidden rounded-lg md:w-1/3">
@@ -86,10 +68,9 @@ const itemRoutes = (app: Elysia) =>
                   </ul>
                 </div>
                 <div class="flex justify-end space-x-2">
-                  <button class=" rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
-                    Редагувати
-                  </button>
-                  <button class=" rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
+                  <button
+                    hx-delete={`/api/item/${item.id}`}
+                    class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
                     Видалити
                   </button>
                 </div>
@@ -98,6 +79,11 @@ const itemRoutes = (app: Elysia) =>
           </div>
         </>
       );
+    })
+    .delete('/item/:itemId', async ({ userId, params: { itemId }, set }) => {
+      await itemService.deleteOne({ userId, itemId });
+
+      set.headers['HX-Redirect'] = '/';
     });
 
 export default itemRoutes;

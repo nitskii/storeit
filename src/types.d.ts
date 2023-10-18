@@ -36,3 +36,8 @@ export type Item = {
   location: string | null;
   tags: string[];
 };
+
+export type DeleteItem = {
+  userId: string;
+  itemId: string;
+};
