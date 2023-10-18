@@ -1046,10 +1046,6 @@ select {
   line-height: 1rem;
 }
 
-.font-semibold {
-  font-weight: 600;
-}
-
 .uppercase {
   text-transform: uppercase;
 }

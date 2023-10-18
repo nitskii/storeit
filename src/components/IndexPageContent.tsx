@@ -15,6 +15,7 @@ const IndexPageContent = () => (
             class="w-full border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
             hx-get="/api/search"
             hx-target="#items-container"
+            hx-swap="outerHTML"
             hx-include="[name='q']"
             hx-trigger="keyup changed delay:200ms, search"
             hx-indicator=".htmx-indicator"
