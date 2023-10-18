@@ -43,6 +43,12 @@ export type UpdateNameItem = {
   name: string;
 };
 
+export type UpdateLocationItem = {
+  userId: string,
+  itemId: string,
+  locationId: string
+}
+
 export type DeleteItem = {
   userId: string;
   itemId: string;
