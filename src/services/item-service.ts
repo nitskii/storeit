@@ -1,12 +1,13 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { and, eq, sql } from 'drizzle-orm';
 import db from '../db';
-import { items, tagsToItems } from '../db/schema';
+import { items, tags, tagsToItems } from '../db/schema';
 import {
   DeleteItem,
   NewItem,
   UpdateLocationItem,
-  UpdateNameItem
+  UpdateNameItem,
+  UpdateTagsItem
 } from '../types';
 import locationService from './location-service';
 import tagService from './tag-service';
@@ -15,8 +16,7 @@ const create = async (newItem: NewItem) => {
   const { locationId, tags, image, userId } = newItem;
 
   if (locationId) {
-    const locationExists =
-      await locationService.existsById(locationId);
+    const locationExists = await locationService.existsById(locationId);
 
     if (!locationExists) {
       throw new Error('Location not found');
@@ -26,32 +26,26 @@ const create = async (newItem: NewItem) => {
   const tagIds: { id: string }[] = [];
 
   if (tags) {
-    tagIds.push(
-      ...(await tagService.createMany(tags, userId))
-    );
+    tagIds.push(...(await tagService.createMany(tags, userId)));
   }
 
   const buffer = Buffer.from(await image.arrayBuffer());
-  const imageUrl: string = await new Promise(
-    (resolve, reject) => {
-      cloudinary.uploader.upload(
-        `data:${image.type};base64,${buffer.toString(
-          'base64'
-        )}`,
-        {
-          unique_filename: true,
-          resource_type: 'image'
-        },
-        (error, result) => {
-          if (error) {
-            reject(error);
-          }
-
-          resolve(result!.secure_url);
+  const imageUrl: string = await new Promise((resolve, reject) => {
+    cloudinary.uploader.upload(
+      `data:${image.type};base64,${buffer.toString('base64')}`,
+      {
+        unique_filename: true,
+        resource_type: 'image'
+      },
+      (error, result) => {
+        if (error) {
+          reject(error);
         }
-      );
-    }
-  );
+
+        resolve(result!.secure_url);
+      }
+    );
+  });
 
   const [{ newItemId }] = await db
     .insert(items)
@@ -158,17 +152,11 @@ const getOne = async (userId: string, itemId: string) => {
   };
 };
 
-const updateName = async ({
-  userId,
-  itemId,
-  name
-}: UpdateNameItem) => {
+const updateName = async ({ userId, itemId, name }: UpdateNameItem) => {
   const [updatedItem] = await db
     .update(items)
     .set({ name })
-    .where(
-      and(eq(items.id, itemId), eq(items.userId, userId))
-    )
+    .where(and(eq(items.id, itemId), eq(items.userId, userId)))
     .returning({
       id: items.id
     });
@@ -186,9 +174,7 @@ const updateLocation = async ({
   const [updatedItem] = await db
     .update(items)
     .set({ locationId })
-    .where(
-      and(eq(items.id, itemId), eq(items.userId, userId))
-    )
+    .where(and(eq(items.id, itemId), eq(items.userId, userId)))
     .returning({
       id: items.id
     });
@@ -198,38 +184,80 @@ const updateLocation = async ({
   }
 };
 
-const deleteOne = async ({
-  userId,
-  itemId
-}: DeleteItem) => {
-  try {
-    await db.transaction(async (tx) => {
-      const itemToDelete = await tx.query.items.findFirst({
-        columns: {
-          id: true,
-          userId: true
-        },
-        where: and(
-          eq(items.id, itemId),
-          eq(items.userId, userId)
-        )
-      });
+const addTag = async ({ userId, itemId, tagName }: UpdateTagsItem) => {
+  const [itemToUpdate, existingTag] = await db.batch([
+    db.query.items.findFirst({
+      columns: { id: true },
+      where: and(eq(items.userId, userId), eq(items.id, itemId))
+    }),
+    db.query.tags.findFirst({
+      columns: { id: true },
+      where: and(eq(items.userId, userId), eq(tags.name, tagName))
+    })
+  ]);
 
-      if (!itemToDelete) {
-        tx.rollback();
-        return;
-      }
+  if (!itemToUpdate) {
+    throw new Error('Item not found');
+  }
 
-      await tx
-        .delete(items)
-        .where(
-          and(
-            eq(items.id, itemToDelete.id),
-            eq(items.userId, itemToDelete.userId)
-          )
-        );
-    });
-  } catch (err) {
+  if (existingTag) {
+    await db
+      .insert(tagsToItems)
+      .values({ itemId: itemToUpdate.id, tagId: existingTag.id });
+  } else {
+    const [{ newTagId }] = await db
+      .insert(tags)
+      .values({ name: tagName, userId })
+      .returning({ newTagId: tags.id });
+
+    await db
+      .insert(tagsToItems)
+      .values({ itemId: itemToUpdate.id, tagId: newTagId });
+  }
+};
+
+const deleteTag = async ({ userId, itemId, tagName }: UpdateTagsItem) => {
+  const [itemToUpdate, existingTag] = await db.batch([
+    db.query.items.findFirst({
+      columns: { id: true },
+      where: and(eq(items.userId, userId), eq(items.id, itemId))
+    }),
+    db.query.tags.findFirst({
+      columns: { id: true },
+      where: and(eq(items.userId, userId), eq(tags.name, tagName))
+    })
+  ]);
+
+  if (!itemToUpdate) {
+    throw new Error('Item not found');
+  }
+
+  if (!existingTag) {
+    throw new Error('Tag not found');
+  }
+
+  const [deletedRecord] = await db
+    .delete(tagsToItems)
+    .where(
+      and(
+        eq(tagsToItems.itemId, itemToUpdate.id),
+        eq(tagsToItems.tagId, existingTag.id)
+      )
+    )
+    .returning();
+
+  if (!deletedRecord) {
+    throw new Error('Tag to item record not found');
+  }
+};
+
+const deleteOne = async ({ userId, itemId }: DeleteItem) => {
+  const [deletedItem] = await db
+    .delete(items)
+    .where(and(eq(items.userId, userId), eq(items.id, itemId)))
+    .returning({ id: items.id });
+
+  if (!deletedItem) {
     throw new Error('Item not found');
   }
 };
@@ -240,5 +268,7 @@ export default {
   getOne,
   updateName,
   updateLocation,
+  addTag,
+  deleteTag,
   deleteOne
 };

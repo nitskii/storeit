@@ -44,10 +44,16 @@ export type UpdateNameItem = {
 };
 
 export type UpdateLocationItem = {
-  userId: string,
-  itemId: string,
-  locationId: string
-}
+  userId: string;
+  itemId: string;
+  locationId: string;
+};
+
+export type UpdateTagsItem = {
+  userId: string;
+  itemId: string;
+  tagName: string;
+};
 
 export type DeleteItem = {
   userId: string;

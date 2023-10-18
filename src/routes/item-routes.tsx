@@ -27,10 +27,7 @@ const itemRoutes = (app: Elysia) =>
       async ({ body: newItem, userId, set }) => {
         await itemService.create({
           ...newItem,
-          tags:
-            typeof newItem.tags == 'string'
-              ? [newItem.tags]
-              : newItem.tags,
+          tags: typeof newItem.tags == 'string' ? [newItem.tags] : newItem.tags,
           userId
         });
 
@@ -103,12 +100,7 @@ const itemRoutes = (app: Elysia) =>
     )
     .patch(
       '/item/:itemId/location',
-      async ({
-        userId,
-        params: { itemId },
-        body: { locationId },
-        set
-      }) => {
+      async ({ userId, params: { itemId }, body: { locationId }, set }) => {
         await itemService.updateLocation({ userId, itemId, locationId });
 
         set.status = 204;
@@ -119,14 +111,37 @@ const itemRoutes = (app: Elysia) =>
         })
       }
     )
-    .delete(
-      '/item/:itemId',
-      async ({ userId, params: { itemId }, set }) => {
-        await itemService.deleteOne({ userId, itemId });
+    .post(
+      '/item/:itemId/tag',
+      async ({ userId, params: { itemId }, body: { tagName }, set }) => {
+        await itemService.addTag({ userId, itemId, tagName });
 
-        set.headers['HX-Redirect'] = '/';
         set.status = 204;
+      },
+      {
+        body: t.Object({
+          tagName: t.String()
+        })
       }
-    );
+    )
+    .delete(
+      '/item/:itemId/tag',
+      async ({ userId, params: { itemId }, body: { tagName }, set }) => {
+        await itemService.deleteTag({ userId, itemId, tagName });
+
+        set.status = 204;
+      },
+      {
+        body: t.Object({
+          tagName: t.String()
+        })
+      }
+    )
+    .delete('/item/:itemId', async ({ userId, params: { itemId }, set }) => {
+      await itemService.deleteOne({ userId, itemId });
+
+      set.headers['HX-Redirect'] = '/';
+      set.status = 204;
+    });
 
 export default itemRoutes;
