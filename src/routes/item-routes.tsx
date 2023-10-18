@@ -70,6 +70,7 @@ const itemRoutes = (app: Elysia) =>
                 <div class="flex justify-end space-x-2">
                   <button
                     hx-delete={`/api/item/${item.id}`}
+                    hx-confirm="Видалити предмет?"
                     class="rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300">
                     Видалити
                   </button>
