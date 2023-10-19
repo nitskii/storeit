@@ -3,20 +3,26 @@ import { and, eq, sql } from 'drizzle-orm';
 import db from '../db';
 import { items, tags, tagsToItems } from '../db/schema';
 import {
-  DeleteItem,
-  NewItem,
-  UpdateLocationItem,
-  UpdateNameItem,
-  UpdateTagsItem
+  ItemBase,
+  ItemLocationUpdate,
+  ItemNameUpdate,
+  ItemTagUpdate,
+  NewItem
 } from '../types';
 import locationService from './location-service';
 import tagService from './tag-service';
 
 const create = async (newItem: NewItem) => {
-  const { locationId, tags, image, userId } = newItem;
+  const {
+    locationId,
+    tags,
+    image,
+    userId
+  } = newItem;
 
   if (locationId) {
-    const locationExists = await locationService.existsById(locationId);
+    const locationExists =
+      await locationService.existsById(locationId);
 
     if (!locationExists) {
       throw new Error('Location not found');
@@ -26,7 +32,7 @@ const create = async (newItem: NewItem) => {
   const tagIds: { id: string }[] = [];
 
   if (tags) {
-    tagIds.push(...(await tagService.createMany(tags, userId)));
+    tagIds.push(...await tagService.createMany(tags, userId));
   }
 
   const buffer = Buffer.from(await image.arrayBuffer());
@@ -47,26 +53,27 @@ const create = async (newItem: NewItem) => {
     );
   });
 
-  const [{ newItemId }] = await db
+  const [ { newItemId } ] = await db
     .insert(items)
     .values({
       ...newItem,
       image: imageUrl
     })
-    .returning({
-      newItemId: items.id
-    });
+    .returning({ newItemId: items.id });
 
-  tagIds.length &&
-    (await db.insert(tagsToItems).values(
+  tagIds.length && await db
+    .insert(tagsToItems)
+    .values(
       tagIds.map((tag) => ({
         tagId: tag.id,
         itemId: newItemId
       }))
-    ));
+    );
 };
 
-const itemsQuery = db.query.items
+const itemsQuery = db
+  .query
+  .items
   .findMany({
     columns: {
       id: true,
@@ -77,19 +84,9 @@ const itemsQuery = db.query.items
     with: {
       tags: {
         columns: {},
-        with: {
-          tag: {
-            columns: {
-              name: true
-            }
-          }
-        }
+        with: { tag: { columns: { name: true } } }
       },
-      location: {
-        columns: {
-          name: true
-        }
-      }
+      location: { columns: { name: true } }
     }
   })
   .prepare();
@@ -104,7 +101,9 @@ const getAll = async (userId: string) => {
   }));
 };
 
-const itemQuery = db.query.items
+const itemQuery = db
+  .query
+  .items
   .findFirst({
     columns: {
       id: true,
@@ -118,28 +117,15 @@ const itemQuery = db.query.items
     with: {
       tags: {
         columns: {},
-        with: {
-          tag: {
-            columns: {
-              name: true
-            }
-          }
-        }
+        with: { tag: { columns: { name: true } } }
       },
-      location: {
-        columns: {
-          name: true
-        }
-      }
+      location: { columns: { name: true } }
     }
   })
   .prepare();
 
 const getOne = async (userId: string, itemId: string) => {
-  const item = await itemQuery.execute({
-    userId,
-    itemId
-  });
+  const item = await itemQuery.execute({ userId, itemId });
 
   if (!item) {
     throw new Error('Item not found');
@@ -152,47 +138,57 @@ const getOne = async (userId: string, itemId: string) => {
   };
 };
 
-const updateName = async ({ userId, itemId, name }: UpdateNameItem) => {
-  const [updatedItem] = await db
+const updateName = async (updateData: ItemNameUpdate) => {
+  const { userId, itemId, name } = updateData;
+
+  const [ updatedItem ] = await db
     .update(items)
     .set({ name })
-    .where(and(eq(items.id, itemId), eq(items.userId, userId)))
-    .returning({
-      id: items.id
-    });
+    .where(and(
+      eq(items.id, itemId),
+      eq(items.userId, userId)
+    ))
+    .returning({ id: items.id });
 
   if (!updatedItem) {
     throw new Error('Item not found');
   }
 };
 
-const updateLocation = async ({
-  userId,
-  itemId,
-  locationId
-}: UpdateLocationItem) => {
-  const [updatedItem] = await db
+const updateLocation = async (updateData: ItemLocationUpdate) => {
+  const { userId, itemId, locationId } = updateData;
+
+  const [ updatedItem ] = await db
     .update(items)
     .set({ locationId })
-    .where(and(eq(items.id, itemId), eq(items.userId, userId)))
-    .returning({
-      id: items.id
-    });
+    .where(and(
+      eq(items.id, itemId),
+      eq(items.userId, userId)
+    ))
+    .returning({ id: items.id });
 
   if (!updatedItem) {
     throw new Error('Item not found');
   }
 };
 
-const addTag = async ({ userId, itemId, tagName }: UpdateTagsItem) => {
-  const [itemToUpdate, existingTag] = await db.batch([
+const addTag = async (updateData: ItemTagUpdate) => {
+  const { userId, itemId, tagName } = updateData;
+
+  const [ itemToUpdate, existingTag ] = await db.batch([
     db.query.items.findFirst({
       columns: { id: true },
-      where: and(eq(items.userId, userId), eq(items.id, itemId))
+      where: and(
+        eq(items.userId, userId),
+        eq(items.id, itemId)
+      )
     }),
     db.query.tags.findFirst({
       columns: { id: true },
-      where: and(eq(items.userId, userId), eq(tags.name, tagName))
+      where: and(
+        eq(items.userId, userId),
+        eq(tags.name, tagName)
+      )
     })
   ]);
 
@@ -203,28 +199,45 @@ const addTag = async ({ userId, itemId, tagName }: UpdateTagsItem) => {
   if (existingTag) {
     await db
       .insert(tagsToItems)
-      .values({ itemId: itemToUpdate.id, tagId: existingTag.id });
+      .values({
+        itemId: itemToUpdate.id,
+        tagId: existingTag.id
+      });
   } else {
-    const [{ newTagId }] = await db
+    const [ { newTagId } ] = await db
       .insert(tags)
-      .values({ name: tagName, userId })
+      .values({
+        name: tagName,
+        userId
+      })
       .returning({ newTagId: tags.id });
 
     await db
       .insert(tagsToItems)
-      .values({ itemId: itemToUpdate.id, tagId: newTagId });
+      .values({
+        itemId: itemToUpdate.id,
+        tagId: newTagId
+      });
   }
 };
 
-const deleteTag = async ({ userId, itemId, tagName }: UpdateTagsItem) => {
-  const [itemToUpdate, existingTag] = await db.batch([
+const deleteTag = async (updateData: ItemTagUpdate) => {
+  const { userId, itemId, tagName } = updateData;
+
+  const [ itemToUpdate, existingTag ] = await db.batch([
     db.query.items.findFirst({
       columns: { id: true },
-      where: and(eq(items.userId, userId), eq(items.id, itemId))
+      where: and(
+        eq(items.userId, userId),
+        eq(items.id, itemId)
+      )
     }),
     db.query.tags.findFirst({
       columns: { id: true },
-      where: and(eq(items.userId, userId), eq(tags.name, tagName))
+      where: and(
+        eq(items.userId, userId),
+        eq(tags.name, tagName)
+      )
     })
   ]);
 
@@ -236,7 +249,7 @@ const deleteTag = async ({ userId, itemId, tagName }: UpdateTagsItem) => {
     throw new Error('Tag not found');
   }
 
-  const [deletedRecord] = await db
+  const [ deletedRecord ] = await db
     .delete(tagsToItems)
     .where(
       and(
@@ -251,10 +264,17 @@ const deleteTag = async ({ userId, itemId, tagName }: UpdateTagsItem) => {
   }
 };
 
-const deleteOne = async ({ userId, itemId }: DeleteItem) => {
-  const [deletedItem] = await db
+const deleteOne = async (deleteData: ItemBase) => {
+  const { userId, itemId } = deleteData;
+
+  const [ deletedItem ] = await db
     .delete(items)
-    .where(and(eq(items.userId, userId), eq(items.id, itemId)))
+    .where(
+      and(
+        eq(items.userId, userId),
+        eq(items.id, itemId)
+      )
+    )
     .returning({ id: items.id });
 
   if (!deletedItem) {

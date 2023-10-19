@@ -1,7 +1,5 @@
 {
-  "env": {
-    "node": true
-  },
+  "env": { "node": true },
   "extends": ["eslint:recommended"],
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
@@ -10,14 +8,51 @@
   },
   "plugins": ["@typescript-eslint"],
   "rules": {
-    "indent": ["warn", 2, { "SwitchCase": 1 }],
-    "linebreak-style": ["warn", "unix"],
-    "quotes": ["warn", "single"],
-    "semi": ["warn", "always"],
-    "no-unused-vars": "warn",
-    "no-empty": "warn",
-    "comma-dangle": ["warn", "never"],
-    "eol-last": "warn"
+    "indent": ["error", 2, { "SwitchCase": 1 }],
+    "linebreak-style": ["error", "unix"],
+    "quotes": ["error", "single"],
+    "semi": ["error", "always"],
+    "no-unused-vars": "error",
+    "no-empty": "error",
+    "comma-dangle": ["error", "never"],
+    "eol-last": "error",
+    "array-bracket-spacing": [1, "always"],
+    "object-curly-spacing": [1, "always"],
+    "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
+    "object-curly-newline": [
+      "error",
+      {
+        "ObjectExpression": { "consistent": true },
+        "ObjectPattern": { "minProperties": 4 },
+        "ImportDeclaration": { "minProperties": 4 },
+        "ExportDeclaration": { "minProperties": 1 }
+      }
+    ],
+    "object-property-newline": [
+      "error",
+      { "allowAllPropertiesOnSameLine": true }
+    ],
+    "operator-linebreak": [
+      "error",
+      "after",
+      { "overrides": { "?": "before", ":": "before" } }
+    ],
+    "dot-location": ["error", "property"],
+    "function-call-argument-newline": ["error", "consistent"],
+    "multiline-ternary": ["error", "always-multiline"],
+    "function-paren-newline": ["error", "multiline-arguments"],
+    "no-trailing-spaces": "error",
+    "no-mixed-spaces-and-tabs": "error",
+    "no-multi-spaces": "error",
+    "comma-spacing": "error",
+    "semi-spacing": "error",
+    "key-spacing": "error",
+    "arrow-spacing": "error",
+    "space-before-function-paren": "error",
+    "space-infix-ops": "error",
+    "switch-colon-spacing": "error",
+    "no-extra-semi": "error",
+    "no-extra-parens": "error"
   },
   "globals": {
     "Bun": true

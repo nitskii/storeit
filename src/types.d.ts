@@ -37,25 +37,17 @@ export type Item = {
   tags: string[];
 };
 
-export type UpdateNameItem = {
+export type ItemBase = {
   userId: string;
   itemId: string;
-  name: string;
 };
 
-export type UpdateLocationItem = {
-  userId: string;
-  itemId: string;
-  locationId: string;
+type Prettify<T> = {
+  [K in keyof T]: T[K]
 };
 
-export type UpdateTagsItem = {
-  userId: string;
-  itemId: string;
-  tagName: string;
-};
+export type ItemNameUpdate = Prettify<ItemBase & { name: string }>;
 
-export type DeleteItem = {
-  userId: string;
-  itemId: string;
-};
+export type ItemLocationUpdate = Prettify<ItemBase & { locationId: string }>;
+
+export type ItemTagUpdate = Prettify<ItemBase & { tagName: string }>;
