@@ -1,7 +1,9 @@
 import { v2 as cloudinary } from 'cloudinary';
 import { and, eq, sql } from 'drizzle-orm';
 import db from '../db';
-import { items, tags, tagsToItems } from '../db/schema';
+import {
+  items, locations, tags, tagsToItems
+} from '../db/schema';
 import {
   ItemBase,
   ItemLocationUpdate,
@@ -157,6 +159,21 @@ const updateName = async (updateData: ItemNameUpdate) => {
 
 const updateLocation = async (updateData: ItemLocationUpdate) => {
   const { userId, itemId, locationId } = updateData;
+
+  const existingLocation = await db
+    .query
+    .locations
+    .findFirst({
+      columns: { id: true },
+      where: and(
+        eq(locations.userId, userId),
+        eq(locations.id, locationId)
+      )
+    });
+
+  if (!existingLocation) {
+    throw new Error('Location not found');
+  }
 
   const [ updatedItem ] = await db
     .update(items)
