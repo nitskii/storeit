@@ -15,6 +15,11 @@ export type Location = {
   hasChildren: boolean;
 };
 
+export type LocationBase = {
+  userId: string;
+  locationId: string;
+};
+
 export type LocationWithChildren = {
   id: string;
   name: string;
