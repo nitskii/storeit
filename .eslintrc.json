@@ -12,7 +12,7 @@
     "linebreak-style": ["error", "unix"],
     "quotes": ["error", "single"],
     "semi": ["error", "always"],
-    "no-unused-vars": "error",
+    "no-unused-vars": "warn",
     "no-empty": "error",
     "comma-dangle": ["error", "never"],
     "eol-last": "error",
@@ -23,15 +23,7 @@
     ],
     "object-curly-spacing": ["error", "always"],
     "brace-style": ["error", "1tbs", { "allowSingleLine": true }],
-    "object-curly-newline": [
-      "error",
-      {
-        "ObjectExpression": { "consistent": true },
-        "ObjectPattern": { "minProperties": 4 },
-        "ImportDeclaration": { "consistent": true },
-        "ExportDeclaration": { "minProperties": 1 }
-      }
-    ],
+    "object-curly-newline": ["error", { "consistent": true }],
     "object-property-newline": [
       "error",
       { "allowAllPropertiesOnSameLine": true }
@@ -56,8 +48,9 @@
     "space-infix-ops": "error",
     "switch-colon-spacing": "error",
     "no-extra-semi": "error",
-    "no-extra-parens": "error",
-    "no-useless-rename": "error"
+    "no-extra-parens": ["error", "all", { "ignoreJSX": "multi-line" }],
+    "no-useless-rename": "error",
+    "block-spacing": "error"
   },
   "globals": {
     "Bun": true

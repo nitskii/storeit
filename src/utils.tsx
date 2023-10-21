@@ -9,9 +9,9 @@ export const mapItemsToHTML = (items: Item[]) => {
         </div>
         <div class="mt-1 flex flex-col items-center space-y-1">
           <span class="text-lg text-gray-700">{item.name}</span>
-          {item.location && (
+          {item.location &&
             <span class="block text-sm text-gray-500">{item.location}</span>
-          )}
+          }
           <div class="space-x-1">
             {item.tags.map((tagName) => (
               <span class="rounded-lg bg-orange-200 px-2 py-1 text-xs uppercase">
