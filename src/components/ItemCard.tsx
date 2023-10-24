@@ -1,7 +1,7 @@
 import { Item } from '../types';
 
 const ItemCard = (item: Item) => (
-  <div class='bg-orange-200 text-center rounded-lg p-4 space-y-2'>
+  <div class='bg-orange-200 text-center rounded-lg p-4 space-y-2 hover:opacity-75'>
     <img src={item.image} alt={item.id} class='rounded-lg'/>
     <h2 class='text-xl font-bold'>{item.name}</h2>
     {

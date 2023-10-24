@@ -3,7 +3,6 @@ import { Elysia, t } from 'elysia';
 import ItemCard from '../components/ItemCard';
 import { authenticator } from '../plugins';
 import itemService from '../services/item-service';
-import { mapItemsToHTML } from '../utils';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
@@ -23,27 +22,6 @@ const itemRoutes = (app: Elysia) =>
         tags: t.Optional(t.Union([ t.Array(t.String()), t.String() ]))
       })
     })
-    .get(
-      '/',
-      async ({ userId }) => (
-        <>
-          {'<!DOCTYPE html>'}
-          <html class='bg-slate-800 h-full'>
-            <head>
-              <meta charset="UTF-8" />
-              <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-              <link href="/public/favicon.ico" rel="icon" />
-              <link href="/public/tailwind.css" rel="stylesheet" />
-            </head>
-            <body class='h-full'>
-              <div class='w-1/3 mx-auto flex items-center h-full'>
-                <ItemCard {...(await itemService.getAll(userId))[3]} />
-              </div>
-            </body>
-          </html>
-        </>
-      )
-    )
     .post(
       '/item',
       async ({ body: newItem, userId, set }) => {
@@ -67,7 +45,9 @@ const itemRoutes = (app: Elysia) =>
       async ({ userId }) => {
         const items = await itemService.getAll(userId);
 
-        return mapItemsToHTML(items);
+        return items
+          .map(item => <ItemCard {...item} />)
+          .join('');
       }
     )
     .get(
