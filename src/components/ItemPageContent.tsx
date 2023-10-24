@@ -50,6 +50,38 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
         'hx-on::before-swap': 'event.detail.shouldSwap = true'
       }}
     />
+    <div
+      id="tag-modal"
+      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      <div
+        class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
+        <form class="flex w-full flex-col items-center space-y-4">
+          <input
+            name="tagName"
+            class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+            placeholder="Назва тегу"
+            list="tags-datalist" />
+          <datalist
+            id="tags-datalist"
+            hx-get="/api/tags"
+            hx-trigger="tagModalOpened"
+          />
+          <button
+            class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+            hx-post={`/api/item/${itemId}/tag`}
+            hx-target="#tags-list"
+            hx-swap="beforeend"
+            {...{ 'hx-on::after-request': 'this.form.reset();hideTagModal()' }}>
+            Додати
+          </button>
+        </form>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideTagModal()">
+          Закрити
+        </button>
+      </div>
+    </div>
   </>
 );
 

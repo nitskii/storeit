@@ -12,6 +12,7 @@ let selectedLocationMessage = null;
 let locationResultModal = null;
 let menu = null;
 let itemResultModal = null;
+let tagModal = null;
 
 htmx.onLoad(() => {
   itemModal = htmx.find('#item-modal');
@@ -28,6 +29,7 @@ htmx.onLoad(() => {
   locationResultModal = htmx.find('#location-result-modal');
   menu = htmx.find('#menu');
   itemResultModal = htmx.find('#item-result-modal');
+  tagModal = htmx.find('#tag-modal');
 });
 
 const handleRequestResult = (detail) => {
@@ -269,4 +271,13 @@ const handlePostItemResult = (detail) => {
   selectedLocationMessage.innerText = '';
   currentPath = INITIAL_PATH;
   buttonSelectLocation.hidden = true;
+};
+
+const showTagModal = () => {
+  htmx.replaceClass(tagModal, 'hidden', 'flex');
+  tagModal.firstChild.firstChild.firstChild.focus();
+};
+
+const hideTagModal = () => {
+  htmx.replaceClass(tagModal, 'flex', 'hidden');
 };
