@@ -70,8 +70,17 @@ const itemRoutes = (app: Elysia) =>
                     </p>
                     <ul class="flex flex-wrap space-x-2">
                       {item.tags.map((tagName) => (
-                        <li class="rounded-lg bg-orange-200 px-2 py-1 text-xs uppercase">
-                          {tagName}
+                        <li class="rounded-lg bg-orange-200 px-2 py-1">
+                          <div class='flex items-center text-xs uppercase'>
+                            {tagName}
+                            <img
+                              src="/public/cross.svg"
+                              class='h-6 pl-2 cursor-pointer'
+                              hx-delete={`/api/item/${item.id}/tag`}
+                              hx-vals={`{ "tagName": "${tagName}" }`}
+                              hx-target='closest li'
+                              hx-swap='delete' />
+                          </div>
                         </li>
                       ))}
                     </ul>
