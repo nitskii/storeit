@@ -51,87 +51,93 @@ const itemRoutes = (app: Elysia) =>
           .join('');
       }
     )
-    .get(
+    .group(
       '/item/:itemId',
-      async ({ userId, params: { itemId } }) => {
-        const item = await itemService.getOne(userId, itemId);
+      app =>
+        app
+          .get(
+            '/',
+            async ({ userId, params: { itemId } }) => {
+              const item = await itemService.getOne(userId, itemId);
 
-        return <ItemInfo {...item} />;
-      }
+              return <ItemInfo {...item} />;
+            }
+          )
+          .patch(
+            '/name',
+            async ({ userId, params: { itemId }, body: { name }, set }) => {
+              await itemService.updateName({ userId, itemId, name });
+
+              set.status = 204;
+            },
+            {
+              body: t.Object({
+                name: t.String()
+              })
+            }
+          )
+          .patch(
+            '/location',
+            async ({ userId, params: { itemId }, body: { locationId }, set }) => {
+              await itemService.updateLocation({ userId, itemId, locationId });
+
+              set.status = 204;
+            },
+            {
+              body: t.Object({
+                locationId: t.String()
+              })
+            }
+          )
+          .patch(
+            '/tag',
+            async ({ userId, params: { itemId }, body: { tagName } }) => {
+              await itemService.addTag({ userId, itemId, tagName });
+
+              return (
+                <li class="rounded-lg bg-orange-200 px-2 py-1">
+                  <div class='flex items-center text-xs uppercase'>
+                    {tagName}
+                    <img
+                      src="/public/cross.svg"
+                      class='h-6 pl-2 cursor-pointer'
+                      hx-delete={`/api/item/${itemId}/tag`}
+                      hx-vals={`{ "tagName": "${tagName}" }`}
+                      hx-target='closest li'
+                      hx-swap='delete' />
+                  </div>
+                </li>
+              );
+            },
+            {
+              body: t.Object({
+                tagName: t.String()
+              })
+            }
+          )
+          .delete(
+            '/tag',
+            async ({ userId, params: { itemId }, body: { tagName }, set }) => {
+              await itemService.deleteTag({ userId, itemId, tagName });
+
+              set.status = 204;
+            },
+            {
+              body: t.Object({
+                tagName: t.String()
+              })
+            }
+          )
+          .delete(
+            '/',
+            async ({ userId, params: { itemId }, set }) => {
+              await itemService.deleteOne({ userId, itemId });
+
+              set.headers['HX-Redirect'] = '/';
+              set.status = 204;
+            }
+          )
     )
-    .patch(
-      '/item/:itemId/name',
-      async ({ userId, params: { itemId }, body: { name }, set }) => {
-        await itemService.updateName({ userId, itemId, name });
-
-        set.status = 204;
-      },
-      {
-        body: t.Object({
-          name: t.String()
-        })
-      }
-    )
-    .patch(
-      '/item/:itemId/location',
-      async ({ userId, params: { itemId }, body: { locationId }, set }) => {
-        await itemService.updateLocation({ userId, itemId, locationId });
-
-        set.status = 204;
-      },
-      {
-        body: t.Object({
-          locationId: t.String()
-        })
-      }
-    )
-    .post(
-      '/item/:itemId/tag',
-      async ({ userId, params: { itemId }, body: { tagName } }) => {
-        await itemService.addTag({ userId, itemId, tagName });
-
-        return (
-          <li class="rounded-lg bg-orange-200 px-2 py-1">
-            <div class='flex items-center text-xs uppercase'>
-              {tagName}
-              <img
-                src="/public/cross.svg"
-                class='h-6 pl-2 cursor-pointer'
-                hx-delete={`/api/item/${itemId}/tag`}
-                hx-vals={`{ "tagName": "${tagName}" }`}
-                hx-target='closest li'
-                hx-swap='delete' />
-            </div>
-          </li>
-        );
-      },
-      {
-        body: t.Object({
-          tagName: t.String()
-        })
-      }
-    )
-    .delete(
-      '/item/:itemId/tag',
-      async ({ userId, params: { itemId }, body: { tagName }, set }) => {
-        await itemService.deleteTag({ userId, itemId, tagName });
-
-        set.status = 204;
-      },
-      {
-        body: t.Object({
-          tagName: t.String()
-        })
-      }
-    )
-    .delete(
-      '/item/:itemId',
-      async ({ userId, params: { itemId }, set }) => {
-        await itemService.deleteOne({ userId, itemId });
-
-        set.headers['HX-Redirect'] = '/';
-        set.status = 204;
-      }
-    );
+    ;
 
 export default itemRoutes;

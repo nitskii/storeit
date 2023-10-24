@@ -68,7 +68,7 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
           />
           <button
             class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-            hx-post={`/api/item/${itemId}/tag`}
+            hx-patch={`/api/item/${itemId}/tag`}
             hx-target="#tags-list"
             hx-swap="beforeend"
             {...{ 'hx-on::after-request': 'this.form.reset();hideTagModal()' }}>
