@@ -24,7 +24,7 @@ const create = async (newItem: NewItem) => {
 
   if (locationId) {
     const locationExists =
-      await locationService.existsById(locationId);
+      await locationService.existsById({ userId, locationId });
 
     if (!locationExists) {
       throw new Error('Location not found');
@@ -55,7 +55,7 @@ const create = async (newItem: NewItem) => {
     );
   });
 
-  const [ { newItemId } ] = await db
+  const [{ newItemId }] = await db
     .insert(items)
     .values({
       ...newItem,
@@ -221,7 +221,7 @@ const addTag = async (updateData: ItemTagUpdate) => {
         tagId: existingTag.id
       });
   } else {
-    const [ { newTagId } ] = await db
+    const [{ newTagId }] = await db
       .insert(tags)
       .values({
         name: tagName,
@@ -283,6 +283,10 @@ const deleteTag = async (updateData: ItemTagUpdate) => {
 
 const deleteOne = async (deleteData: ItemBase) => {
   const { userId, itemId } = deleteData;
+
+  await db
+    .delete(tagsToItems)
+    .where(eq(tagsToItems.itemId, itemId));
 
   const [ deletedItem ] = await db
     .delete(items)
