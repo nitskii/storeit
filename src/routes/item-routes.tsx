@@ -2,6 +2,7 @@ import { html } from '@elysiajs/html';
 import { Elysia, t } from 'elysia';
 import ItemCard from '../components/ItemCard';
 import ItemInfo from '../components/ItemInfo';
+import TagListItem from '../components/TagListItem';
 import { authenticator } from '../plugins';
 import itemService from '../services/item-service';
 
@@ -94,20 +95,7 @@ const itemRoutes = (app: Elysia) =>
             async ({ userId, params: { itemId }, body: { tagName } }) => {
               await itemService.addTag({ userId, itemId, tagName });
 
-              return (
-                <li class="rounded-lg bg-orange-200 px-2 py-1">
-                  <div class='flex items-center text-xs uppercase'>
-                    {tagName}
-                    <img
-                      src="/public/cross.svg"
-                      class='h-6 pl-2 cursor-pointer'
-                      hx-delete={`/api/item/${itemId}/tag`}
-                      hx-vals={`{ "tagName": "${tagName}" }`}
-                      hx-target='closest li'
-                      hx-swap='delete' />
-                  </div>
-                </li>
-              );
+              return <TagListItem itemId={itemId} tagName={tagName} />;
             },
             {
               body: t.Object({

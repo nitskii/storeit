@@ -56,3 +56,8 @@ export type ItemNameUpdate = Prettify<ItemBase & { name: string }>;
 export type ItemLocationUpdate = Prettify<ItemBase & { locationId: string }>;
 
 export type ItemTagUpdate = Prettify<ItemBase & { tagName: string }>;
+
+export type TagBase = {
+  itemId: string;
+  tagName: string;
+};

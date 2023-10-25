@@ -1,4 +1,5 @@
 import { Item } from '../types';
+import TagListItem from './TagListItem';
 
 const ItemInfo = (item: Item) => (
   <div class="flex h-full w-full">
@@ -12,24 +13,15 @@ const ItemInfo = (item: Item) => (
           <p class="text-base text-gray-600 md:text-lg">
             {item.location}
           </p>
-          <div class='flex space-x-2'>
+          <div class='flex'>
             <ul
               id='tags-list'
-              class="flex flex-wrap space-x-2 items-center">
-              {item.tags.map((tagName) => (
-                <li class="rounded-lg bg-orange-200 px-2 py-1">
-                  <div class='flex items-center text-xs uppercase'>
-                    {tagName}
-                    <img
-                      src="/public/cross.svg"
-                      class='h-6 pl-2 cursor-pointer'
-                      hx-delete={`/api/item/${item.id}/tag`}
-                      hx-vals={`{ "tagName": "${tagName}" }`}
-                      hx-target='closest li'
-                      hx-swap='delete' />
-                  </div>
-                </li>
-              ))}
+              class="flex flex-wrap items-center">
+              {
+                item.tags.map(
+                  (tagName) => <TagListItem itemId={item.id} tagName={tagName} />
+                )
+              }
             </ul>
             <button
               class='bg-orange-200 rounded-lg p-1 cursor-pointer hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
