@@ -66,10 +66,10 @@ const itemRoutes = (app: Elysia) =>
           )
           .patch(
             '/name',
-            async ({ userId, params: { itemId }, body: { name }, set }) => {
+            async ({ userId, params: { itemId }, body: { name } }) => {
               await itemService.updateName({ userId, itemId, name });
 
-              set.status = 204;
+              return name;
             },
             {
               body: t.Object({

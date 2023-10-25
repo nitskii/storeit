@@ -51,6 +51,32 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
       }}
     />
     <div
+      id="name-modal"
+      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      <div
+        class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
+        <form class="flex w-full flex-col items-center space-y-4">
+          <input
+            name="name"
+            class="w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300"
+            placeholder="Назва предмету" />
+          <button
+            class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+            hx-patch={`/api/item/${itemId}/name`}
+            hx-target="#item-name"
+            hx-swap="innerHTML"
+            {...{ 'hx-on::after-request': 'hideNameModal()' }}>
+            Змінити
+          </button>
+        </form>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideNameModal()">
+          Закрити
+        </button>
+      </div>
+    </div>
+    <div
       id="tag-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div

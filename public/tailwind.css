@@ -787,6 +787,10 @@ select {
   height: 100vh;
 }
 
+.h-2 {
+  height: 0.5rem;
+}
+
 .max-h-\[50\%\] {
   max-height: 50%;
 }
@@ -1275,6 +1279,18 @@ select {
   .sm\:mx-auto {
     margin-left: auto;
     margin-right: auto;
+  }
+
+  .sm\:h-5 {
+    height: 1.25rem;
+  }
+
+  .sm\:h-6 {
+    height: 1.5rem;
+  }
+
+  .sm\:h-4 {
+    height: 1rem;
   }
 
   .sm\:max-w-md {

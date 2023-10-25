@@ -9,10 +9,20 @@ const ItemInfo = (item: Item) => (
       </div>
       <div class="flex w-full flex-grow flex-col justify-between space-y-2 p-2 md:w-2/3">
         <div class="space-y-2">
-          <h3 class="text-xl md:text-3xl">{item.name}</h3>
-          <p class="text-base text-gray-600 md:text-lg">
-            {item.location}
-          </p>
+          <div class='flex space-x-2 items-center'>
+            <h2 id='item-name' class="text-xl md:text-3xl font-bold">{item.name}</h2>
+            <button class='p-2 cursor-pointer' onclick='showNameModal()'>
+              <img src='/public/pencil.svg' class='h-4 sm:h-6' />
+            </button>
+          </div>
+          <div class='flex space-x-2 items-center'>
+            <h3 class="text-gray-600 md:text-lg">
+              {item.location}
+            </h3>
+            <button class='p-2 cursor-pointer'>
+              <img src='/public/pencil.svg' class='h-4' />
+            </button>
+          </div>
           <div class='flex'>
             <ul
               id='tags-list'

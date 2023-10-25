@@ -12,6 +12,7 @@ let selectedLocationMessage = null;
 let locationResultModal = null;
 let menu = null;
 let itemResultModal = null;
+let nameModal = null;
 let tagModal = null;
 
 htmx.onLoad(() => {
@@ -29,6 +30,7 @@ htmx.onLoad(() => {
   locationResultModal = htmx.find('#location-result-modal');
   menu = htmx.find('#menu');
   itemResultModal = htmx.find('#item-result-modal');
+  nameModal = htmx.find('#name-modal');
   tagModal = htmx.find('#tag-modal');
 });
 
@@ -280,4 +282,15 @@ const showTagModal = () => {
 
 const hideTagModal = () => {
   htmx.replaceClass(tagModal, 'flex', 'hidden');
+};
+
+const showNameModal = () => {
+  const nameInput = nameModal.firstChild.firstChild.firstChild;
+  nameInput.value = htmx.find('#item-name').innerText;
+  htmx.replaceClass(nameModal, 'hidden', 'flex');
+  nameInput.focus();
+};
+
+const hideNameModal = () => {
+  htmx.replaceClass(nameModal, 'flex', 'hidden');
 };
