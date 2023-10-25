@@ -5,6 +5,7 @@ import {
   items, locations, tags, tagsToItems
 } from '../db/schema';
 import {
+  Item,
   ItemBase,
   ItemLocationUpdate,
   ItemNameUpdate,
@@ -93,7 +94,7 @@ const itemsQuery = db
   })
   .prepare();
 
-const getAll = async (userId: string) => {
+const getAll = async (userId: string): Promise<Item[]> => {
   const rows = await itemsQuery.execute({ userId });
 
   return rows.map((row) => ({
