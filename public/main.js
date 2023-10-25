@@ -13,6 +13,7 @@ let locationResultModal = null;
 let menu = null;
 let itemResultModal = null;
 let nameModal = null;
+let locationUpdateModal = null;
 let tagModal = null;
 
 htmx.onLoad(() => {
@@ -31,6 +32,7 @@ htmx.onLoad(() => {
   menu = htmx.find('#menu');
   itemResultModal = htmx.find('#item-result-modal');
   nameModal = htmx.find('#name-modal');
+  locationUpdateModal = htmx.find('#location-update-modal');
   tagModal = htmx.find('#tag-modal');
 });
 
@@ -152,6 +154,7 @@ const toggleLocationSelectionBlock = (checked) => {
 };
 
 const showLocationSelectionModal = () => {
+  htmx.trigger('#locations-list', 'loadData');
   htmx.replaceClass(locationSelectionModal, 'hidden', 'flex');
 };
 
@@ -293,4 +296,15 @@ const showNameModal = () => {
 
 const hideNameModal = () => {
   htmx.replaceClass(nameModal, 'flex', 'hidden');
+};
+
+const showLocationUpdateModal = () => {
+  selectedLocationMessage.innerText = `Обрано локацію ${
+    htmx.find('#item-location').innerText
+  }`;
+  htmx.replaceClass(locationUpdateModal, 'hidden', 'flex');
+};
+
+const hideLocationUpdateModal = () => {
+  htmx.replaceClass(locationUpdateModal, 'flex', 'hidden');
 };

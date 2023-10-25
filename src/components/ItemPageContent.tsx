@@ -1,3 +1,5 @@
+import LocationSelectionModal from './LocationSelectionModal';
+
 const ItemPageContent = ({ itemId }: { itemId: string }) => (
   <>
     <head>
@@ -76,6 +78,45 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
         </button>
       </div>
     </div>
+    <div
+      id="location-update-modal"
+      class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
+      <div
+        class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
+        <form class="flex w-full flex-col items-center space-y-4">
+          <div
+            id="selected-location-message"
+            class="px-2 pb-1 text-sm text-gray-600"
+          />
+          <input
+            type="hidden"
+            id="location-id-input"
+            name="locationId"
+            disabled
+          />
+          <button
+            type="button"
+            class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+            onclick="showLocationSelectionModal()">
+            Оберіть локацію
+          </button>
+          <button
+            class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+            hx-patch={`/api/item/${itemId}/location`}
+            hx-target="#item-location"
+            hx-swap="innerHTML"
+            {...{ 'hx-on::after-request': 'hideLocationUpdateModal()' }}>
+            Змінити
+          </button>
+        </form>
+        <button
+          class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
+          onclick="hideLocationModal()">
+          Закрити
+        </button>
+      </div>
+    </div>
+    <LocationSelectionModal />
     <div
       id="tag-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">

@@ -16,10 +16,12 @@ const ItemInfo = (item: Item) => (
             </button>
           </div>
           <div class='flex space-x-2 items-center'>
-            <h3 class="text-gray-600 md:text-lg">
+            <h3 id='item-location' class="text-gray-600 md:text-lg">
               {item.location}
             </h3>
-            <button class='p-2 cursor-pointer'>
+            <button
+              class='p-2 cursor-pointer'
+              onclick='showLocationUpdateModal()'>
               <img src='/public/pencil.svg' class='h-4' />
             </button>
           </div>

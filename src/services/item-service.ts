@@ -164,7 +164,7 @@ const updateLocation = async (updateData: ItemLocationUpdate) => {
     .query
     .locations
     .findFirst({
-      columns: { id: true },
+      columns: { id: true, name: true },
       where: and(
         eq(locations.userId, userId),
         eq(locations.id, locationId)
@@ -187,6 +187,8 @@ const updateLocation = async (updateData: ItemLocationUpdate) => {
   if (!updatedItem) {
     throw new Error('Item not found');
   }
+
+  return existingLocation.name;
 };
 
 const addTag = async (updateData: ItemTagUpdate) => {

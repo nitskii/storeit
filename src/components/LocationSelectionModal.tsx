@@ -13,7 +13,7 @@ const LocationSelectionModal = () => (
           id="locations-list"
           class="scroll h-full w-full overflow-auto rounded-lg bg-orange-200"
           hx-get="/api/root-locations"
-          hx-trigger="click from:#button-show-location-selection-modal">
+          hx-trigger="loadData">
           <div class="htmx-indicator flex justify-center">
             <img src="/public/loading.svg" />
           </div>
