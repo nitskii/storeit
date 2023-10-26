@@ -9,29 +9,27 @@
   },
   "dependencies": {
     "@elysiajs/cookie": "^0.7.0",
-    "@elysiajs/html": "^0.7.0",
+    "@elysiajs/html": "^0.7.3",
     "@elysiajs/jwt": "^0.7.0",
     "@elysiajs/static": "^0.7.1",
-    "@kitajs/html": "^3.0.0",
-    "@kitajs/ts-html-plugin": "^1.1.1",
-    "@libsql/client": "^0.3.5",
+    "@kitajs/html": "^3.0.4",
+    "@kitajs/ts-html-plugin": "^1.3.0",
+    "@libsql/client": "^0.3.6",
     "@tailwindcss/aspect-ratio": "^0.4.2",
     "@tailwindcss/forms": "^0.5.6",
     "cloudinary": "^1.41.0",
     "drizzle-orm": "^0.28.6",
-    "elysia": "^0.7.15",
-    "sql-formatter": "^13.0.0"
+    "elysia": "^0.7.20",
+    "sql-formatter": "^13.0.2"
   },
   "devDependencies": {
-    "@typescript-eslint/eslint-plugin": "^6.7.3",
-    "@typescript-eslint/parser": "^6.7.3",
-    "better-sqlite3": "^8.7.0",
-    "bun-types": "^1.0.3",
+    "@typescript-eslint/eslint-plugin": "^6.9.0",
+    "@typescript-eslint/parser": "^6.9.0",
+    "better-sqlite3": "^9.0.0",
+    "bun-types": "^1.0.7",
     "drizzle-kit": "^0.19.13",
-    "eslint": "^8.50.0",
-    "prettier": "^3.0.3",
-    "prettier-plugin-tailwindcss": "^0.5.4",
-    "tailwindcss": "^3.3.3",
+    "prettier-plugin-tailwindcss": "^0.5.6",
+    "tailwindcss": "^3.3.5",
     "typescript": "^5.2.2"
   }
 }
