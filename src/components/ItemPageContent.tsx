@@ -111,7 +111,7 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
         </form>
         <button
           class="w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300"
-          onclick="hideLocationModal()">
+          onclick="hideLocationUpdateModal()">
           Закрити
         </button>
       </div>
