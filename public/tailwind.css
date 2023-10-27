@@ -1,5 +1,5 @@
 /*
-! tailwindcss v3.3.3 | MIT License | https://tailwindcss.com
+! tailwindcss v3.3.5 | MIT License | https://tailwindcss.com
 */
 
 /*
@@ -738,12 +738,12 @@ select {
   margin-bottom: 1rem;
 }
 
-.mt-1 {
-  margin-top: 0.25rem;
-}
-
 .mr-2 {
   margin-right: 0.5rem;
+}
+
+.mt-1 {
+  margin-top: 0.25rem;
 }
 
 .block {
@@ -785,10 +785,6 @@ select {
 
 .h-screen {
   height: 100vh;
-}
-
-.h-2 {
-  height: 0.5rem;
 }
 
 .max-h-\[50\%\] {
@@ -1037,11 +1033,6 @@ select {
   line-height: 1;
 }
 
-.text-base {
-  font-size: 1rem;
-  line-height: 1.5rem;
-}
-
 .text-lg {
   font-size: 1.125rem;
   line-height: 1.75rem;
@@ -1175,10 +1166,6 @@ select {
   color: rgb(75 85 99 / var(--tw-text-opacity));
 }
 
-.last\:mr-2:last-child {
-  margin-right: 0.5rem;
-}
-
 .last\:border-none:last-child {
   border-style: none;
 }
@@ -1281,16 +1268,8 @@ select {
     margin-right: auto;
   }
 
-  .sm\:h-5 {
-    height: 1.25rem;
-  }
-
   .sm\:h-6 {
     height: 1.5rem;
-  }
-
-  .sm\:h-4 {
-    height: 1rem;
   }
 
   .sm\:max-w-md {
