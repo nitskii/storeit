@@ -1,8 +1,7 @@
 import staticPlugin from '@elysiajs/static';
-import { v2 as cloudinary } from 'cloudinary';
 import Elysia from 'elysia';
+import "./config/cloudinary";
 import {
-  errorHandler,
   logger,
   redirector
 } from './plugins';
@@ -11,15 +10,9 @@ import {
   itemRoutes,
   locationRoutes,
   pageRoutes,
+  searchRoutes,
   tagRoutes
 } from './routes';
-import searchRoutes from './routes/search-routes';
-
-cloudinary.config({
-  cloud_name: process.env.CLOUDINARY_CLOUD_NAME,
-  api_key: process.env.CLOUDINARY_API_KEY,
-  api_secret: process.env.CLOUDINARY_API_SECRET
-});
 
 new Elysia()
   .use(logger)
@@ -27,6 +20,9 @@ new Elysia()
   .use(staticPlugin())
   .group(
     '/api',
+    {
+      error: ({ error }) => ({ error: error.message })
+    },
     app => app
       .use(authRoutes)
       .use(locationRoutes)
@@ -35,7 +31,6 @@ new Elysia()
       .use(searchRoutes)
   )
   .use(pageRoutes)
-  .use(errorHandler)
   .listen(process.env.PORT ?? 8080, ({ hostname, port }) => {
     console.log(`Server started at http://${hostname}:${port}`);
   });
