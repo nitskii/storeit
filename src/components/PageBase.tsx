@@ -11,10 +11,10 @@ const PageBase = ({ children }: Html.PropsWithChildren) => (
         <meta name="viewport" content="width=device-width, initial-scale=1.0" />
         <link href="/public/favicon.ico" rel="icon" />
         <link href="/public/tailwind.css" rel="stylesheet" />
-        <script defer src="/public/htmx.min.js" />
-        <script defer src="/public/main.js" />
       </head>
       <body class="flex h-screen flex-col">{children}</body>
+      <script src="/public/htmx.min.js" />
+      <script src="/public/main.js" />
     </html>
   </>
 );

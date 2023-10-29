@@ -20,9 +20,6 @@ new Elysia()
   .use(staticPlugin())
   .group(
     '/api',
-    {
-      error: ({ error }) => ({ error: error.message })
-    },
     app => app
       .use(authRoutes)
       .use(locationRoutes)

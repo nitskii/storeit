@@ -13,3 +13,15 @@
 .htmx-request.htmx-indicator {
   display: flex;
 }
+
+.text-input {
+  @apply w-full rounded-lg border-0 bg-orange-200 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300;
+}
+
+.button {
+  @apply w-full rounded-lg bg-orange-200 px-2 py-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300;
+}
+
+.link {
+  @apply block cursor-pointer underline underline-offset-[6px] hover:text-gray-600;
+}

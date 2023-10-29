@@ -308,3 +308,7 @@ const showLocationUpdateModal = () => {
 const hideLocationUpdateModal = () => {
   htmx.replaceClass(locationUpdateModal, 'flex', 'hidden');
 };
+
+const handleLogin = ({ detail }) => {
+  detail.shouldSwap = true;
+}

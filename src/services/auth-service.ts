@@ -1,17 +1,27 @@
 import { randomBytes } from 'crypto';
 import { eq } from 'drizzle-orm';
+import { NotFoundError } from 'elysia';
 import db from '../db';
 import { users } from '../db/schema';
 import { UserCredentials } from '../types';
 
+declare class AlreadyExistsError extends Error {
+  code: "ALREADY_EXISTS";
+  status: 409;
+  constructor(message?: string);
+}
+
 const signup = async (credentials: UserCredentials) => {
-  const existingUser = await db.query.users.findFirst({
-    columns: { id: true },
-    where: eq(users.nickname, credentials.nickname)
-  });
+  const existingUser = await db
+    .query
+    .users
+    .findFirst({
+      columns: { id: true },
+      where: eq(users.nickname, credentials.nickname)
+    });
 
   if (existingUser) {
-    throw new Error('User exists');
+    throw new AlreadyExistsError();
   }
 
   const salt = randomBytes(8).toString('hex');
@@ -45,7 +55,7 @@ const login = async (credentials: UserCredentials) => {
   });
 
   if (!existingUser) {
-    throw new Error('User not found');
+    throw new NotFoundError();
   }
 
   const correctPassword = await Bun.password.verify(

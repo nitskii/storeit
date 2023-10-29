@@ -52,7 +52,9 @@ const authRoutes = new Elysia()
       set.status = 204;
       set.headers['HX-Redirect'] = '/';
     }, {
-      body: 'user'
+      body: 'user',
+      error: ({ error, set, code }) => {
+      }
     }
   )
   .post(
