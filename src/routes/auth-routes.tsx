@@ -7,11 +7,11 @@ import { HttpError } from "../utils";
 const authRoutes = new Elysia()
   .guard(
     {
-      error: ({ error, set, code }) => {
-        if (code == "VALIDATION") {
-          set.headers["Content-Type"] = "text/html;charset=utf-8";
-          set.headers["HX-Reswap"] = "afterend";
+      error: ({ error, set }) => {
+        set.headers["HX-Reswap"] = "afterend";
+        set.headers["Content-Type"] = "text/html;charset=utf-8";
 
+        if (set.status == 400) {
           switch(error.message) {
             case "Нікнейм повинен мати від 3 до 30 символів":
               set.headers["HX-Retarget"] = "#nickname-input";
@@ -20,16 +20,8 @@ const authRoutes = new Elysia()
               set.headers["HX-Retarget"] = "#password-input";
               break;
           }
-
-          return (
-            <div class="pl-2 pt-1 text-red-500">
-              {error.message}
-            </div>
-          );
         } else if (error instanceof HttpError) {
           set.status = error.status;
-          set.headers["Content-Type"] = "text/html;charset=utf-8";
-          set.headers["HX-Reswap"] = "afterend";
 
           switch (error.code) {
             case "INCORRECT_PASSWORD":
@@ -40,15 +32,13 @@ const authRoutes = new Elysia()
               set.headers["HX-Retarget"] = "#nickname-input";
               break;
           }
-
-          return (
-            <div class="pl-2 pt-1 text-red-500">
-              {error.message}
-            </div>
-          );
         }
 
-        set.status = 500;
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            {error.message || "Щось пішло не так"}
+          </div>
+        );
       }
     },
     app => app
