@@ -1,24 +1,25 @@
-import cookie from '@elysiajs/cookie';
 import jwt from '@elysiajs/jwt';
 import { Elysia } from 'elysia';
+import { HttpError } from '../utils';
 
 const authenticator = new Elysia({ name: 'authenticator' })
-  .use(cookie())
   .use(
     jwt({
       secret: process.env.SECRET
     })
   )
   .derive(
-    async ({ cookie, jwt }) => {
-      if (!cookie.auth) {
-        throw new Error('Unauthorized');
+    async ({ cookie: { auth }, jwt }) => {
+      if (!auth) {
+        throw new HttpError("Не авторізовано", "UNAUTHORIZED", 401);
       }
 
-      const payload = await jwt.verify(cookie.auth);
+      const payload = await jwt.verify(auth.value);
+
+      console.log(payload);
 
       if (!payload) {
-        throw new Error('JWT is invalid or expired');
+        throw new HttpError("Термін дії токену закінчився", "JWT_EXPIRED", 401);
       }
 
       return {
@@ -26,5 +27,6 @@ const authenticator = new Elysia({ name: 'authenticator' })
       };
     }
   );
-
+    
 export default authenticator;
+      

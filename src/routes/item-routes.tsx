@@ -5,57 +5,73 @@ import ItemInfo from '../components/ItemInfo';
 import TagListItem from '../components/TagListItem';
 import { authenticator } from '../plugins';
 import itemService from '../services/item-service';
+import { HttpError } from '../utils';
 
 const MAX_IMAGE_SIZE = 5 * 1024 * 1024;
 
-const itemRoutes = (app: Elysia) =>
-  app
-    .use(authenticator)
-    .use(html())
-    .model({
-      item: t.Object({
-        name: t.String(),
-        image: t.File({
-          // currently has a bug which doesn't allow to upload .webp and some other formats
-          // type: 'image',
-          maxSize: MAX_IMAGE_SIZE
-        }),
-        locationId: t.Optional(t.String()),
-        tags: t.Optional(t.Union([ t.Array(t.String()), t.String() ]))
+const itemRoutes = (app: Elysia) => app
+  .guard(
+    {
+      error: ({ error, set, code }) => {
+        set.headers["Content-Type"] = "text/html;charset=utf-8";
+
+        if (error instanceof HttpError) {
+          set.status = error.status;
+        }
+
+        return (
+          <div class="pl-2 pt-1 text-red-500">
+            {error.message || "Щось пішло не так"}
+          </div>
+        );
+      }
+    },
+    app => app
+      .use(authenticator)
+      .use(html())
+      .model({
+        item: t.Object({
+          name: t.String(),
+          image: t.File({
+            // currently has a bug which doesn't allow to upload .webp and some other formats
+            // type: 'image',
+            maxSize: MAX_IMAGE_SIZE
+          }),
+          locationId: t.Optional(t.String()),
+          tags: t.Optional(t.Union([ t.Array(t.String()), t.String() ]))
+        })
       })
-    })
-    .post(
-      '/item',
-      async ({ body: newItem, userId, set }) => {
-        await itemService.create({
-          ...newItem,
-          tags: typeof newItem.tags == 'string'
+      .post(
+        '/item',
+        async ({ body: newItem, userId, set }) => {
+          await itemService.create({
+            ...newItem,
+            tags: typeof newItem.tags == 'string'
             ? [ newItem.tags ]
             : newItem.tags,
-          userId
-        });
+            userId
+          });
 
-        set.status = 204;
-        set.headers['HX-Trigger'] = 'itemsUpdate';
-      },
-      {
-        body: 'item'
-      }
-    )
-    .get(
-      '/items',
-      async ({ userId }) => {
-        const items = await itemService.getAll(userId);
+          set.status = 204;
+          set.headers['HX-Trigger'] = 'itemsUpdate';
+        },
+        {
+          body: 'item'
+        }
+      )
+      .get(
+        '/items',
+        async ({ userId }) => {
+          const items = await itemService.getAll(userId);
 
-        return items
-          .map(item => <ItemCard {...item} />)
-          .join('');
-      }
-    )
-    .group(
-      '/item/:itemId',
-      app =>
-        app
+          return items
+            .map(item => <ItemCard {...item} />)
+            .join('');
+        }
+      )
+      .group(
+        '/item/:itemId',
+        app => app
           .get(
             '/',
             async ({ userId, params: { itemId } }) => {
@@ -64,68 +80,68 @@ const itemRoutes = (app: Elysia) =>
               return <ItemInfo {...item} />;
             }
           )
-          .patch(
-            '/name',
-            async ({ userId, params: { itemId }, body: { name } }) => {
-              await itemService.updateName({ userId, itemId, name });
+        .patch(
+          '/name',
+          async ({ userId, params: { itemId }, body: { name } }) => {
+            await itemService.updateName({ userId, itemId, name });
+            
+            return name;
+          },
+          {
+            body: t.Object({
+              name: t.String()
+            })
+          }
+        )
+        .patch(
+          '/location',
+          async ({ userId, params: { itemId }, body: { locationId } }) => {
+            const locationName = await itemService.updateLocation({ userId, itemId, locationId });
+            
+            return locationName;
+          },
+          {
+            body: t.Object({
+              locationId: t.String()
+            })
+          }
+        )
+        .patch(
+          '/tag',
+          async ({ userId, params: { itemId }, body: { tagName } }) => {
+            await itemService.addTag({ userId, itemId, tagName });
+            
+            return <TagListItem itemId={itemId} tagName={tagName} />;
+          },
+          {
+            body: t.Object({
+              tagName: t.String()
+            })
+          }
+        )
+        .delete(
+          '/tag',
+          async ({ userId, params: { itemId }, body: { tagName }, set }) => {
+            await itemService.deleteTag({ userId, itemId, tagName });
+            
+            set.status = 204;
+          },
+          {
+            body: t.Object({
+              tagName: t.String()
+            })
+          }
+        )
+        .delete(
+          '/',
+          async ({ userId, params: { itemId }, set }) => {
+            await itemService.deleteOne({ userId, itemId });
 
-              return name;
-            },
-            {
-              body: t.Object({
-                name: t.String()
-              })
-            }
-          )
-          .patch(
-            '/location',
-            async ({ userId, params: { itemId }, body: { locationId } }) => {
-              const locationName = await itemService.updateLocation({ userId, itemId, locationId });
-
-              return locationName;
-            },
-            {
-              body: t.Object({
-                locationId: t.String()
-              })
-            }
-          )
-          .patch(
-            '/tag',
-            async ({ userId, params: { itemId }, body: { tagName } }) => {
-              await itemService.addTag({ userId, itemId, tagName });
-
-              return <TagListItem itemId={itemId} tagName={tagName} />;
-            },
-            {
-              body: t.Object({
-                tagName: t.String()
-              })
-            }
-          )
-          .delete(
-            '/tag',
-            async ({ userId, params: { itemId }, body: { tagName }, set }) => {
-              await itemService.deleteTag({ userId, itemId, tagName });
-
-              set.status = 204;
-            },
-            {
-              body: t.Object({
-                tagName: t.String()
-              })
-            }
-          )
-          .delete(
-            '/',
-            async ({ userId, params: { itemId }, set }) => {
-              await itemService.deleteOne({ userId, itemId });
-
-              set.headers['HX-Redirect'] = '/';
-              set.status = 204;
-            }
-          )
-    )
-    ;
+            set.headers['HX-Redirect'] = '/';
+            set.status = 204;
+          }
+        )
+      )
+  );
 
 export default itemRoutes;
