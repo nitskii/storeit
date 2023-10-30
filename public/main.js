@@ -309,17 +309,18 @@ const hideLocationUpdateModal = () => {
   htmx.replaceClass(locationUpdateModal, "flex", "hidden");
 };
 
-const handleLogin = ({ detail }) => {
-  detail.shouldSwap = true;
-  const target = detail.xhr.getResponseHeader("HX-Retarget");
+const handleResponse = ({ detail }) => {
+  const targetSelector = detail.xhr.getResponseHeader("HX-Retarget");
+  
+  if (targetSelector) {
+    const targetElement = htmx.find(targetSelector);
+    detail.shouldSwap = !Boolean(targetElement.nextSibling);
 
-  htmx
-    .find(target)
-    .addEventListener(
-      "input",
-      () => {
-        htmx.remove(htmx.find(".error-message"));
-      },
-      { once: true }
-    );
+    targetElement
+      .addEventListener(
+        "input",
+        () => htmx.remove(targetElement.nextSibling),
+        { once: true }
+      );
+  }
 };

@@ -22,7 +22,7 @@ const authRoutes = new Elysia()
           }
 
           return (
-            <div class="pl-2 pt-1 text-red-500 error-message">
+            <div class="pl-2 pt-1 text-red-500">
               {error.message}
             </div>
           );
@@ -42,7 +42,7 @@ const authRoutes = new Elysia()
           }
 
           return (
-            <div class="pl-2 pt-1 text-red-500 error-message">
+            <div class="pl-2 pt-1 text-red-500">
               {error.message}
             </div>
           );

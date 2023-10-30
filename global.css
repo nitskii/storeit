@@ -23,5 +23,5 @@
 }
 
 .link {
-  @apply block cursor-pointer underline underline-offset-[6px] hover:text-gray-600;
+  @apply inline-block cursor-pointer underline underline-offset-[6px] hover:text-orange-600 focus:outline-none focus:text-orange-600;
 }
