@@ -1,4 +1,5 @@
 import Elysia, { t } from 'elysia';
+import ItemCard from '../components/ItemCard';
 import { authenticator } from '../plugins';
 import searchService from '../services/search-service';
 
@@ -14,7 +15,11 @@ const searchRoutes = new Elysia({ name: 'searchRoutes' })
           <section
             id="items-container"
             class="grid grid-cols-1 gap-y-4 p-4 sm:grid-cols-2 sm:gap-x-4 lg:grid-cols-4">
-            {result}
+            {
+              result
+                .map(item => <ItemCard {...item} />)
+                .join('')
+            }
           </section>
         );
       }

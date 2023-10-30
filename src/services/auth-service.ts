@@ -5,12 +5,6 @@ import db from '../db';
 import { users } from '../db/schema';
 import { UserCredentials } from '../types';
 
-declare class AlreadyExistsError extends Error {
-  code: "ALREADY_EXISTS";
-  status: 409;
-  constructor(message?: string);
-}
-
 const signup = async (credentials: UserCredentials) => {
   const existingUser = await db
     .query
@@ -21,7 +15,7 @@ const signup = async (credentials: UserCredentials) => {
     });
 
   if (existingUser) {
-    throw new AlreadyExistsError();
+    throw new Error("User already exists");
   }
 
   const salt = randomBytes(8).toString('hex');
