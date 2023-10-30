@@ -1,4 +1,3 @@
-import { html } from "@elysiajs/html";
 import jwt from "@elysiajs/jwt";
 import { Elysia, t } from "elysia";
 import userService from "../services/auth-service";
@@ -61,7 +60,6 @@ const authRoutes = new Elysia()
           }),
         }),
       })
-      .use(html())
       .post(
         "/signup",
         async ({ body: credentials, jwt, set }) => {
