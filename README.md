@@ -4,9 +4,20 @@ Storeit is a simple storage system that allows users to add their items (clothes
 
 ## Table of Contents
 
+- [Technologies-used](#technologies-used)
 - [Current features](#current-features)
 - [Accessing the Deployed Project](#accessing-the-deployed-project)
 - [Current issues](#current-issues)
+
+## Technologies used
+
+- Bun (JS runtime)
+- Elysia (web framework)
+- Turso (database)
+- Drizzle (ORM)
+- HTMX (front-end)
+- Tailwind CSS (styling)
+- Cloudinary (image storage)
 
 ## Current features
 
