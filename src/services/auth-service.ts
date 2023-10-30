@@ -1,9 +1,9 @@
 import { randomBytes } from 'crypto';
 import { eq } from 'drizzle-orm';
-import { NotFoundError } from 'elysia';
 import db from '../db';
 import { users } from '../db/schema';
 import { UserCredentials } from '../types';
+import { HttpError } from '../utils';
 
 const signup = async (credentials: UserCredentials) => {
   const existingUser = await db
@@ -15,7 +15,7 @@ const signup = async (credentials: UserCredentials) => {
     });
 
   if (existingUser) {
-    throw new Error("User already exists");
+    throw new HttpError('Користувач вже існує', "USER_ALREADY_EXISTS", 409);
   }
 
   const salt = randomBytes(8).toString('hex');
@@ -49,7 +49,7 @@ const login = async (credentials: UserCredentials) => {
   });
 
   if (!existingUser) {
-    throw new NotFoundError();
+    throw new HttpError('Користувача не знайдено', "USER_NOT_FOUND", 404);
   }
 
   const correctPassword = await Bun.password.verify(
@@ -59,7 +59,7 @@ const login = async (credentials: UserCredentials) => {
   );
 
   if (!correctPassword) {
-    throw new Error('Incorrect password');
+    throw new HttpError('Невірний пароль', "INCORRECT_PASSWORD", 400);
   }
 
   return existingUser.id;

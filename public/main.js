@@ -17,27 +17,27 @@ let locationUpdateModal = null;
 let tagModal = null;
 
 htmx.onLoad(() => {
-  itemModal = htmx.find('#item-modal');
-  tagInput = htmx.find('#tag-input');
-  addedTagsList = htmx.find('#added-tags-list');
-  tagInputBlock = htmx.find('#tag-input-block');
-  locationModal = htmx.find('#location-modal');
-  locationSelectionBlock = htmx.find('#location-selection-block');
-  locationIdInput = htmx.find('#location-id-input');
-  locationSelectionModal = htmx.find('#location-selection-modal');
-  buttonSelectLocation = htmx.find('#button-select-location');
-  currentLocationChainMessage = htmx.find('#current-location-chain-message');
-  selectedLocationMessage = htmx.find('#selected-location-message');
-  locationResultModal = htmx.find('#location-result-modal');
-  menu = htmx.find('#menu');
-  itemResultModal = htmx.find('#item-result-modal');
-  nameModal = htmx.find('#name-modal');
-  locationUpdateModal = htmx.find('#location-update-modal');
-  tagModal = htmx.find('#tag-modal');
+  itemModal = htmx.find("#item-modal");
+  tagInput = htmx.find("#tag-input");
+  addedTagsList = htmx.find("#added-tags-list");
+  tagInputBlock = htmx.find("#tag-input-block");
+  locationModal = htmx.find("#location-modal");
+  locationSelectionBlock = htmx.find("#location-selection-block");
+  locationIdInput = htmx.find("#location-id-input");
+  locationSelectionModal = htmx.find("#location-selection-modal");
+  buttonSelectLocation = htmx.find("#button-select-location");
+  currentLocationChainMessage = htmx.find("#current-location-chain-message");
+  selectedLocationMessage = htmx.find("#selected-location-message");
+  locationResultModal = htmx.find("#location-result-modal");
+  menu = htmx.find("#menu");
+  itemResultModal = htmx.find("#item-result-modal");
+  nameModal = htmx.find("#name-modal");
+  locationUpdateModal = htmx.find("#location-update-modal");
+  tagModal = htmx.find("#tag-modal");
 });
 
 const handleRequestResult = (detail) => {
-  const targetId = detail.xhr.getResponseHeader('HX-Retarget');
+  const targetId = detail.xhr.getResponseHeader("HX-Retarget");
 
   if (!targetId) {
     return;
@@ -49,7 +49,7 @@ const handleRequestResult = (detail) => {
     detail.shouldSwap = true;
 
     inputBlock.firstChild.addEventListener(
-      'input',
+      "input",
       () => htmx.remove(inputBlock.lastChild),
       { once: true }
     );
@@ -62,24 +62,24 @@ htmx.replaceClass = (elt, oldClass, newClass) => {
 };
 
 const showItemModal = () => {
-  htmx.replaceClass(itemModal, 'hidden', 'flex');
-  htmx.removeClass(menu, 'w-full');
-  htmx.removeClass(menu, 'h-screen');
-  htmx.addClass(menu, 'hidden');
+  htmx.replaceClass(itemModal, "hidden", "flex");
+  htmx.removeClass(menu, "w-full");
+  htmx.removeClass(menu, "h-screen");
+  htmx.addClass(menu, "hidden");
 };
 
 const hideItemModal = () => {
-  htmx.replaceClass(itemModal, 'flex', 'hidden');
+  htmx.replaceClass(itemModal, "flex", "hidden");
 };
 
-const tagExistsMessage = document.createElement('div');
-tagExistsMessage.innerText = 'Тег вже додано';
-htmx.addClass(tagExistsMessage, 'pl-2');
-htmx.addClass(tagExistsMessage, 'pt-1');
-htmx.addClass(tagExistsMessage, 'text-red-500');
+const tagExistsMessage = document.createElement("div");
+tagExistsMessage.innerText = "Тег вже додано";
+htmx.addClass(tagExistsMessage, "pl-2");
+htmx.addClass(tagExistsMessage, "pt-1");
+htmx.addClass(tagExistsMessage, "text-red-500");
 
 const addTagToList = () => {
-  if (tagInput.value == '') {
+  if (tagInput.value == "") {
     return;
   }
 
@@ -89,62 +89,62 @@ const addTagToList = () => {
     if (addedTag.innerText == tagInput.value) {
       tagInputBlock.append(tagExistsMessage);
 
-      tagInput.addEventListener('input', () => htmx.remove(tagExistsMessage), {
-        once: true
+      tagInput.addEventListener("input", () => htmx.remove(tagExistsMessage), {
+        once: true,
       });
 
       return;
     }
   }
 
-  const newTag = document.createElement('li');
+  const newTag = document.createElement("li");
 
-  const crossImage = document.createElement('img');
-  crossImage.src = '/public/cross.svg';
-  htmx.addClass(crossImage, 'w-6');
-  htmx.addClass(crossImage, 'h-6');
+  const crossImage = document.createElement("img");
+  crossImage.src = "/public/cross.svg";
+  htmx.addClass(crossImage, "w-6");
+  htmx.addClass(crossImage, "h-6");
 
-  const removeButton = document.createElement('button');
-  removeButton.type = 'button';
-  htmx.addClass(removeButton, 'p-1');
+  const removeButton = document.createElement("button");
+  removeButton.type = "button";
+  htmx.addClass(removeButton, "p-1");
   removeButton.append(crossImage);
   removeButton.addEventListener(
-    'click',
+    "click",
     () => {
       htmx.remove(newTag);
       addedTagsList.childElementCount ||
-        htmx.replaceClass(addedTagsList, 'flex', 'hidden');
+        htmx.replaceClass(addedTagsList, "flex", "hidden");
     },
     {
-      once: true
+      once: true,
     }
   );
 
-  const tagHiddenInput = document.createElement('input');
-  tagHiddenInput.type = 'hidden';
+  const tagHiddenInput = document.createElement("input");
+  tagHiddenInput.type = "hidden";
   tagHiddenInput.value = tagInput.value;
-  tagHiddenInput.name = 'tags';
+  tagHiddenInput.name = "tags";
 
-  htmx.addClass(newTag, 'flex');
-  htmx.addClass(newTag, 'items-center');
-  htmx.addClass(newTag, 'rounded-lg');
-  htmx.addClass(newTag, 'bg-orange-200');
-  htmx.addClass(newTag, 'pl-2');
+  htmx.addClass(newTag, "flex");
+  htmx.addClass(newTag, "items-center");
+  htmx.addClass(newTag, "rounded-lg");
+  htmx.addClass(newTag, "bg-orange-200");
+  htmx.addClass(newTag, "pl-2");
   newTag.append(tagHiddenInput);
   newTag.append(tagInput.value);
   newTag.append(removeButton);
 
   addedTagsList.append(newTag);
-  htmx.replaceClass(addedTagsList, 'hidden', 'flex');
-  tagInput.value = '';
+  htmx.replaceClass(addedTagsList, "hidden", "flex");
+  tagInput.value = "";
 };
 
 const showLocationModal = () => {
-  htmx.replaceClass(locationModal, 'hidden', 'flex');
+  htmx.replaceClass(locationModal, "hidden", "flex");
 };
 
 const hideLocationModal = () => {
-  htmx.replaceClass(locationModal, 'flex', 'hidden');
+  htmx.replaceClass(locationModal, "flex", "hidden");
 };
 
 const toggleLocationSelectionBlock = (checked) => {
@@ -154,25 +154,25 @@ const toggleLocationSelectionBlock = (checked) => {
 };
 
 const showLocationSelectionModal = () => {
-  htmx.trigger('#locations-list', 'loadData');
-  htmx.replaceClass(locationSelectionModal, 'hidden', 'flex');
+  htmx.trigger("#locations-list", "loadData");
+  htmx.replaceClass(locationSelectionModal, "hidden", "flex");
 };
 
 const hideLocationSelectionModal = () => {
-  htmx.replaceClass(locationSelectionModal, 'flex', 'hidden');
+  htmx.replaceClass(locationSelectionModal, "flex", "hidden");
 };
 
 const updateButtonSelectLocationState = ({ id, name }) => {
   buttonSelectLocation.innerText = `Обрати локацію ${name}`;
   buttonSelectLocation.hidden = false;
-  buttonSelectLocation.dataset['id'] = id;
-  buttonSelectLocation.dataset['name'] = name;
+  buttonSelectLocation.dataset["id"] = id;
+  buttonSelectLocation.dataset["name"] = name;
 };
 
-const INITIAL_PATH = '/api/root-locations';
+const INITIAL_PATH = "/api/root-locations";
 let currentPath = INITIAL_PATH;
 const pathHistory = [];
-let currentLocationChain = '';
+let currentLocationChain = "";
 
 const handleLoadButtonClick = ({ path, name }) => {
   pathHistory.push(currentPath);
@@ -190,15 +190,15 @@ const handleLoadButtonClick = ({ path, name }) => {
 
 const handleBackButtonClick = async () => {
   if (pathHistory.length) {
-    await htmx.ajax('GET', pathHistory.pop(), '#locations-list');
+    await htmx.ajax("GET", pathHistory.pop(), "#locations-list");
 
     if (pathHistory.length) {
-      const lastLocationIndex = currentLocationChain.lastIndexOf('>');
+      const lastLocationIndex = currentLocationChain.lastIndexOf(">");
       currentLocationChain = currentLocationChain.slice(0, lastLocationIndex);
       currentLocationChainMessage.innerText = currentLocationChain;
     } else {
       currentPath = INITIAL_PATH;
-      currentLocationChain = '';
+      currentLocationChain = "";
       currentLocationChainMessage.innerText = currentLocationChain;
     }
 
@@ -217,7 +217,7 @@ const handleSelectLocationButtonClick = () => {
     selectedLocationMessage.innerText = finalLocation;
   }
 
-  currentLocationChain = '';
+  currentLocationChain = "";
   currentLocationChainMessage.innerText = currentLocationChain;
   selectedLocationMessage.hidden = false;
   locationIdInput.value = buttonSelectLocation.dataset.id;
@@ -227,11 +227,11 @@ const handleSelectLocationButtonClick = () => {
 };
 
 const showLocationResultModal = () => {
-  htmx.replaceClass(locationResultModal, 'hidden', 'flex');
+  htmx.replaceClass(locationResultModal, "hidden", "flex");
 };
 
 const hideLocationResultModal = () => {
-  htmx.replaceClass(locationResultModal, 'flex', 'hidden');
+  htmx.replaceClass(locationResultModal, "flex", "hidden");
 };
 
 const handlePostLocationResult = (detail) => {
@@ -240,28 +240,28 @@ const handlePostLocationResult = (detail) => {
   hideLocationModal();
   showLocationResultModal();
   detail.target.form.reset();
-  currentLocationChain = '';
+  currentLocationChain = "";
   currentLocationChainMessage.innerText = currentLocationChain;
-  locationIdInput.value = '';
+  locationIdInput.value = "";
   locationIdInput.disabled = true;
-  selectedLocationMessage.innerText = '';
+  selectedLocationMessage.innerText = "";
   currentPath = INITIAL_PATH;
   buttonSelectLocation.hidden = true;
   locationSelectionBlock.hidden = true;
 };
 
 const toggleMenu = () => {
-  menu.classList.toggle('hidden');
-  menu.classList.toggle('w-full');
-  menu.classList.toggle('h-screen');
+  menu.classList.toggle("hidden");
+  menu.classList.toggle("w-full");
+  menu.classList.toggle("h-screen");
 };
 
 const showItemResultModal = () => {
-  htmx.replaceClass(itemResultModal, 'hidden', 'flex');
+  htmx.replaceClass(itemResultModal, "hidden", "flex");
 };
 
 const hideItemResultModal = () => {
-  htmx.replaceClass(itemResultModal, 'flex', 'hidden');
+  htmx.replaceClass(itemResultModal, "flex", "hidden");
 };
 
 const handlePostItemResult = (detail) => {
@@ -270,45 +270,56 @@ const handlePostItemResult = (detail) => {
   hideItemModal();
   showItemResultModal();
   detail.target.form.reset();
-  currentLocationChain = '';
+  currentLocationChain = "";
   currentLocationChainMessage.innerText = currentLocationChain;
-  locationIdInput.value = '';
-  selectedLocationMessage.innerText = '';
+  locationIdInput.value = "";
+  selectedLocationMessage.innerText = "";
   currentPath = INITIAL_PATH;
   buttonSelectLocation.hidden = true;
 };
 
 const showTagModal = () => {
-  htmx.replaceClass(tagModal, 'hidden', 'flex');
+  htmx.replaceClass(tagModal, "hidden", "flex");
   tagModal.firstChild.firstChild.firstChild.focus();
 };
 
 const hideTagModal = () => {
-  htmx.replaceClass(tagModal, 'flex', 'hidden');
+  htmx.replaceClass(tagModal, "flex", "hidden");
 };
 
 const showNameModal = () => {
   const nameInput = nameModal.firstChild.firstChild.firstChild;
-  nameInput.value = htmx.find('#item-name').innerText;
-  htmx.replaceClass(nameModal, 'hidden', 'flex');
+  nameInput.value = htmx.find("#item-name").innerText;
+  htmx.replaceClass(nameModal, "hidden", "flex");
   nameInput.focus();
 };
 
 const hideNameModal = () => {
-  htmx.replaceClass(nameModal, 'flex', 'hidden');
+  htmx.replaceClass(nameModal, "flex", "hidden");
 };
 
 const showLocationUpdateModal = () => {
   selectedLocationMessage.innerText = `Обрано локацію ${
-    htmx.find('#item-location').innerText
+    htmx.find("#item-location").innerText
   }`;
-  htmx.replaceClass(locationUpdateModal, 'hidden', 'flex');
+  htmx.replaceClass(locationUpdateModal, "hidden", "flex");
 };
 
 const hideLocationUpdateModal = () => {
-  htmx.replaceClass(locationUpdateModal, 'flex', 'hidden');
+  htmx.replaceClass(locationUpdateModal, "flex", "hidden");
 };
 
 const handleLogin = ({ detail }) => {
   detail.shouldSwap = true;
-}
+  const target = detail.xhr.getResponseHeader("HX-Retarget");
+
+  htmx
+    .find(target)
+    .addEventListener(
+      "input",
+      () => {
+        htmx.remove(htmx.find(".error-message"));
+      },
+      { once: true }
+    );
+};

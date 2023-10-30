@@ -66,7 +66,8 @@ const LoginPageContent = () => (
           <button
             class="button"
             hx-post="/api/login"
-            {...{'hx-on::before-swap': 'handleLogin(event)'}}>
+            {...{'hx-on::before-swap': 'handleLogin(event)'}}
+            hx-swap="none">
             Увійти
           </button>
         </form>
