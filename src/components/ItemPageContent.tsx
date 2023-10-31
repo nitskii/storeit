@@ -4,6 +4,7 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
   <>
     <head>
       <title>Предмет</title>
+      <script defer src='/public/item.js' />
     </head>
     <header class="flex-none bg-orange-100">
       <nav class="flex justify-end p-2">
@@ -53,7 +54,7 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
       }}
     />
     <div
-      id="name-modal"
+      id="name-update-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div
         class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">
@@ -118,7 +119,7 @@ const ItemPageContent = ({ itemId }: { itemId: string }) => (
     </div>
     <LocationSelectionModal />
     <div
-      id="tag-modal"
+      id="tag-update-modal"
       class="fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4">
       <div
         class="flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md">

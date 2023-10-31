@@ -1,8 +1,8 @@
 import { html } from '@elysiajs/html';
 import Elysia from 'elysia';
 import {
-  IndexPage,
-  IndexPageContent,
+  HomePage,
+  HomePageContent,
   LoginPage,
   LoginPageContent,
   NotFoundPage,
@@ -23,7 +23,7 @@ const pageRoutes = new Elysia({ name: 'pageRoutes' })
     headers['hx-request'] ? <LoginPageContent /> : <LoginPage />
   )
   .get('/', ({ headers }) =>
-    headers['hx-request'] ? <IndexPageContent /> : <IndexPage />
+    headers['hx-request'] ? <HomePageContent /> : <HomePage />
   )
   .get('/locations', ({ headers }) =>
     headers['hx-request'] ? <LocationsPageContent /> : <LocationsPage />

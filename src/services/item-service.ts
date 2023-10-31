@@ -12,6 +12,7 @@ import {
   ItemTagUpdate,
   NewItem
 } from '../types';
+import { HttpError } from '../utils';
 import locationService from './location-service';
 import tagService from './tag-service';
 
@@ -28,7 +29,7 @@ const create = async (newItem: NewItem) => {
       await locationService.existsById({ userId, locationId });
 
     if (!locationExists) {
-      throw new Error('Location not found');
+      throw new HttpError('Локацію не знайдено', 'LOCATION_NOT_FOUND', 404);
     }
   }
 
@@ -60,7 +61,8 @@ const create = async (newItem: NewItem) => {
     .insert(items)
     .values({
       ...newItem,
-      image: imageUrl
+      image: imageUrl,
+      locationId: locationId || null
     })
     .returning({ newItemId: items.id });
 
@@ -131,7 +133,7 @@ const getOne = async (userId: string, itemId: string) => {
   const item = await itemQuery.execute({ userId, itemId });
 
   if (!item) {
-    throw new Error('Item not found');
+    throw new HttpError('Предмет не знайдено', 'ITEM_NOT_FOUND', 404);
   }
 
   return {
@@ -154,7 +156,7 @@ const updateName = async (updateData: ItemNameUpdate) => {
     .returning({ id: items.id });
 
   if (!updatedItem) {
-    throw new Error('Item not found');
+    throw new HttpError('Предмет не знайдено', 'ITEM_NOT_FOUND', 404);
   }
 };
 
@@ -173,7 +175,7 @@ const updateLocation = async (updateData: ItemLocationUpdate) => {
     });
 
   if (!existingLocation) {
-    throw new Error('Location not found');
+    throw new HttpError('Локацію не знайдено', "LOCATION_NOT_FOUND", 404);
   }
 
   const [ updatedItem ] = await db
@@ -186,7 +188,7 @@ const updateLocation = async (updateData: ItemLocationUpdate) => {
     .returning({ id: items.id });
 
   if (!updatedItem) {
-    throw new Error('Item not found');
+    throw new HttpError('Предмет не знайдено', 'ITEM_NOT_FOUND', 404);
   }
 
   return existingLocation.name;
@@ -213,7 +215,7 @@ const addTag = async (updateData: ItemTagUpdate) => {
   ]);
 
   if (!itemToUpdate) {
-    throw new Error('Item not found');
+    throw new HttpError('Предмет не знайдено', 'ITEM_NOT_FOUND', 404);
   }
 
   if (existingTag) {
@@ -262,11 +264,11 @@ const deleteTag = async (updateData: ItemTagUpdate) => {
   ]);
 
   if (!itemToUpdate) {
-    throw new Error('Item not found');
+    throw new HttpError('Предмет не знайдено', 'ITEM_NOT_FOUND', 404);
   }
 
   if (!existingTag) {
-    throw new Error('Tag not found');
+    throw new HttpError('Тег не знайдено', 'TAG_NOT_FOUND', 404);
   }
 
   const [ deletedRecord ] = await db
@@ -280,7 +282,7 @@ const deleteTag = async (updateData: ItemTagUpdate) => {
     .returning();
 
   if (!deletedRecord) {
-    throw new Error('Tag to item record not found');
+    throw new HttpError('Тег не знайдено', 'TAG_NOT_FOUND', 404);
   }
 };
 
@@ -302,7 +304,7 @@ const deleteOne = async (deleteData: ItemBase) => {
     .returning({ id: items.id });
 
   if (!deletedItem) {
-    throw new Error('Item not found');
+    throw new HttpError('Предмет не знайдено', 'ITEM_NOT_FOUND', 404);
   }
 };
 

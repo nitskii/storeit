@@ -1,6 +1,8 @@
 const SignupPageContent = () => (
   <>
-    <title>Вхід</title>
+    <head>
+      <title>Вхід</title>
+    </head>
     <main class="h-full flex items-center px-4 sm:p-0 w-full sm:max-w-md sm:mx-auto">
       <div class="rounded-lg bg-orange-100 p-4 flex flex-col items-center w-full space-y-4">
         <form class="space-y-4 w-full">

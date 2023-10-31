@@ -7,15 +7,19 @@ const PageBase = ({ children }: Html.PropsWithChildren) => (
     {'<!DOCTYPE html>'}
     <html class="h-full bg-orange-50">
       <head>
-        <meta charset="UTF-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-        <link href="/public/favicon.ico" rel="icon" />
-        <link href="/public/tailwind.css" rel="stylesheet" />
+        <meta hx-preserve="true" charset="UTF-8" />
+        <meta hx-preserve="true" name="viewport" content="width=device-width, initial-scale=1.0" />
+        <link hx-preserve="true" href="/public/favicon.ico" rel="icon" />
+        <link hx-preserve="true" href="/public/tailwind.css" rel="stylesheet" />
+        <script defer hx-preserve="true" src="/public/htmx.min.js" />
+        <script defer hx-preserve="true" src="/public/base.js" />
+        <script defer hx-preserve="true" src="https://unpkg.com/htmx.org/dist/ext/head-support.js" />
       </head>
-      <body class="flex h-screen flex-col">{children}</body>
-      <script src="/public/htmx.min.js" />
-      <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js" />
-      {/* <script src="/public/main.js" /> */}
+      <body
+        class="flex h-screen flex-col"
+        hx-ext='head-support'>
+        {children}
+      </body>
     </html>
   </>
 );

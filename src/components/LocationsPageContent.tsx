@@ -4,6 +4,7 @@ const LocationsPageContent = () => (
   <>
     <head>
       <title>Локації</title>
+      <script defer src='/public/locations.js' />
     </head>
     <header class="bg-orange-100">
       <nav class="flex justify-end space-x-2 p-2">
