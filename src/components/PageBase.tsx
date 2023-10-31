@@ -14,7 +14,8 @@ const PageBase = ({ children }: Html.PropsWithChildren) => (
       </head>
       <body class="flex h-screen flex-col">{children}</body>
       <script src="/public/htmx.min.js" />
-      <script src="/public/main.js" />
+      <script src="https://unpkg.com/htmx.org/dist/ext/head-support.js" />
+      {/* <script src="/public/main.js" /> */}
     </html>
   </>
 );

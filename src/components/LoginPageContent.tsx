@@ -9,7 +9,8 @@ const LoginPageContent = () => (
               id="nickname-input"
               name="nickname"
               class="text-input"
-              placeholder="Нікнейм" />
+              placeholder="Нікнейм"
+            />
           </div>
           <div id="password-input-block">
             <input
@@ -17,20 +18,18 @@ const LoginPageContent = () => (
               id="password-input"
               name="password"
               class="text-input"
-              placeholder="Пароль" />
+              placeholder="Пароль"
+            />
           </div>
           <button
             class="button"
             hx-post="/api/login"
-            {...{'hx-on::before-swap': 'handleResponse(event)'}}
-            hx-swap="none">
+            hx-swap="none"
+            {...{ 'hx-on::before-swap': 'handleResponse(event)' }}>
             Увійти
           </button>
         </form>
-        <a
-          href="/signup"
-          hx-boost="true"
-          class="link">
+        <a href="/signup" hx-boost="true" class="link">
           Я не маю акаунту
         </a>
       </div>

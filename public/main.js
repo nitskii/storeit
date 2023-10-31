@@ -89,9 +89,11 @@ const addTagToList = () => {
     if (addedTag.innerText == tagInput.value) {
       tagInputBlock.append(tagExistsMessage);
 
-      tagInput.addEventListener("input", () => htmx.remove(tagExistsMessage), {
-        once: true,
-      });
+      tagInput.addEventListener(
+        "input",
+        () => htmx.remove(tagExistsMessage),
+        { once: true }
+      );
 
       return;
     }
