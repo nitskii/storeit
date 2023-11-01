@@ -10,10 +10,28 @@ const hideLocationModal = () => {
 
 const locationSelectionBlock = htmx.find('#location-selection-block');
 
-const toggleLocationSelectionBlock = (checked) => {
+const toggleLocationSelectionBlock = ({ checked }) => {
   locationSelectionBlock.hidden = !checked;
 
-  locationIdInput.disabled = !(checked && locationIdInput.value);
+  locationIdInput.disabled = !(
+    checked && locationIdInput.value
+  );
+};
+
+const handlePostLocationResult = (event) => {
+  handleResponse(event);
+
+  hideLocationModal();
+  showLocationResultModal();
+  event.detail.target.form.reset();
+  currentLocationChain = '';
+  currentLocationChainMessage.innerText = '';
+  locationIdInput.value = '';
+  locationIdInput.disabled = true;
+  selectedLocationMessage.innerText = '';
+  currentPath = INITIAL_PATH;
+  locationSelectionBlock.hidden = true;
+  buttonSelectLocation.hidden = true;
 };
 
 const locationResultModal = htmx.find('#location-result-modal');
@@ -24,20 +42,4 @@ const showLocationResultModal = () => {
 
 const hideLocationResultModal = () => {
   htmx.replaceClass(locationResultModal, 'flex', 'hidden');
-};
-
-const handlePostLocationResult = (detail) => {
-  handleRequestResult(detail);
-
-  hideLocationModal();
-  showLocationResultModal();
-  detail.target.form.reset();
-  currentLocationChain = '';
-  currentLocationChainMessage.innerText = currentLocationChain;
-  locationIdInput.value = '';
-  locationIdInput.disabled = true;
-  selectedLocationMessage.innerText = '';
-  currentPath = INITIAL_PATH;
-  locationSelectionBlock.hidden = true;
-  buttonSelectLocation.hidden = true;
 };
