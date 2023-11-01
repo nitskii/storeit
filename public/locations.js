@@ -1,45 +1,47 @@
-const locationModal = htmx.find('#location-modal');
+htmx.onLoad(() => {
+  globalThis.locationModal = htmx.find('#location-modal');
 
-const showLocationModal = () => {
-  htmx.replaceClass(locationModal, 'hidden', 'flex');
-};
+  globalThis.showLocationModal = () => {
+    htmx.replaceClass(locationModal, 'hidden', 'flex');
+  };
 
-const hideLocationModal = () => {
-  htmx.replaceClass(locationModal, 'flex', 'hidden');
-};
+  globalThis.hideLocationModal = () => {
+    htmx.replaceClass(locationModal, 'flex', 'hidden');
+  };
 
-const locationSelectionBlock = htmx.find('#location-selection-block');
+  globalThis.locationSelectionBlock = htmx.find('#location-selection-block');
 
-const toggleLocationSelectionBlock = ({ checked }) => {
-  locationSelectionBlock.hidden = !checked;
+  globalThis.toggleLocationSelectionBlock = ({ checked }) => {
+    locationSelectionBlock.hidden = !checked;
 
-  locationIdInput.disabled = !(
-    checked && locationIdInput.value
-  );
-};
+    locationIdInput.disabled = !(
+      checked && locationIdInput.value
+    );
+  };
 
-const handlePostLocationResult = (event) => {
-  handleResponse(event);
+  globalThis.handlePostLocationResult = (event) => {
+    handleResponse(event);
 
-  hideLocationModal();
-  showLocationResultModal();
-  event.detail.target.form.reset();
-  currentLocationChain = '';
-  currentLocationChainMessage.innerText = '';
-  locationIdInput.value = '';
-  locationIdInput.disabled = true;
-  selectedLocationMessage.innerText = '';
-  currentPath = INITIAL_PATH;
-  locationSelectionBlock.hidden = true;
-  buttonSelectLocation.hidden = true;
-};
+    hideLocationModal();
+    showLocationResultModal();
+    event.detail.target.form.reset();
+    currentLocationChain = '';
+    currentLocationChainMessage.innerText = '';
+    locationIdInput.value = '';
+    locationIdInput.disabled = true;
+    selectedLocationMessage.innerText = '';
+    currentPath = INITIAL_PATH;
+    locationSelectionBlock.hidden = true;
+    buttonSelectLocation.hidden = true;
+  };
 
-const locationResultModal = htmx.find('#location-result-modal');
+  globalThis.locationResultModal = htmx.find('#location-result-modal');
 
-const showLocationResultModal = () => {
-  htmx.replaceClass(locationResultModal, 'hidden', 'flex');
-};
+  globalThis.showLocationResultModal = () => {
+    htmx.replaceClass(locationResultModal, 'hidden', 'flex');
+  };
 
-const hideLocationResultModal = () => {
-  htmx.replaceClass(locationResultModal, 'flex', 'hidden');
-};
+  globalThis.hideLocationResultModal = () => {
+    htmx.replaceClass(locationResultModal, 'flex', 'hidden');
+  };
+});
