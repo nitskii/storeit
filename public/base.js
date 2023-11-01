@@ -13,12 +13,11 @@ htmx.replaceClass = (elt, oldClass, newClass) => {
 
 const handleResponse = ({ detail }) => {
   const targetSelector = detail.xhr.getResponseHeader("HX-Retarget");
-  
+
   if (targetSelector) {
     const targetElement = htmx.find(targetSelector);
-    detail.shouldSwap = !Boolean(targetElement.nextSibling);
-
-    targetElement
+    detail.shouldSwap = targetElement.nextSibling == null;
+    targetElement 
       .addEventListener(
         "input",
         () => htmx.remove(targetElement.nextSibling),

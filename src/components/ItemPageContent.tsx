@@ -48,41 +48,46 @@ const ItemPageContent = ({ itemId }: ItemPageProps) => (
     />
     <div
       id='name-update-modal'
-      class='fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4'>
-      <div class='flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md'>
+      class='hidden modal-background'>
+      <div class='modal-content'>
         <form class='flex w-full flex-col items-center space-y-4'>
-          <input
-            name='name'
-            class='w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300'
-            placeholder='Назва предмету'
-          />
+          <div class='w-full'>
+            <input
+              id='name-input'
+              name='name'
+              class='text-input'
+              placeholder='Назва предмету'
+            />
+          </div>
           <button
-            class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
+            class='button'
             hx-patch={`/api/item/${itemId}/name`}
-            hx-target='#item-name'
-            hx-swap='innerHTML'
-            {...{
-              'hx-on::after-request': 'hideNameModal()'
-            }}>
+            hx-target='#item-name'>
             Змінити
           </button>
         </form>
         <button
-          class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
-          onclick='hideNameModal()'>
+          class='button'
+          onclick='hideNameUpdateModal()'>
           Закрити
         </button>
       </div>
     </div>
     <div
       id='location-update-modal'
-      class='fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4'>
-      <div class='flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md'>
+      class='hidden modal-background'>
+      <div class='modal-content'>
         <form class='flex w-full flex-col items-center space-y-4'>
           <div
             id='selected-location-message'
             class='px-2 pb-1 text-sm text-gray-600'
           />
+          <button
+            type='button'
+            class='button'
+            onclick='showLocationSelectionModal()'>
+            Оберіть локацію
+          </button>
           <input
             type='hidden'
             id='location-id-input'
@@ -90,25 +95,14 @@ const ItemPageContent = ({ itemId }: ItemPageProps) => (
             disabled
           />
           <button
-            type='button'
-            class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
-            onclick='showLocationSelectionModal()'>
-            Оберіть локацію
-          </button>
-          <button
-            class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
+            class='button'
             hx-patch={`/api/item/${itemId}/location`}
-            hx-target='#item-location'
-            hx-swap='innerHTML'
-            {...{
-              'hx-on::after-request':
-                'hideLocationUpdateModal()'
-            }}>
+            hx-target='#item-location'>
             Змінити
           </button>
         </form>
         <button
-          class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
+          class='button'
           onclick='hideLocationUpdateModal()'>
           Закрити
         </button>
@@ -117,35 +111,35 @@ const ItemPageContent = ({ itemId }: ItemPageProps) => (
     <LocationSelectionModal />
     <div
       id='tag-update-modal'
-      class='fixed left-0 top-0 hidden h-screen w-full items-center justify-center bg-black bg-opacity-50 px-4'>
-      <div class='flex w-full flex-col items-center justify-center space-y-4 rounded-lg bg-orange-100 p-4 shadow sm:max-w-md'>
+      class='hidden modal-background'>
+      <div class='modal-content'>
         <form class='flex w-full flex-col items-center space-y-4'>
-          <input
-            name='tagName'
-            class='w-full rounded-lg border-0 bg-orange-200 placeholder:text-gray-600 focus-visible:outline focus-visible:outline-2 focus-visible:outline-offset-0 focus-visible:outline-orange-300'
-            placeholder='Назва тегу'
-            list='tags-datalist'
-          />
+          <div class='w-full'>
+            <input
+              id='tag-input'
+              name='tagName'
+              list='tags-datalist'
+              class='text-input'
+              placeholder='Назва тегу'
+            />
+          </div>
           <datalist
             id='tags-datalist'
             hx-get='/api/tags'
-            hx-trigger='tagModalOpened'
+            hx-trigger='dataLoad'
           />
           <button
-            class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
+            class='button'
             hx-patch={`/api/item/${itemId}/tag`}
             hx-target='#tags-list'
             hx-swap='beforeend'
-            {...{
-              'hx-on::after-request':
-                'this.form.reset();hideTagModal()'
-            }}>
+            {...{ 'hx-on::before-request': 'resetForm(event.target.form)' }}>
             Додати
           </button>
         </form>
         <button
-          class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
-          onclick='hideTagModal()'>
+          class='button'
+          onclick='hideTagUpdateModal()'>
           Закрити
         </button>
       </div>
