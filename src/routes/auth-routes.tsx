@@ -31,6 +31,8 @@ const authRoutes = new Elysia()
               set.headers["HX-Retarget"] = "#nickname-input";
               break;
           }
+        } else {
+          set.headers['HX-Reswap'] = 'none';
         }
 
         return (
