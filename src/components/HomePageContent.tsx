@@ -28,13 +28,6 @@ const HomePageContent = () => (
         />
       </div>
       <NavMenu>
-        <li class='fixed right-6 top-4 md:hidden'>
-          <button
-            class='text-right text-4xl'
-            onclick='toggleMenu()'>
-            &times;
-          </button>
-        </li>
         <li>
           <a
             class='link-button'
