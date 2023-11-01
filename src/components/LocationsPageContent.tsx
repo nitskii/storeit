@@ -38,7 +38,7 @@ const LocationsPageContent = () => (
     <main
       class='flex h-full items-center justify-center'
       hx-get='/api/locations'
-      hx-trigger='load, dataUpdate'
+      hx-trigger='load, dataUpdate from:body'
     />
     <div
       id='location-modal'
