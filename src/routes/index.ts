@@ -13,4 +13,3 @@ export {
   searchRoutes,
   tagRoutes
 };
-

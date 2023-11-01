@@ -14,6 +14,7 @@ import {
   LocationWithChildren,
   NewLocation
 } from '../types';
+import { HttpError } from '../utils';
 
 const create = async (newLocation: NewLocation) => {
   const existingLocation = await db
@@ -44,7 +45,11 @@ const create = async (newLocation: NewLocation) => {
       });
 
     if (!existingParent) {
-      throw new Error('Parent location not found');
+      throw new HttpError(
+        'Локацію не знайдено',
+        'LOCATION_NOT_FOUND',
+        404
+      );
     }
 
     const [{ newLocationId }] = await db
@@ -61,11 +66,18 @@ const create = async (newLocation: NewLocation) => {
         });
     }
   } else if (existingLocation && !newLocation.parentId) {
-    throw new Error('Location exists');
+    throw new HttpError(
+      'Локація вже існує',
+      'LOCATION_ALREADY_EXISTS',
+      40
+    );
   } else if (existingLocation && newLocation.parentId) {
     if (existingLocation.id == newLocation.parentId) {
-      // eslint-disable-next-line quotes
-      throw new Error("Parent location can't be a child of itself");
+      throw new HttpError(
+        'Локація не може належити сама до себе',
+        'LOCATION_SELF_REFERENCE',
+        400
+      );
     }
 
     const recordExists = await db
@@ -79,7 +91,11 @@ const create = async (newLocation: NewLocation) => {
       });
 
     if (recordExists) {
-      throw new Error('Parent location already has such child');
+      throw new HttpError(
+        'Локація вже існує',
+        'LOCATION_ALREADY_EXISTS',
+        409
+      );
     }
 
     await db

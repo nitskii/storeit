@@ -4,6 +4,7 @@ import ItemCard from './ItemCard';
 import ItemInfo from './ItemInfo';
 import ItemPage from './ItemPage';
 import ItemPageContent from './ItemPageContent';
+import LocationListItem from './LocationListItem';
 import LocationSelectionModal from './LocationSelectionModal';
 import LocationsPage from './LocationsPage';
 import LocationsPageContent from './LocationsPageContent';
@@ -22,6 +23,7 @@ export {
   ItemInfo,
   ItemPage,
   ItemPageContent,
+  LocationListItem,
   LocationSelectionModal,
   LocationsPage,
   LocationsPageContent,
