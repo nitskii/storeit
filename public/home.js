@@ -85,17 +85,21 @@ htmx.onLoad(() => {
   globalThis.handlePostItemResult = (event) => {
     handleResponse(event);
 
-    hideItemModal();
-    showItemResultModal();
-    event.detail.target.form.reset();
-    addedTagsList.innerHTML = '';
-    currentLocationChain = '';
-    currentLocationChainMessage.innerText =
+    const { status } = event.detail.xhr;
+
+    if (status < 400 || status >= 500) {
+      hideItemModal();
+      showItemResultModal();
+      event.detail.target.form.reset();
+      addedTagsList.innerHTML = '';
+      currentLocationChain = '';
+      currentLocationChainMessage.innerText =
       currentLocationChain;
-    locationIdInput.value = '';
-    selectedLocationMessage.innerText = '';
-    currentPath = INITIAL_PATH;
-    buttonSelectLocation.hidden = true;
+      locationIdInput.value = '';
+      selectedLocationMessage.innerText = '';
+      currentPath = INITIAL_PATH;
+      buttonSelectLocation.hidden = true;
+    }
   };
 
   globalThis.itemResultModal = htmx.find('#item-result-modal');

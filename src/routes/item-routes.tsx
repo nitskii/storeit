@@ -26,7 +26,7 @@ const itemRoutes = (app: Elysia) => app
               set.headers['HX-Retarget'] = '#name-input';
               break;
             case 'Зображення має бути не більше 5 МБ':
-              set.headers['HX-Retarget'] = '#file-input';
+              set.headers['HX-Retarget'] = '#image-input';
               break;
           }
         } else if (error instanceof HttpError) {
