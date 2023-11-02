@@ -132,7 +132,6 @@ const ItemPageContent = ({ itemId }: ItemPageProps) => (
             class='button'
             hx-patch={`/api/item/${itemId}/tag`}
             hx-target='#tags-list'
-            hx-swap='beforeend'
             {...{ 'hx-on::before-request': 'resetForm(event.target.form)' }}>
             Додати
           </button>

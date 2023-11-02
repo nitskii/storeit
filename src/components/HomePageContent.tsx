@@ -85,9 +85,7 @@ const HomePageContent = () => (
               class='file-input'
             />
           </div>
-          <div
-            id='location-selection-block'
-            class='w-full'>
+          <div class='w-full'>
             <div
               id='selected-location-message'
               class='px-2 pb-1 text-sm text-gray-600'
@@ -106,9 +104,7 @@ const HomePageContent = () => (
               disabled
             />
           </div>
-          <div
-            id='tag-input-block'
-            class='flex w-full flex-col justify-between'>
+          <div class='flex w-full flex-col justify-between'>
             <ul
               id='added-tags-list'
               class='mb-4 hidden flex-wrap gap-2'
@@ -140,7 +136,6 @@ const HomePageContent = () => (
             class='button'
             hx-post='/api/item'
             hx-encoding='multipart/form-data'
-            hx-swap='none'
             {...{ 'hx-on::before-swap': 'handlePostItemResult(event)' }}>
             Додати
           </button>
