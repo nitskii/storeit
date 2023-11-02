@@ -74,7 +74,9 @@ htmx.onLoad(() => {
   globalThis.handleTagUpdateResult = (event) => {
     handleResponse(event);
 
-    if (event.detail.xhr.status >= 500) {
+    const { status } = event.detail.xhr;
+
+    if (status < 400 || status >= 500) {
       hideTagUpdateModal();
     }
   };
