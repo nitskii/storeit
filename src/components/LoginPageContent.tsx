@@ -26,7 +26,6 @@ const LoginPageContent = () => (
           <button
             class='button'
             hx-post='/api/login'
-            hx-swap='none'
             {...{ 'hx-on::before-swap': 'handleResponse(event)' }}>
             Увійти
           </button>

@@ -53,6 +53,8 @@ const authRoutes = new Elysia()
           )
         }
 
+        set.headers['HX-Reswap'] = 'none';
+
         return error.message;
       }
     },

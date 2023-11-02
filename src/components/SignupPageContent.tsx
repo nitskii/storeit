@@ -26,7 +26,6 @@ const SignupPageContent = () => (
           <button
             class='button'
             hx-post='/api/signup'
-            hx-swap='none'
             {...{ 'hx-on::before-swap': 'handleResponse(event)' }}>
             Зареєструватись
           </button>
