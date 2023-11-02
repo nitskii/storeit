@@ -18,12 +18,14 @@ htmx.onLoad(() => {
     if (targetSelector) {
       const targetElement = htmx.find(targetSelector);
       detail.shouldSwap = targetElement.nextSibling == null;
-      targetElement 
-        .addEventListener(
+
+      if (detail.shouldSwap) {
+        targetElement.addEventListener(
           "input",
           () => htmx.remove(targetElement.nextSibling),
           { once: true }
         );
+      }
     }
   };
 });
