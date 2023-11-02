@@ -22,17 +22,21 @@ htmx.onLoad(() => {
   globalThis.handlePostLocationResult = (event) => {
     handleResponse(event);
 
-    hideLocationModal();
-    showLocationResultModal();
-    event.detail.target.form.reset();
-    currentLocationChain = '';
-    currentLocationChainMessage.innerText = '';
-    locationIdInput.value = '';
-    locationIdInput.disabled = true;
-    selectedLocationMessage.innerText = '';
-    currentPath = INITIAL_PATH;
-    locationSelectionBlock.hidden = true;
-    buttonSelectLocation.hidden = true;
+    const { status } = event.detail.xhr;
+
+    if (status < 400 || status >= 500) {
+      hideLocationModal();
+      showLocationResultModal();
+      event.detail.target.form.reset();
+      currentLocationChain = '';
+      currentLocationChainMessage.innerText = '';
+      locationIdInput.value = '';
+      locationIdInput.disabled = true;
+      selectedLocationMessage.innerText = '';
+      currentPath = INITIAL_PATH;
+      locationSelectionBlock.hidden = true;
+      buttonSelectLocation.hidden = true;
+    }
   };
 
   globalThis.locationResultModal = htmx.find('#location-result-modal');

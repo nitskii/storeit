@@ -69,7 +69,7 @@ const create = async (newLocation: NewLocation) => {
     throw new HttpError(
       'Локація вже існує',
       'LOCATION_ALREADY_EXISTS',
-      40
+      409
     );
   } else if (existingLocation && newLocation.parentId) {
     if (existingLocation.id == newLocation.parentId) {

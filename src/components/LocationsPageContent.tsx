@@ -102,7 +102,7 @@ const LocationsPageContent = () => (
       id='location-result-modal'
       class='hidden modal-background'>
       <div class='modal-content'>
-        <div class='flex items-center gap-2'>
+        <div class='flex items-center justify-center gap-2'>
           Додано
           <img
             src='/public/checkmark.svg'
