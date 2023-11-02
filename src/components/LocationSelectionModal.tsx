@@ -28,12 +28,12 @@ const LocationSelectionModal = () => (
         </div>
         <button
           id='button-select-location'
-          class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
+          class='button'
           onclick='handleSelectLocationButtonClick()'
           hidden
         />
         <button
-          class='w-full rounded-lg bg-orange-200 p-2 hover:bg-orange-300 focus-visible:outline focus-visible:outline-2 focus-visible:outline-orange-300'
+          class='button'
           onclick='handleBackButtonClick()'>
           Назад
         </button>
